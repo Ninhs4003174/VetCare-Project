@@ -6,10 +6,11 @@
 ## Group-PX-XX
 
 ## Members
-* Student Name 1 (sXXXXX)
-* Student Name 2 (sXXXXX)
-* Student Name 3 (sXXXXX)
-* Student Name 4 (sXXXXX)
+* Harmandeep Singh (s4009171)
+* Gurnoor Kaur (s3991487)
+* Fazila Qurban Ali (s3667195)
+* 
+* 
 
 ## Records
 
