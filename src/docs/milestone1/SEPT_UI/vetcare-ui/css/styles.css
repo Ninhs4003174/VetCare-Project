@@ -100,7 +100,6 @@ footer {
     margin-top: 20px;
 }
 
-
 /* Services Section */
 .services {
     text-align: center;
@@ -177,7 +176,6 @@ footer {
     background-color: #eeeeee;
 }
 
-
 /* Browse Categories Section */
 .browse-categories {
     text-align: center;
@@ -250,7 +248,6 @@ footer {
     background-color: #5c7a85;
 }
 
-
 /* Testimonials Section */
 .testimonials {
     padding: 40px 20px;
@@ -318,36 +315,6 @@ footer {
     margin: 0;
 }
 
-/* Testimonials Section */
-.testimonials {
-    padding: 40px 20px;
-    background-color: #f8f8f8;
-    text-align: center;
-}
-
-.testimonial-slider {
-    display: flex;
-    justify-content: center;
-    overflow: hidden;
-    max-width: 100%;
-    margin: auto;
-}
-
-.testimonial {
-    width: 100%;
-    max-width: 500px;
-    margin: 0 20px;
-    padding: 20px;
-    background-color: #ffffff;
-    border-radius: 5px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-}
-
-.testimonial p.user {
-    font-weight: bold;
-    margin-top: 10px;
-}
-
 /* FAQ Section */
 .faq {
     padding: 40px 20px;
@@ -374,15 +341,6 @@ footer {
     background-color: #f8f8f8;
     border-radius: 5px;
     margin-bottom: 10px;
-}
-
-.faq-answer {
-    display: none;
-    padding-left: 20px;
-}
-
-.faq-answer p {
-    margin: 0;
 }
 
 .faq-answer {
@@ -392,7 +350,6 @@ footer {
     overflow: hidden;
     transition: max-height 0.3s ease-out;
 }
-
 
 /* Appointment Overview */
 .appointment-overview {
@@ -535,48 +492,126 @@ footer {
     background-color: #43575d;
 }
 
-/* Profile Section */
-.profile {
+/* Notifications Section */
+.notifications {
     padding: 20px;
-    max-width: 900px;
-    margin: auto;
-}
-
-.profile h1 {
-    text-align: center;
-    margin-bottom: 20px;
-}
-
-.profile-info, .pet-info {
-    background-color: #ffffff;
-    padding: 20px;
+    margin: 20px 0;
+    background-color: #f8f8f8;
     border-radius: 5px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.notifications h2 {
+    color: #35424a;
+    margin-bottom: 15px;
+}
+
+.notifications p {
+    margin-bottom: 10px;
+    line-height: 1.6;
+}
+
+/* Reviews Section */
+.reviews {
+    padding: 20px;
+    margin: 20px 0;
+    background-color: #f8f8f8;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.reviews h2 {
+    color: #35424a;
+    margin-bottom: 15px;
+}
+
+.review-card {
+    background-color: #ffffff;
+    padding: 20px;
     margin-bottom: 20px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
-.profile-info h2, .pet-info h2 {
-    margin-bottom: 15px;
-}
-
-.pet-record {
-    margin-bottom: 15px;
-}
-
-.pet-record h3 {
+.review-card p {
     margin-bottom: 10px;
 }
 
-.btn-primary {
+.review-card .rating {
+    font-size: 1.2em;
+    color: #ffcc00;
+}
+
+.review-form label {
+    display: block;
+    margin: 10px 0 5px;
+}
+
+.review-form textarea,
+.review-form select {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+}
+
+.review-form input[type="submit"] {
     padding: 10px 20px;
     background-color: #35424a;
     color: #ffffff;
-    text-decoration: none;
+    border: none;
     border-radius: 5px;
-    display: inline-block;
-    margin-top: 10px;
+    cursor: pointer;
 }
 
-.btn-primary:hover {
+.review-form input[type="submit"]:hover {
+    background-color: #43575d;
+}
+
+/* Contact Section */
+.contact {
+    padding: 20px;
+    margin: 20px 0;
+    background-color: #f8f8f8;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.contact h2 {
+    color: #35424a;
+    margin-bottom: 15px;
+}
+
+.contact p {
+    margin-bottom: 10px;
+    line-height: 1.6;
+}
+
+.contact-form label {
+    display: block;
+    margin: 10px 0 5px;
+}
+
+.contact-form input[type="text"],
+.contact-form input[type="email"],
+.contact-form textarea {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+}
+
+.contact-form input[type="submit"] {
+    padding: 10px 20px;
+    background-color: #35424a;
+    color: #ffffff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.contact-form input[type="submit"]:hover {
     background-color: #43575d;
 }

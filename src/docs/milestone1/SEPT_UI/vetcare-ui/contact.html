@@ -5,26 +5,28 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>VetCare - Contact</title>
     <link rel="stylesheet" href="css/styles.css">
-    <script defer src="js/script.js"></script>
 </head>
 <body>
     <header>
         <nav>
             <ul>
                 <li><a href="index.html">Home</a></li>
+                <li><a href="records.html">Pet Records</a></li>
                 <li><a href="appointments.html">Appointments</a></li>
-                <li><a href="records.html">Records</a></li>
+                <li><a href="resources.html">Resources</a></li>
                 <li><a href="notifications.html">Notifications</a></li>
-                <li><a href="profile.html">Profile</a></li>
-                <li><a href="reviews.html">Reviews</a></li>
                 <li><a href="contact.html">Contact</a></li>
+                <!-- Profile and Logout links for logged-in user -->
+                <li><a href="profile.html">My Profile</a></li>
+                <li><a href="logout.html">Logout</a></li>
             </ul>
         </nav>
     </header>
     
     <main>
         <h1>Contact Us</h1>
-        <section>
+        
+        <section class="contact">
             <h2>Get in Touch</h2>
             <p>If you have any questions or need assistance, feel free to reach out to us.</p>
             <p><strong>Email:</strong> support@vetcare.com</p>
@@ -32,15 +34,18 @@
             <p><strong>Address:</strong> 123 Pet Care Avenue, Pet City, PC 54321</p>
         </section>
         
-        <section>
+        <section class="contact">
             <h2>Contact Form</h2>
-            <form>
-                <label for="name">Your Name:</label><br>
-                <input type="text" id="name" name="name"><br>
-                <label for="email">Your Email:</label><br>
-                <input type="email" id="email" name="email"><br>
-                <label for="message">Your Message:</label><br>
-                <textarea id="message" name="message" rows="4" cols="50"></textarea><br><br>
+            <form class="contact-form">
+                <label for="name">Your Name:</label>
+                <input type="text" id="name" name="name">
+                
+                <label for="email">Your Email:</label>
+                <input type="email" id="email" name="email">
+                
+                <label for="message">Your Message:</label>
+                <textarea id="message" name="message" rows="4" cols="50"></textarea>
+                
                 <input type="submit" value="Send Message">
             </form>
         </section>
