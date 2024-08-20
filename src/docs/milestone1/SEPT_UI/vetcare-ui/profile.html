@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>VetCare - Profile</title>
+    <title>VetCare - My Profile</title>
     <link rel="stylesheet" href="css/styles.css">
     <script defer src="js/script.js"></script>
 </head>
@@ -17,13 +17,44 @@
                 <li><a href="resources.html">Resources</a></li>
                 <li><a href="notifications.html">Notifications</a></li>
                 <li><a href="contact.html">Contact</a></li>
+                <li><a href="profile.html">My Profile</a></li>
+                <li><a href="logout.html">Logout</a></li>
             </ul>
         </nav>
     </header>
     
     <main>
-        <h1>User Profile</h1>
-        <!-- User profile UI and settings will go here -->
+        <section class="profile">
+            <h1>My Profile</h1>
+            <div class="profile-info">
+                <h2>User Information</h2>
+                <p><strong>Name:</strong> John Doe</p>
+                <p><strong>Email:</strong> john.doe@example.com</p>
+                <p><strong>Phone:</strong> (123) 456-7890</p>
+                <p><strong>Address:</strong> 123 Main Street, Cityville, ST 12345</p>
+            </div>
+
+            <div class="pet-info">
+                <h2>My Pets</h2>
+                <div class="pet-record">
+                    <h3>Bella</h3>
+                    <p><strong>Breed:</strong> Golden Retriever</p>
+                    <p><strong>Date of Birth:</strong> March 14, 2019</p>
+                    <p><strong>Last Visit:</strong> August 1, 2024</p>
+                    <p><strong>Notes:</strong> Bella is in good health. Continue current diet and exercise routine.</p>
+                    <a href="records.html" class="btn-primary">View Full Record</a>
+                </div>
+
+                <div class="pet-record">
+                    <h3>Max</h3>
+                    <p><strong>Breed:</strong> Labrador Retriever</p>
+                    <p><strong>Date of Birth:</strong> June 22, 2018</p>
+                    <p><strong>Last Visit:</strong> July 15, 2024</p>
+                    <p><strong>Notes:</strong> Max is doing well on his allergy medication. Monitor for changes in symptoms.</p>
+                    <a href="records.html" class="btn-primary">View Full Record</a>
+                </div>
+            </div>
+        </section>
     </main>
     
     <footer>
