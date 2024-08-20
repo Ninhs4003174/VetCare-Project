@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VetCare - Reviews</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <script defer src="js/script.js"></script>
+</head>
+<body>
+    <header>
+        <nav>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="appointments.html">Appointments</a></li>
+                <li><a href="records.html">Records</a></li>
+                <li><a href="notifications.html">Notifications</a></li>
+                <li><a href="profile.html">Profile</a></li>
+                <li><a href="reviews.html">Reviews</a></li>
+                <li><a href="contact.html">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+    
+    <main>
+        <h1>User Reviews</h1>
+        <section>
+            <h2>Review 1</h2>
+            <p>Excellent service! The vet was very knowledgeable and caring. My dog had a great experience.</p>
+            <p><strong>Rating:</strong> ★★★★☆</p>
+        </section>
+        
+        <section>
+            <h2>Review 2</h2>
+            <p>The clinic was clean and the staff were friendly. However, the wait time was a bit long.</p>
+            <p><strong>Rating:</strong> ★★★☆☆</p>
+        </section>
+        
+        <section>
+            <h2>Write a Review</h2>
+            <form>
+                <label for="review">Your Review:</label><br>
+                <textarea id="review" name="review" rows="4" cols="50"></textarea><br>
+                <label for="rating">Your Rating:</label><br>
+                <select id="rating" name="rating">
+                    <option value="5">★★★★★</option>
+                    <option value="4">★★★★☆</option>
+                    <option value="3">★★★☆☆</option>
+                    <option value="2">★★☆☆☆</option>
+                    <option value="1">★☆☆☆☆</option>
+                </select><br><br>
+                <input type="submit" value="Submit Review">
+            </form>
+        </section>
+    </main>
+    
+    <footer>
+        <p>&copy; 2024 VetCare. All rights reserved.</p>
+    </footer>
+</body>
+</html>

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>VetCare - Notifications</title>
+    <title>VetCare - Contact</title>
     <link rel="stylesheet" href="css/styles.css">
     <script defer src="js/script.js"></script>
 </head>
@@ -23,20 +23,26 @@
     </header>
     
     <main>
-        <h1>Notifications</h1>
+        <h1>Contact Us</h1>
         <section>
-            <h2>Upcoming Appointments</h2>
-            <p>You have an appointment scheduled for <strong>August 25, 2024</strong> at <strong>3:00 PM</strong>.</p>
+            <h2>Get in Touch</h2>
+            <p>If you have any questions or need assistance, feel free to reach out to us.</p>
+            <p><strong>Email:</strong> support@vetcare.com</p>
+            <p><strong>Phone:</strong> +1 (800) 123-4567</p>
+            <p><strong>Address:</strong> 123 Pet Care Avenue, Pet City, PC 54321</p>
         </section>
         
         <section>
-            <h2>Medication Reminders</h2>
-            <p>Your pet needs to take <strong>Heartworm Medication</strong> on <strong>August 22, 2024</strong>.</p>
-        </section>
-        
-        <section>
-            <h2>Vaccination Reminders</h2>
-            <p>Your pet is due for a <strong>Rabies Vaccination</strong> on <strong>September 5, 2024</strong>.</p>
+            <h2>Contact Form</h2>
+            <form>
+                <label for="name">Your Name:</label><br>
+                <input type="text" id="name" name="name"><br>
+                <label for="email">Your Email:</label><br>
+                <input type="email" id="email" name="email"><br>
+                <label for="message">Your Message:</label><br>
+                <textarea id="message" name="message" rows="4" cols="50"></textarea><br><br>
+                <input type="submit" value="Send Message">
+            </form>
         </section>
     </main>
     
