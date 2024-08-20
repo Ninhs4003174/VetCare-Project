@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>VetCare - Appointments</title>
     <link rel="stylesheet" href="css/styles.css">
+    <script defer src="js/script.js"></script>
 </head>
 <body>
     <header>
@@ -21,8 +22,82 @@
     </header>
     
     <main>
-        <h1>Your Appointments</h1>
-        <!-- Appointment details and management UI will go here -->
+        <section class="appointment-overview">
+            <h1>Your Appointments</h1>
+            <p>Manage your upcoming appointments with your veterinarian. View, reschedule, or cancel appointments with ease.</p>
+        </section>
+
+        <!-- Upcoming Appointments Section -->
+        <section class="upcoming-appointments">
+            <h2>Upcoming Appointments</h2>
+            <div class="appointment-card">
+                <h3>Vaccination for Bella</h3>
+                <p>Date: August 25, 2024</p>
+                <p>Time: 10:00 AM</p>
+                <p>Veterinarian: Dr. Smith</p>
+                <button class="btn-secondary">Reschedule</button>
+                <button class="btn-danger">Cancel Appointment</button>
+            </div>
+            <div class="appointment-card">
+                <h3>General Checkup for Max</h3>
+                <p>Date: September 1, 2024</p>
+                <p>Time: 2:00 PM</p>
+                <p>Veterinarian: Dr. Jane</p>
+                <button class="btn-secondary">Reschedule</button>
+                <button class="btn-danger">Cancel Appointment</button>
+            </div>
+        </section>
+
+        <!-- Schedule New Appointment Section -->
+        <section class="schedule-appointment">
+            <h2>Schedule a New Appointment</h2>
+            <form action="schedule_appointment.html" method="POST">
+                <label for="pet-name">Pet Name:</label>
+                <input type="text" id="pet-name" name="pet-name" required>
+
+                <label for="appointment-type">Appointment Type:</label>
+                <select id="appointment-type" name="appointment-type" required>
+                    <option value="checkup">General Checkup</option>
+                    <option value="vaccination">Vaccination</option>
+                    <option value="dental">Dental Cleaning</option>
+                    <option value="surgery">Surgery Consultation</option>
+                </select>
+
+                <label for="vet-select">Select Veterinarian:</label>
+                <select id="vet-select" name="vet-select" required>
+                    <option value="dr-smith">Dr. Smith</option>
+                    <option value="dr-jane">Dr. Jane</option>
+                    <option value="dr-miller">Dr. Miller</option>
+                </select>
+
+                <label for="appointment-date">Select Date:</label>
+                <input type="date" id="appointment-date" name="appointment-date" required>
+
+                <label for="appointment-time">Select Time:</label>
+                <input type="time" id="appointment-time" name="appointment-time" required>
+
+                <button type="submit" class="btn-primary">Schedule Appointment</button>
+            </form>
+        </section>
+
+        <!-- Appointment History Section -->
+        <section class="appointment-history">
+            <h2>Appointment History</h2>
+            <div class="history-card">
+                <h3>Vaccination for Bella</h3>
+                <p>Date: June 12, 2024</p>
+                <p>Veterinarian: Dr. Smith</p>
+                <p>Status: Completed</p>
+                <button class="btn-primary">View Details</button>
+            </div>
+            <div class="history-card">
+                <h3>Dental Cleaning for Max</h3>
+                <p>Date: July 20, 2024</p>
+                <p>Veterinarian: Dr. Jane</p>
+                <p>Status: Completed</p>
+                <button class="btn-primary">View Details</button>
+            </div>
+        </section>
     </main>
     
     <footer>
