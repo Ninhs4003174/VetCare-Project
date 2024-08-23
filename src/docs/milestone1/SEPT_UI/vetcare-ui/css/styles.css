@@ -630,3 +630,37 @@ footer {
 .contact-form input[type="submit"]:hover {
     background-color: #43575d;
 }
+
+/* Profile Page Styles */
+.profile-info {
+    background-color: #f8f8f8;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    margin: 20px 0;
+}
+
+.pet-info {
+    margin-top: 20px;
+}
+
+.pet-card {
+    background-color: #ffffff;
+    padding: 20px;
+    margin-bottom: 20px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.pet-card h3 {
+    margin-bottom: 10px;
+}
+
+.pet-card p {
+    margin-bottom: 10px;
+}
+
+.pet-card .btn-primary {
+    display: inline-block;
+    margin-top: 10px;
+}
