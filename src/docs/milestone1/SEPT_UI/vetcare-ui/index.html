@@ -5,27 +5,24 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>VetCare - Home</title>
     <link rel="stylesheet" href="css/styles.css">
-    <script defer src="js/script.js"></script>
 </head>
 <body>
     <header>
         <nav>
             <ul>
-                <li><a href="index.html">Home</a></li>
+                <li><a href="index.html"><img src="img/logo.png" alt="Logo" class="logo"></a></li>
                 <li><a href="records.html">Pet Records</a></li>
                 <li><a href="appointments.html">Appointments</a></li>
                 <li><a href="resources.html">Resources</a></li>
-                <li><a href="notifications.html">Notifications</a></li>
                 <li><a href="contact.html">Contact</a></li>
-                <!-- Profile and Logout links for logged-in user -->
                 <li><a href="profile.html">My Profile</a></li>
-                <li><a href="logout.html">Logout</a></li>
+                <li><a href="#"><img src="img/notif.png" alt="Notifications" class="notification-icon"></a></li>
+                <li><a href="logout.html" class="btn-secondary">Log out</a></li>
             </ul>
         </nav>
     </header>
-    
+
     <main>
-        <!-- Hero Section -->
         <section class="hero">
             <div class="hero-content">
                 <h1>Welcome to VetCare</h1>
@@ -36,104 +33,66 @@
                 </div>
             </div>
         </section>
-        
-        
-        <!-- About Section -->
+
         <section class="about">
             <h2>About VetCare</h2>
             <p>VetCare is a comprehensive platform designed to help pet owners, veterinarians, and administrators manage pet healthcare effectively and efficiently. With VetCare, you can easily track medical records, schedule appointments, and access a wealth of educational resources.</p>
         </section>
-        
-        <!-- Featured Services Section -->
+
         <section class="services">
             <h2>Our Featured Services</h2>
-            <div class="service-card">
-                <img src="img/vaccination.png" alt="Vaccination">
-                <h3>Vaccination Tracking</h3>
-                <p>Keep track of your pet's vaccination schedule and get reminders for upcoming vaccines.</p>
-            </div>
-            <div class="service-card">
-                <img src="img/consultation.png" alt="Consultation">
-                <h3>Online Consultations</h3>
-                <p>Connect with veterinarians online for quick consultations and advice on your pet's health.</p>
-            </div>
-            <div class="service-card">
-                <img src="img/nutrition.png" alt="Nutrition">
-                <h3>Nutrition Plans</h3>
-                <p>Get personalized nutrition plans tailored to your pet's specific needs and health conditions.</p>
+            <div class="service-cards">
+                <div class="service-card">
+                    <img src="path-to-icon1.png" alt="Vaccination Tracking">
+                    <h3>Vaccination Tracking</h3>
+                    <p>Keep track of your pet's vaccination schedule and get reminders for upcoming vaccines.</p>
+                </div>
+                <div class="service-card">
+                    <img src="path-to-icon2.png" alt="Online Consultations">
+                    <h3>Online Consultations</h3>
+                    <p>Connect with veterinarians online for quick consultations and advice on your pet's health.</p>
+                </div>
+                <div class="service-card">
+                    <img src="path-to-icon3.png" alt="Nutrition Plans">
+                    <h3>Nutrition Plans</h3>
+                    <p>Get personalized nutrition plans tailored to your pet's specific needs and health conditions.</p>
+                </div>
             </div>
         </section>
 
-        <!-- Testimonials Section -->
         <section class="testimonials">
             <h2>What Our Users Say</h2>
-            <div class="testimonial-slider">
-                <div class="testimonial">
-                    <p>"VetCare has made managing my pet's health so much easier! I can track vaccinations, schedule appointments, and even get reminders for medication."</p>
-                    <p class="user">- Emily, Pet Owner</p>
+            <div class="testimonial-cards">
+                <div class="testimonial-card">
+                    <p>“VetCare has made managing my pet's health so much easier! I can track vaccinations, schedule appointments, and even get reminders for medication.”</p>
+                    <p class="user">- A Happy Pet Owner</p>
                 </div>
-                <div class="testimonial">
-                    <p>"As a veterinarian, VetCare has streamlined my workflow. I can quickly access pet records, manage my appointments, and provide better care for my patients."</p>
-                    <p class="user">- Dr. Smith, Veterinarian</p>
+                <div class="testimonial-card">
+                    <p>“As a veterinarian, VetCare has streamlined my workflow. I can quickly access pet records, manage my appointments, and provide better care for my patients.”</p>
+                    <p class="user">- A Dedicated Veterinarian</p>
                 </div>
-                <div class="testimonial">
-                    <p>"VetCare is a game changer! The resources provided have helped me ensure my pet receives the best care possible."</p>
-                    <p class="user">- Jake, Pet Owner</p>
-                </div>
-            </div>
-        </section>
-
-        <!-- FAQ Section -->
-        <section class="faq">
-            <h2>Frequently Asked Questions</h2>
-            <div class="faq-item">
-                <h3 class="faq-question">How do I book an appointment?</h3>
-                <div class="faq-answer">
-                    <p>To book an appointment, navigate to the Appointments page, select your preferred date and time, and confirm the booking.</p>
+                <div class="testimonial-card">
+                    <p>“VetCare is a game changer! The resources provided have helped me ensure my pet receives the best care possible.”</p>
+                    <p class="user">- A Grateful Pet Parent</p>
                 </div>
             </div>
-            <div class="faq-item">
-                <h3 class="faq-question">Can I access my pet’s medical history online?</h3>
-                <div class="faq-answer">
-                    <p>Yes, you can access your pet’s complete medical history, including vaccination records, treatment plans, and past consultations, through the Pet Records page.</p>
-                </div>
-            </div>
-            <div class="faq-item">
-                <h3 class="faq-question">Is my personal information secure on VetCare?</h3>
-                <div class="faq-answer">
-                    <p>VetCare uses state-of-the-art encryption and security protocols to ensure that all your personal and pet-related information is safe and secure.</p>
-                </div>
-            </div>
-            <div class="faq-item">
-                <h3 class="faq-question">Can I get reminders for my pet's medication schedules?</h3>
-                <div class="faq-answer">
-                    <p>Yes, VetCare allows you to set up reminders for your pet's medication schedules to ensure timely administration of treatments.</p>
-                </div>
-            </div>
-            <div class="faq-item">
-                <h3 class="faq-question">How do I update my pet’s records?</h3>
-                <div class="faq-answer">
-                    <p>You can update your pet's records by logging into your account, navigating to the Pet Records section, and editing the necessary information.</p>
-                </div>
-            </div>
-        </section>
-
-        <!-- Call-to-Action Banner -->
-        <section class="cta-banner">
-            <h2>Ready to take control of your pet’s health?</h2>
-            <p>Join VetCare today and experience seamless pet healthcare management. Sign up now and get started!</p>
-            <a href="signup.html" class="btn-primary">Sign Up Now</a>
         </section>
     </main>
-    
+
     <footer>
-        <p>&copy; 2024 VetCare. All rights reserved.</p>
-        <ul>
-            <li><a href="terms.html">Terms of Service</a></li>
-            <li><a href="privacy.html">Privacy Policy</a></li>
-            <li><a href="https://www.facebook.com/VetCare" target="_blank">Facebook</a></li>
-            <li><a href="https://www.twitter.com/VetCare" target="_blank">Twitter</a></li>
-        </ul>
+        <nav>
+            <ul>
+                <li><a href="index.html"><img src="img/logo.png" alt="Logo"></a></li>
+                <li><a href="records.html">Pet Records</a></li>
+                <li><a href="appointments.html">Appointments</a></li>
+                <li><a href="resources.html">Resources</a></li>
+                <li><a href="contact.html">Contact</a></li>
+                <li><a href="profile.html">My Profile</a></li>
+                <li><a href="#"><img src="img/facebook.png" alt="Facebook"></a></li>
+                <li><a href="#"><img src="img/linked.png" alt="LinkedIn"></a></li>
+                <li><a href="#"><img src="img/insta.png" alt="Instagram"></a></li>
+            </ul>
+        </nav>
     </footer>
 </body>
 </html>
