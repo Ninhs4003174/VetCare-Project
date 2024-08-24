@@ -1,0 +1,766 @@
+/* Basic Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    color: #333;
+}
+
+/* Color Scheme */
+:root {
+    --primary-color: #35424a; /* Dark Blue-Grey */
+    --secondary-color: #5b9bd5; /* Soft Blue */
+    --accent-color: #2a75bb; /* Accent Blue */
+    --text-color: #333;
+    --background-color: #f4f4f4;
+    --white-color: #ffffff;
+}
+
+/* Header Styles */
+header {
+    background-color: #35424a;
+    color: #ffffff;
+    padding: 20px 0;
+}
+
+header nav ul {
+    list-style: none;
+    display: flex;
+    justify-content: center;
+    background-color: #35424a;
+}
+
+header nav ul li {
+    margin: 0 10px;
+}
+
+header nav ul li a {
+    color: #ffffff;
+    text-decoration: none;
+    padding: 10px 20px;
+    display: block;
+}
+
+header nav ul li a:hover {
+    background-color: #f4f4f4;
+    border-radius: 5px;
+}
+
+/* Adjusting the logo size */
+.logo {
+    width: 80px; /* Adjust this value as needed */
+    height: auto;
+}
+
+/* Adjusting the notification bell size */
+.notification-icon {
+    width: 20px; /* Adjust this value to make the bell smaller */
+    height: auto;
+}
+
+
+/* Hero Section */
+.hero {
+    padding: 60px 40px;
+    background-color: #f8f8f8;
+    text-align: center;
+}
+
+.hero-content {
+    max-width: 800px;
+    margin: auto;
+}
+
+.hero-content h1 {
+    font-size: 3em;
+    margin-bottom: 20px;
+}
+
+.hero-content p {
+    font-size: 1.2em;
+    margin-bottom: 30px;
+}
+
+.button-group {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+}
+
+.btn-primary {
+    padding: 15px 30px;
+    background-color: var(--primary-color);
+    color: var(--white-color);
+    text-decoration: none;
+    border-radius: 5px;
+    font-size: 1em;
+}
+
+.button-group a:hover {
+    background-color: #43575d;
+}
+
+/* About Section */
+.about {
+    padding: 40px 20px;
+    background-color: #ffffff;
+    text-align: center;
+}
+
+.about h2 {
+    font-size: 2em;
+    margin-bottom: 20px;
+}
+
+.about p {
+    font-size: 1.1em;
+    max-width: 900px;
+    margin: auto;
+    line-height: 1.6;
+}
+
+/* Services Section */
+.services {
+    padding: 60px 20px;
+    background-color: #e0e0e0;
+    text-align: center;
+}
+
+.services h2 {
+    font-size: 2.5em;
+    margin-bottom: 40px;
+}
+
+.service-cards {
+    display: flex;
+    justify-content: space-around;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.card {
+    background-color: #ffffff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    width: 30%;
+    text-align: center;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.card h2 {
+    margin-bottom: 10px;
+}
+
+.card button {
+    padding: 10px 20px;
+    background-color: #35424a;
+    color: #ffffff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.card button:hover {
+    background-color: #43575d;
+}
+
+/* Testimonials Section */
+.testimonials {
+    padding: 60px 20px;
+    background-color: #f8f8f8;
+    text-align: center;
+    margin-top: 20px;
+    color: #333;
+}
+
+main section {
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    width: 30%;
+    text-align: center;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.testimonial-card p {
+    font-size: 1em;
+    line-height: 1.5;
+    margin-bottom: 15px;
+}
+
+.testimonial-card .user {
+    font-weight: bold;
+    color: #35424a;
+}
+
+.testimonial-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Footer Styles */
+footer {
+    text-align: center;
+    padding: 20px 0;
+    background-color: #35424a;
+    color: #ffffff;
+    margin-top: 20px;
+}
+
+/* Services Section */
+.services {
+    text-align: center;
+    padding: 40px 20px;
+    background-color: #f8f8f8;
+}
+
+.service-card {
+    display: inline-block;
+    width: 30%;
+    margin: 20px;
+    background-color: #ffffff;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+footer nav ul li a {
+    color: #ffffff;
+    text-decoration: none;
+    padding: 5px;
+}
+
+.service-card h3 {
+    margin-bottom: 10px;
+}
+
+
+/* FAQ Section */
+.faq {
+    padding: 40px 20px;
+    background-color: var(--white-color);
+    text-align: left;
+}
+
+.faq h2 {
+    text-align: center;
+    margin-bottom: 20px;
+    color: var(--primary-color);
+}
+
+.faq-item {
+    margin-bottom: 20px;
+}
+
+.faq-item h3 {
+    margin-bottom: 10px;
+    color: var(--secondary-color);
+}
+
+/* CTA Banner */
+.cta-banner {
+    background-color: var(--primary-color);
+    color: var(--white-color);
+    text-align: center;
+    padding: 40px 20px;
+}
+
+.cta-banner h2 {
+    font-size: 2em;
+    margin-bottom: 20px;
+}
+
+.cta-banner p {
+    font-size: 1.2em;
+    margin-bottom: 20px;
+}
+
+.cta-banner .btn-primary {
+    background-color: var(--white-color);
+    color: var(--primary-color);
+    padding: 15px 30px;
+    border-radius: 5px;
+    text-decoration: none;
+}
+
+.cta-banner .btn-primary:hover {
+    background-color: var(--secondary-color);
+}
+
+/* Browse Categories Section */
+.browse-categories {
+    text-align: center;
+    padding: 40px 20px;
+    background-color: var(--background-color);
+}
+
+.category-card {
+    display: inline-block;
+    width: 30%;
+    margin: 20px;
+    background-color: var(--white-color);
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+.category-card img {
+    width: 100px;
+    margin-bottom: 15px;
+}
+
+.category-card h3 {
+    margin-bottom: 10px;
+    color: var(--secondary-color);
+}
+
+/* Featured Resources Section */
+.featured-resources {
+    padding: 40px 20px;
+    text-align: center;
+}
+
+.resource-card {
+    background-color: var(--white-color);
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    margin: 20px auto;
+    width: 80%;
+    text-align: left;
+}
+
+.resource-card h3 {
+    margin-bottom: 10px;
+    color: var(--secondary-color);
+}
+
+.resource-card p {
+    margin-bottom: 20px;
+}
+
+/* Button Styles */
+.btn-primary {
+    padding: 10px 20px;
+    background-color: var(--primary-color);
+    color: var(--white-color);
+    text-decoration: none;
+    border-radius: 5px;
+}
+
+.btn-secondary {
+    padding: 10px 20px;
+    background-color: var(--secondary-color);
+    color: var(--white-color);
+    text-decoration: none;
+    border-radius: 5px;
+}
+
+.btn-primary:hover, .btn-secondary:hover {
+    background-color: var(--accent-color);
+}
+
+/* Testimonials Section */
+.testimonials {
+    padding: 40px 20px;
+    background-color: var(--background-color);
+    text-align: center;
+}
+
+.testimonial-slider {
+    display: flex;
+    justify-content: center;
+    overflow: hidden;
+    max-width: 100%;
+    margin: auto;
+}
+
+.testimonial {
+    width: 100%;
+    max-width: 500px;
+    margin: 0 20px;
+    padding: 20px;
+    background-color: var(--white-color);
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.testimonial p.user {
+    font-weight: bold;
+    margin-top: 10px;
+}
+
+/* FAQ Section */
+.faq {
+    padding: 40px 20px;
+    background-color: var(--white-color);
+    text-align: left;
+    max-width: 800px;
+    margin: auto;
+}
+
+.faq h2 {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.faq-item {
+    margin-bottom: 20px;
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 10px;
+}
+
+.faq-question {
+    cursor: pointer;
+    padding: 10px;
+    background-color: var(--background-color);
+    border-radius: 5px;
+    margin-bottom: 10px;
+}
+
+.faq-answer {
+    display: none;
+    padding-left: 20px;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease-out;
+}
+
+/* Appointment Overview */
+.appointment-overview {
+    text-align: center;
+    margin: 20px 0;
+    color: var(--primary-color);
+}
+
+/* Upcoming Appointments Section */
+.upcoming-appointments {
+    padding: 20px;
+    margin: 20px 0;
+}
+
+.appointment-card {
+    background-color: var(--white-color);
+    padding: 20px;
+    margin-bottom: 20px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.appointment-card h3 {
+    margin-bottom: 10px;
+    color: var(--secondary-color);
+}
+
+.btn-secondary {
+    padding: 10px 20px;
+    background-color: var(--primary-color);
+    color: var(--white-color);
+    text-decoration: none;
+    border-radius: 5px;
+    border: none;
+    cursor: pointer;
+    margin-right: 10px;
+}
+
+.btn-danger {
+    padding: 10px 20px;
+    background-color: #d9534f;
+    color: var(--white-color);
+    text-decoration: none;
+    border-radius: 5px;
+    border: none;
+    cursor: pointer;
+}
+
+/* Schedule New Appointment Section */
+.schedule-appointment {
+    padding: 20px;
+    margin: 20px 0;
+    background-color: var(--background-color);
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.schedule-appointment h2 {
+    margin-bottom: 20px;
+    color: var(--primary-color);
+}
+
+.schedule-appointment form {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+
+.schedule-appointment form label {
+    margin-bottom: 5px;
+    color: var(--text-color);
+}
+
+.schedule-appointment form input,
+.schedule-appointment form select {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    width: 100%;
+}
+
+/* Appointment History Section */
+.appointment-history {
+    padding: 20px;
+    margin: 20px 0;
+}
+
+.history-card {
+    background-color: var(--white-color);
+    padding: 20px;
+    margin-bottom: 20px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.history-card h3 {
+    margin-bottom: 10px;
+    color: var(--secondary-color);
+}
+
+/* Pet Records Section */
+.pet-records {
+    padding: 20px;
+    max-width: 900px;
+    margin: auto;
+}
+
+.pet-records h1 {
+    text-align: center;
+    margin-bottom: 20px;
+    color: var(--primary-color);
+}
+
+.record-card {
+    background-color: var(--white-color);
+    padding: 20px;
+    margin-bottom: 20px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.record-card h2 {
+    margin-bottom: 15px;
+    color: var(--secondary-color);
+}
+
+.record-card p {
+    margin-bottom: 10px;
+}
+
+.record-card ul {
+    list-style: disc;
+    padding-left: 20px;
+}
+
+.btn-primary {
+    padding: 10px 20px;
+    background-color: var(--primary-color);
+    color: var(--white-color);
+    text-decoration: none;
+    border-radius: 5px;
+    border: none;
+    cursor: pointer;
+}
+
+.btn-primary:hover {
+    background-color: var(--accent-color);
+}
+
+/* Notifications Section */
+.notifications {
+    padding: 20px;
+    margin: 20px 0;
+    background-color: var(--background-color);
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.notifications h2 {
+    color: var(--primary-color);
+    margin-bottom: 15px;
+}
+
+.notifications p {
+    margin-bottom: 10px;
+    line-height: 1.6;
+}
+
+/* Reviews Section */
+.reviews {
+    padding: 20px;
+    margin: 20px 0;
+    background-color: var(--background-color);
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.reviews h2 {
+    color: var(--primary-color);
+    margin-bottom: 15px;
+}
+
+.review-card {
+    background-color: var(--white-color);
+    padding: 20px;
+    margin-bottom: 20px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.review-card p {
+    margin-bottom: 10px;
+}
+
+.review-card .rating {
+    font-size: 1.2em;
+    color: #ffcc00;
+}
+
+.review-form label {
+    display: block;
+    margin: 10px 0 5px;
+}
+
+.review-form textarea,
+.review-form select {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+}
+
+.review-form input[type="submit"] {
+    padding: 10px 20px;
+    background-color: var(--primary-color);
+    color: var(--white-color);
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.review-form input[type="submit"]:hover {
+    background-color: var(--accent-color);
+}
+
+/* Contact Section */
+.contact {
+    padding: 20px;
+    margin: 20px 0;
+    background-color: var(--background-color);
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.contact h2 {
+    color: var(--primary-color);
+    margin-bottom: 15px;
+}
+
+.contact p {
+    margin-bottom: 10px;
+    line-height: 1.6;
+}
+
+.contact-form label {
+    display: block;
+    margin: 10px 0 5px;
+}
+
+.contact-form input[type="text"],
+.contact-form input[type="email"],
+.contact-form textarea {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+}
+
+.contact-form input[type="submit"] {
+    padding: 10px 20px;
+    background-color: var(--primary-color);
+    color: var(--white-color);
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.contact-form input[type="submit"]:hover {
+    background-color: var(--accent-color);
+}
+
+/* Profile Page Styles */
+.profile-info {
+    background-color: #f8f8f8;
+    padding: 20px;
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.profile-header {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.profile-header h1 {
+    font-size: 2.5em;
+    margin-bottom: 10px;
+}
+
+.user-info, .pet-info {
+    margin-bottom: 30px;
+}
+
+.user-info h2, .pet-info h2 {
+    font-size: 2em;
+    margin-bottom: 20px;
+    border-bottom: 2px solid #e0e0e0;
+    padding-bottom: 10px;
+}
+
+.user-info p, .pet-info p {
+    font-size: 1.2em;
+    margin-bottom: 10px;
+}
+
+.pet-card {
+    background-color: #ffffff;
+    padding: 20px;
+    margin-bottom: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+}
+
+.pet-card h3 {
+    font-size: 1.8em;
+    margin-bottom: 10px;
+}
+
+.btn-primary {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #35424a;
+    color: #ffffff;
+    text-decoration: none;
+    border-radius: 5px;
+    font-size: 1em;
+    text-align: center;
+    margin-top: 15px;
+}
