@@ -21,5 +21,5 @@
 * Microsoft Teams Link: https://teams.microsoft.com/l/channel/19%3AaxoqBqaFeK5AGL-wZ5MZg5dxd7YRsi-PAaAh_80RIFg1%40thread.tacv2/General?groupId=e049f1c7-56ee-45bc-8fb7-ee427a2a3f79&tenantId=
 
 NOTE:
-UI and Architecture Diagrams/WireFrames are located inside "SRS.docs" in docs\milestone1
+UI and Architecture Diagrams/WireFrames are located inside "SRS Document" in docs\milestone1
 See [Instructions](INSTRUCTIONS.md)
