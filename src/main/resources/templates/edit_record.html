@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Edit Pet Record</title>
+</head>
+<body>
+    <h1>Edit Pet Record</h1>
+    <form action="/records/save" th:object="${petRecord}" method="post">
+        <label>Name:</label>
+        <input type="text" th:field="*{name}" />
+        <br/>
+        <label>Breed:</label>
+        <input type="text" th:field="*{breed}" />
+        <br/>
+        <label>Date of Birth:</label>
+        <input type="text" th:field="*{dateOfBirth}" />
+        <br/>
+        <label>Last Visit:</label>
+        <input type="text" th:field="*{lastVisit}" />
+        <br/>
+        <label>Notes:</label>
+        <textarea th:field="*{notes}"></textarea>
+        <br/>
+        <button type="submit">Save</button>
+    </form>
+</body>
+</html>
