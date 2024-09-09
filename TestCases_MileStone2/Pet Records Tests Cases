@@ -1,0 +1,29 @@
+Test Case 1: View Medical Records
+Scenario: View Medical Records
+Given a User with access permissions
+When the user navigates to the "Medical Records" section
+Then the system displays a list of the pet's medical history, vaccination records, and treatment plans
+
+Examples:
+
+| User Role    | Access Permission | Records Displayed                              |
+| ------------ | ----------------  | -----------------------------------------------|
+| Veterinarian | Yes               | Full medical history, vaccinations, treatments |
+| Pet Owner    | Yes               | Vaccination records, treatments only           |
+| Admin        | Yes               | Full medical history, vaccinations, treatments |
+| Guest        | No                | Access Denied message                          |
+
+Test Case 2: Download Medical Records
+Scenario: Download Medical Records
+Given a User with download permissions
+When the user selects the "Download" option for a medical record
+Then the system provides a downloadable PDF of the selected records
+
+Examples:
+
+| User Role    | Download Permission | Output                            |
+| ------------ | ------------------- | --------------------------------- |
+| Veterinarian | Yes                 | PDF file of full medical history  |
+| Pet Owner    | Yes                 | PDF file of vaccination records   |
+| Admin        | Yes                 | PDF file of all records           |
+| Guest        | No                  | "Permission Denied" error message |

@@ -11,19 +11,28 @@ body {
     color: #333;
 }
 
+/* Color Scheme */
+:root {
+    --primary-color: #35424a; /* Dark Blue-Grey */
+    --secondary-color: #5b9bd5; /* Soft Blue */
+    --accent-color: #2a75bb; /* Accent Blue */
+    --text-color: #333;
+    --background-color: #f4f4f4;
+    --white-color: #ffffff;
+}
+
 /* Header Styles */
 header {
-    background-color: #ffffff;
-    padding: 10px 0;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    background-color: #35424a;
+    color: #ffffff;
+    padding: 20px 0;
 }
 
 header nav ul {
     list-style: none;
     display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 0 20px;
+    justify-content: center;
+    background-color: #35424a;
 }
 
 header nav ul li {
@@ -31,7 +40,7 @@ header nav ul li {
 }
 
 header nav ul li a {
-    color: #333;
+    color: #ffffff;
     text-decoration: none;
     padding: 10px 20px;
     display: block;
@@ -85,14 +94,14 @@ header nav ul li a:hover {
 
 .btn-primary {
     padding: 15px 30px;
-    background-color: #35424a;
-    color: #ffffff;
+    background-color: var(--primary-color);
+    color: var(--white-color);
     text-decoration: none;
     border-radius: 5px;
     font-size: 1em;
 }
 
-.btn-primary:hover {
+.button-group a:hover {
     background-color: #43575d;
 }
 
@@ -134,7 +143,7 @@ header nav ul li a:hover {
     flex-wrap: wrap;
 }
 
-.service-card {
+.card {
     background-color: #ffffff;
     padding: 20px;
     border-radius: 10px;
@@ -144,24 +153,21 @@ header nav ul li a:hover {
     transition: transform 0.2s, box-shadow 0.2s;
 }
 
-.service-card img {
-    width: 80px;
-    margin-bottom: 20px;
+.card h2 {
+    margin-bottom: 10px;
 }
 
-.service-card h3 {
-    font-size: 1.5em;
-    margin-bottom: 15px;
+.card button {
+    padding: 10px 20px;
+    background-color: #35424a;
+    color: #ffffff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
 }
 
-.service-card p {
-    font-size: 1em;
-    line-height: 1.5;
-}
-
-.service-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+.card button:hover {
+    background-color: #43575d;
 }
 
 /* Testimonials Section */
@@ -169,22 +175,11 @@ header nav ul li a:hover {
     padding: 60px 20px;
     background-color: #f8f8f8;
     text-align: center;
+    margin-top: 20px;
+    color: #333;
 }
 
-.testimonials h2 {
-    font-size: 2.5em;
-    margin-bottom: 40px;
-}
-
-.testimonial-cards {
-    display: flex;
-    justify-content: space-around;
-    gap: 20px;
-    flex-wrap: wrap;
-}
-
-.testimonial-card {
-    background-color: #ffffff;
+main section {
     padding: 20px;
     border-radius: 10px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
@@ -211,22 +206,28 @@ header nav ul li a:hover {
 
 /* Footer Styles */
 footer {
-    background-color: #35424a;
-    padding: 20px 0;
-    color: #ffffff;
     text-align: center;
+    padding: 20px 0;
+    background-color: #35424a;
+    color: #ffffff;
+    margin-top: 20px;
 }
 
-footer nav ul {
-    display: flex;
-    justify-content: center;
-    gap: 20px;
-    padding: 0;
-    margin: 20px 0;
+/* Services Section */
+.services {
+    text-align: center;
+    padding: 40px 20px;
+    background-color: #f8f8f8;
 }
 
-footer nav ul li {
-    margin: 0 10px;
+.service-card {
+    display: inline-block;
+    width: 30%;
+    margin: 20px;
+    background-color: #ffffff;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
 footer nav ul li a {
@@ -235,21 +236,22 @@ footer nav ul li a {
     padding: 5px;
 }
 
-footer nav ul li a img {
-    width: 20px;
+.service-card h3 {
+    margin-bottom: 10px;
 }
 
 
 /* FAQ Section */
 .faq {
     padding: 40px 20px;
-    background-color: #ffffff;
+    background-color: var(--white-color);
     text-align: left;
 }
 
 .faq h2 {
     text-align: center;
     margin-bottom: 20px;
+    color: var(--primary-color);
 }
 
 .faq-item {
@@ -258,12 +260,13 @@ footer nav ul li a img {
 
 .faq-item h3 {
     margin-bottom: 10px;
+    color: var(--secondary-color);
 }
 
 /* CTA Banner */
 .cta-banner {
-    background-color: #35424a;
-    color: #ffffff;
+    background-color: var(--primary-color);
+    color: var(--white-color);
     text-align: center;
     padding: 40px 20px;
 }
@@ -279,29 +282,29 @@ footer nav ul li a img {
 }
 
 .cta-banner .btn-primary {
-    background-color: #ffffff;
-    color: #35424a;
+    background-color: var(--white-color);
+    color: var(--primary-color);
     padding: 15px 30px;
     border-radius: 5px;
     text-decoration: none;
 }
 
 .cta-banner .btn-primary:hover {
-    background-color: #eeeeee;
+    background-color: var(--secondary-color);
 }
 
 /* Browse Categories Section */
 .browse-categories {
     text-align: center;
     padding: 40px 20px;
-    background-color: #f8f8f8;
+    background-color: var(--background-color);
 }
 
 .category-card {
     display: inline-block;
     width: 30%;
     margin: 20px;
-    background-color: #ffffff;
+    background-color: var(--white-color);
     padding: 20px;
     border-radius: 5px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
@@ -315,6 +318,7 @@ footer nav ul li a img {
 
 .category-card h3 {
     margin-bottom: 10px;
+    color: var(--secondary-color);
 }
 
 /* Featured Resources Section */
@@ -324,7 +328,7 @@ footer nav ul li a img {
 }
 
 .resource-card {
-    background-color: #ffffff;
+    background-color: var(--white-color);
     padding: 20px;
     border-radius: 5px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
@@ -335,6 +339,7 @@ footer nav ul li a img {
 
 .resource-card h3 {
     margin-bottom: 10px;
+    color: var(--secondary-color);
 }
 
 .resource-card p {
@@ -344,28 +349,28 @@ footer nav ul li a img {
 /* Button Styles */
 .btn-primary {
     padding: 10px 20px;
-    background-color: #35424a;
-    color: #ffffff;
+    background-color: var(--primary-color);
+    color: var(--white-color);
     text-decoration: none;
     border-radius: 5px;
 }
 
 .btn-secondary {
     padding: 10px 20px;
-    background-color: #43575d;
-    color: #ffffff;
+    background-color: var(--secondary-color);
+    color: var(--white-color);
     text-decoration: none;
     border-radius: 5px;
 }
 
 .btn-primary:hover, .btn-secondary:hover {
-    background-color: #5c7a85;
+    background-color: var(--accent-color);
 }
 
 /* Testimonials Section */
 .testimonials {
     padding: 40px 20px;
-    background-color: #f8f8f8;
+    background-color: var(--background-color);
     text-align: center;
 }
 
@@ -382,7 +387,7 @@ footer nav ul li a img {
     max-width: 500px;
     margin: 0 20px;
     padding: 20px;
-    background-color: #ffffff;
+    background-color: var(--white-color);
     border-radius: 5px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
@@ -395,7 +400,7 @@ footer nav ul li a img {
 /* FAQ Section */
 .faq {
     padding: 40px 20px;
-    background-color: #ffffff;
+    background-color: var(--white-color);
     text-align: left;
     max-width: 800px;
     margin: auto;
@@ -415,44 +420,7 @@ footer nav ul li a img {
 .faq-question {
     cursor: pointer;
     padding: 10px;
-    background-color: #f8f8f8;
-    border-radius: 5px;
-    margin-bottom: 10px;
-}
-
-.faq-answer {
-    display: none;
-    padding-left: 20px;
-}
-
-.faq-answer p {
-    margin: 0;
-}
-
-/* FAQ Section */
-.faq {
-    padding: 40px 20px;
-    background-color: #ffffff;
-    text-align: left;
-    max-width: 800px;
-    margin: auto;
-}
-
-.faq h2 {
-    text-align: center;
-    margin-bottom: 20px;
-}
-
-.faq-item {
-    margin-bottom: 20px;
-    border-bottom: 1px solid #ddd;
-    padding-bottom: 10px;
-}
-
-.faq-question {
-    cursor: pointer;
-    padding: 10px;
-    background-color: #f8f8f8;
+    background-color: var(--background-color);
     border-radius: 5px;
     margin-bottom: 10px;
 }
@@ -469,6 +437,7 @@ footer nav ul li a img {
 .appointment-overview {
     text-align: center;
     margin: 20px 0;
+    color: var(--primary-color);
 }
 
 /* Upcoming Appointments Section */
@@ -478,7 +447,7 @@ footer nav ul li a img {
 }
 
 .appointment-card {
-    background-color: #ffffff;
+    background-color: var(--white-color);
     padding: 20px;
     margin-bottom: 20px;
     border-radius: 5px;
@@ -487,12 +456,13 @@ footer nav ul li a img {
 
 .appointment-card h3 {
     margin-bottom: 10px;
+    color: var(--secondary-color);
 }
 
 .btn-secondary {
     padding: 10px 20px;
-    background-color: #35424a;
-    color: #ffffff;
+    background-color: var(--primary-color);
+    color: var(--white-color);
     text-decoration: none;
     border-radius: 5px;
     border: none;
@@ -503,7 +473,7 @@ footer nav ul li a img {
 .btn-danger {
     padding: 10px 20px;
     background-color: #d9534f;
-    color: #ffffff;
+    color: var(--white-color);
     text-decoration: none;
     border-radius: 5px;
     border: none;
@@ -514,13 +484,14 @@ footer nav ul li a img {
 .schedule-appointment {
     padding: 20px;
     margin: 20px 0;
-    background-color: #f8f8f8;
+    background-color: var(--background-color);
     border-radius: 5px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
 .schedule-appointment h2 {
     margin-bottom: 20px;
+    color: var(--primary-color);
 }
 
 .schedule-appointment form {
@@ -531,6 +502,7 @@ footer nav ul li a img {
 
 .schedule-appointment form label {
     margin-bottom: 5px;
+    color: var(--text-color);
 }
 
 .schedule-appointment form input,
@@ -548,7 +520,7 @@ footer nav ul li a img {
 }
 
 .history-card {
-    background-color: #ffffff;
+    background-color: var(--white-color);
     padding: 20px;
     margin-bottom: 20px;
     border-radius: 5px;
@@ -557,6 +529,7 @@ footer nav ul li a img {
 
 .history-card h3 {
     margin-bottom: 10px;
+    color: var(--secondary-color);
 }
 
 /* Pet Records Section */
@@ -569,10 +542,11 @@ footer nav ul li a img {
 .pet-records h1 {
     text-align: center;
     margin-bottom: 20px;
+    color: var(--primary-color);
 }
 
 .record-card {
-    background-color: #ffffff;
+    background-color: var(--white-color);
     padding: 20px;
     margin-bottom: 20px;
     border-radius: 5px;
@@ -581,6 +555,7 @@ footer nav ul li a img {
 
 .record-card h2 {
     margin-bottom: 15px;
+    color: var(--secondary-color);
 }
 
 .record-card p {
@@ -594,8 +569,8 @@ footer nav ul li a img {
 
 .btn-primary {
     padding: 10px 20px;
-    background-color: #35424a;
-    color: #ffffff;
+    background-color: var(--primary-color);
+    color: var(--white-color);
     text-decoration: none;
     border-radius: 5px;
     border: none;
@@ -603,20 +578,20 @@ footer nav ul li a img {
 }
 
 .btn-primary:hover {
-    background-color: #43575d;
+    background-color: var(--accent-color);
 }
 
 /* Notifications Section */
 .notifications {
     padding: 20px;
     margin: 20px 0;
-    background-color: #f8f8f8;
+    background-color: var(--background-color);
     border-radius: 5px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
 .notifications h2 {
-    color: #35424a;
+    color: var(--primary-color);
     margin-bottom: 15px;
 }
 
@@ -629,18 +604,18 @@ footer nav ul li a img {
 .reviews {
     padding: 20px;
     margin: 20px 0;
-    background-color: #f8f8f8;
+    background-color: var(--background-color);
     border-radius: 5px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
 .reviews h2 {
-    color: #35424a;
+    color: var(--primary-color);
     margin-bottom: 15px;
 }
 
 .review-card {
-    background-color: #ffffff;
+    background-color: var(--white-color);
     padding: 20px;
     margin-bottom: 20px;
     border-radius: 5px;
@@ -672,28 +647,28 @@ footer nav ul li a img {
 
 .review-form input[type="submit"] {
     padding: 10px 20px;
-    background-color: #35424a;
-    color: #ffffff;
+    background-color: var(--primary-color);
+    color: var(--white-color);
     border: none;
     border-radius: 5px;
     cursor: pointer;
 }
 
 .review-form input[type="submit"]:hover {
-    background-color: #43575d;
+    background-color: var(--accent-color);
 }
 
 /* Contact Section */
 .contact {
     padding: 20px;
     margin: 20px 0;
-    background-color: #f8f8f8;
+    background-color: var(--background-color);
     border-radius: 5px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
 .contact h2 {
-    color: #35424a;
+    color: var(--primary-color);
     margin-bottom: 15px;
 }
 
@@ -719,27 +694,20 @@ footer nav ul li a img {
 
 .contact-form input[type="submit"] {
     padding: 10px 20px;
-    background-color: #35424a;
-    color: #ffffff;
+    background-color: var(--primary-color);
+    color: var(--white-color);
     border: none;
     border-radius: 5px;
     cursor: pointer;
 }
 
 .contact-form input[type="submit"]:hover {
-    background-color: #43575d;
+    background-color: var(--accent-color);
 }
 
 /* Profile Page Styles */
-body {
-    font-family: Arial, sans-serif;
-    background-color: #f4f4f4;
-    color: #333;
-}
-
-.profile-container {
-    max-width: 900px;
-    margin: 20px auto;
+.profile-info {
+    background-color: #f8f8f8;
     padding: 20px;
     background-color: #ffffff;
     border-radius: 8px;
@@ -773,7 +741,7 @@ body {
 }
 
 .pet-card {
-    background-color: #f8f8f8;
+    background-color: #ffffff;
     padding: 20px;
     margin-bottom: 20px;
     border-radius: 8px;
@@ -796,10 +764,3 @@ body {
     text-align: center;
     margin-top: 15px;
 }
-
-.btn-primary:hover {
-    background-color: #43575d;
-}
-
-
-
