@@ -7,56 +7,63 @@
 
 body {
     font-family: Arial, sans-serif;
-    background-color: #f4f4f4;
-    color: #333;
+    background-color: var(--background-color);
+    color: var(--text-color);
+}
+
+/* Global Variables */
+:root {
+    --primary-color: #35424a; /* Dark Blue-Grey */
+    --secondary-color: #5b9bd5; /* Soft Blue */
+    --accent-color: #2a75bb; /* Accent Blue */
+    --text-color: #333;
+    --background-color: #f4f4f4;
+    --white-color: #ffffff;
 }
 
 /* Navbar Styling */
 header {
-    background-color: #ffffff;
+    background-color: var(--white-color);
     padding: 20px 0;
 }
 
-.navbar {
-    max-width: 1200px;
-    margin: 0 auto;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 10px 20px;
+/* Footer Styles */
+footer {
+    background-color: var(--primary-color); /* Dark Blue-Grey matching the design */
+    padding: 20px 0;
+    text-align: center;
+    color: var(--white-color);
 }
 
-.navbar-menu {
+footer nav ul {
     list-style: none;
     display: flex;
-    justify-content: center; /* Center items */
+    justify-content: center;
     align-items: center;
-    flex: 1;
+    padding: 0;
+    margin: 0;
 }
 
-.navbar-menu li {
-    margin-left: 20px;
+footer nav ul li {
+    margin: 0 15px; /* Space between items */
+    display: inline-flex;
+    align-items: center;
 }
 
-.navbar-menu a {
-    color: var(--primary-color);
+footer nav ul li a {
+    color: var(--white-color); /* White text */
     text-decoration: none;
-    padding: 10px 20px;
-    font-size: 1em;
+    font-size: 14px;
 }
 
-.logo {
-    width: 60px;
-    height: auto;
-}
-
-.notification-icon {
+footer nav ul li img {
     width: 20px;
-    height: auto;
+    height: 20px;
+    margin-left: 5px;
 }
 
-.navbar-menu a:hover {
-    background-color: transparent;
+footer nav ul li a:hover {
+    color: var(--secondary-color); /* Soft Blue on hover */
 }
 
 /* Pet Records Section */
@@ -64,7 +71,7 @@ header {
     padding: 40px;
     max-width: 900px;
     margin: auto;
-    background-color: #ffffff;
+    background-color: var(--white-color);
     border-radius: 10px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     margin-top: 20px;
@@ -73,11 +80,11 @@ header {
 .pet-records h1 {
     text-align: center;
     margin-bottom: 30px;
-    color: #35424a; /* Dark Blue-Grey */
+    color: var(--primary-color);
 }
 
 .record-card {
-    background-color: #ffffff;
+    background-color: var(--white-color);
     padding: 20px;
     margin-bottom: 20px;
     border-radius: 5px;
@@ -86,7 +93,7 @@ header {
 
 .record-card h2 {
     margin-bottom: 15px;
-    color: #5b9bd5; /* Soft Blue */
+    color: var(--secondary-color);
 }
 
 .record-card p {
@@ -98,66 +105,19 @@ header {
     padding-left: 20px;
 }
 
+/* Button Styling */
 .btn-primary {
     padding: 10px 20px;
-    background-color: #35424a; /* Dark Blue-Grey */
-    color: #ffffff;
+    background-color: var(--primary-color);
+    color: var(--white-color);
     text-decoration: none;
     border-radius: 5px;
     border: none;
     cursor: pointer;
 }
 
-/* Footer Styles */
-footer {
-    background-color: #35424a; /* Dark Blue-Grey */
-    padding: 20px 0;
-}
-
-.footer-nav {
-    max-width: 1200px;
-    margin: 0 auto;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    background-color: #35424a; /* Dark Blue-Grey */
-}
-
-.footer-nav ul {
-    list-style: none;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    flex: 1;
-}
-
-.footer-nav li {
-    margin-left: 20px;
-}
-
-.footer-nav a {
-    color: #ffffff;
-    text-decoration: none;
-    padding: 10px 20px;
-}
-
-.footer-logo {
-    width: 50px;
-    height: auto;
-}
-
-.social-icon {
-    width: 30px;
-    height: auto;
-    margin: 0 10px;
-}
-
-/* Action buttons for edit and delete */
-.action-buttons {
-    display: flex;
-    justify-content: flex-end;
-    gap: 10px;
-    margin-bottom: 10px;
+.btn-primary:hover {
+    background-color: var(--accent-color);
 }
 
 .btn-secondary {
@@ -182,10 +142,12 @@ footer {
     background-color: var(--accent-color); /* Hover effect */
 }
 
-.record-header {
+/* Action buttons for edit and delete */
+.action-buttons {
     display: flex;
-    justify-content: space-between;
-    align-items: center;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-bottom: 10px;
 }
 
 /* Center-align the "Create New Record" button */
@@ -198,8 +160,8 @@ footer {
 /* Styling the button itself */
 .new-record-btn a {
     padding: 10px 20px;
-    background-color: #35424a; /* Dark Blue-Grey */
-    color: #ffffff;
+    background-color: var(--primary-color);
+    color: var(--white-color);
     text-decoration: none;
     border-radius: 5px;
     border: none;
@@ -211,7 +173,7 @@ footer {
 
 /* Button hover state */
 .new-record-btn a:hover {
-    background-color: #2a75bb; /* Accent Blue on hover */
+    background-color: var(--accent-color); /* Accent Blue on hover */
 }
 
 /* Form Container Styling */
@@ -245,20 +207,6 @@ footer {
 .form-container textarea {
     resize: vertical;
     min-height: 100px;
-}
-
-.btn-primary {
-    padding: 10px 20px;
-    background-color: var(--primary-color);
-    color: var(--white-color);
-    text-decoration: none;
-    border-radius: 5px;
-    border: none;
-    cursor: pointer;
-}
-
-.btn-primary:hover {
-    background-color: var(--accent-color);
 }
 
 /* Additional Navbar and Footer Styling */
