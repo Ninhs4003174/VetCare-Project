@@ -1,27 +1,82 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Add New Pet Record</title>
+    <title>Create New Pet Record</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
 </head>
 <body>
-    <h1>Add New Pet Record</h1>
-    <form action="/records/save" th:object="${petRecord}" method="post">
-        <label>Name:</label>
-        <input type="text" th:field="*{name}" />
-        <br/>
-        <label>Breed:</label>
-        <input type="text" th:field="*{breed}" />
-        <br/>
-        <label>Date of Birth:</label>
-        <input type="text" th:field="*{dateOfBirth}" />
-        <br/>
-        <label>Last Visit:</label>
-        <input type="text" th:field="*{lastVisit}" />
-        <br/>
-        <label>Notes:</label>
-        <textarea th:field="*{notes}"></textarea>
-        <br/>
-        <button type="submit">Save</button>
-    </form>
+    <header>
+        <nav>
+            <ul class="navbar-menu">
+                <li><a href="index.html"><img src="img/logo.png" alt="Logo" class="logo"></a></li>
+                <li><a href="records.html">Pet Records</a></li>
+                <li><a href="appointments.html">Appointments</a></li>
+                <li><a href="resources.html">Resources</a></li>
+                <li><a href="contact.html">Contact</a></li>
+                <li><a href="profile.html">My Profile</a></li>
+                <li><a href="#"><img src="img/notif.png" alt="Notifications" class="notification-icon"></a></li>
+                <li><a href="logout.html" class="btn-secondary">Log out</a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <section class="pet-record-form">
+            <h1>Create New Pet Record</h1>
+            <form th:action="@{/records/save}" method="post" class="form-container">
+                <label for="name">Pet Name:</label>
+                <input type="text" id="name" name="name" required>
+
+                <label for="breed">Breed:</label>
+                <input type="text" id="breed" name="breed" required>
+
+                <label for="dateOfBirth">Date of Birth:</label>
+                <input type="date" id="dateOfBirth" name="dateOfBirth" required>
+
+                <label for="veterinarian">Veterinarian:</label>
+                <input type="text" id="veterinarian" name="veterinarian" required>
+
+                <label for="lastVisit">Last Visit:</label>
+                <input type="date" id="lastVisit" name="lastVisit">
+
+                <label for="allergies">Allergies:</label>
+                <input type="text" id="allergies" name="allergies">
+
+                <label for="prescriptions">Prescriptions:</label>
+                <input type="text" id="prescriptions" name="prescriptions">
+
+                <label for="vaccinationHistory">Vaccination History:</label>
+                <textarea id="vaccinationHistory" name="vaccinationHistory"></textarea>
+
+                <label for="recentTests">Recent Tests:</label>
+                <input type="text" id="recentTests" name="recentTests">
+
+                <label for="recentSurgeries">Recent Surgeries:</label>
+                <input type="text" id="recentSurgeries" name="recentSurgeries">
+
+                <label for="dietaryRecommendations">Dietary Recommendations:</label>
+                <input type="text" id="dietaryRecommendations" name="dietaryRecommendations">
+
+                <label for="notes">Notes:</label>
+                <textarea id="notes" name="notes"></textarea>
+
+                <button type="submit" class="btn-primary">Save Record</button>
+            </form>
+        </section>
+    </main>
+    <footer>
+        <nav>
+            <ul class="footer-nav">
+                <li><a href="index.html"><img src="img/logo.png" alt="Logo" class="footer-logo"></a></li>
+                <li><a href="records.html">Pet Records</a></li>
+                <li><a href="appointments.html">Appointments</a></li>
+                <li><a href="resources.html">Resources</a></li>
+                <li><a href="contact.html">Contact</a></li>
+                <li><a href="profile.html">My Profile</a></li>
+                <li><a href="#"><img src="img/facebook.png" alt="Facebook" class="social-icon"></a></li>
+                <li><a href="#"><img src="img/linked.png" alt="LinkedIn" class="social-icon"></a></li>
+                <li><a href="#"><img src="img/insta.png" alt="Instagram" class="social-icon"></a></li>
+            </ul>
+        </nav>
+    </footer>
 </body>
 </html>

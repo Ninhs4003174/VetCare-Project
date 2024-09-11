@@ -5,47 +5,69 @@ import au.edu.rmit.sept.webapp.services.PetRecordService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
+@RequestMapping("/records")
 public class PetRecordController {
 
     @Autowired
     private PetRecordService petRecordService;
 
-    @GetMapping("/records")
+    // Serve the list of all pet records
+    @GetMapping
     public String getAllRecords(Model model) {
         model.addAttribute("records", petRecordService.getAllPetRecords());
-        return "records";
+        return "records"; // This corresponds to records.html
     }
 
-    @GetMapping("/records/{id}")
-    public String getPetRecord(@PathVariable Long id, Model model) {
-        PetRecord record = petRecordService.getPetRecordById(id);
-        model.addAttribute("record", record);
-        return "view_record"; // Make sure to have a `view_record.html` template
-    }
-
-    @GetMapping("/records/new")
-    public String createNewRecord(Model model) {
+    // Serve the new record form page
+    @GetMapping("/new")
+    public String showNewRecordForm(Model model) {
         PetRecord petRecord = new PetRecord();
-        model.addAttribute("record", petRecord);
-        return "new_record"; // Corresponding form page to create a new record
+        model.addAttribute("petRecord", petRecord);
+        return "new_record"; // This corresponds to new_record.html
     }
 
-    @PostMapping("/records")
-    public String savePetRecord(@ModelAttribute("record") PetRecord petRecord) {
-        petRecordService.savePetRecord(petRecord);
-        return "redirect:/records";
+    // Handle form submission to save the new pet record
+    @PostMapping("/save")
+    public String saveRecord(@ModelAttribute("petRecord") PetRecord petRecord) {
+        petRecordService.save(petRecord);
+        return "redirect:/records"; // Redirect to records list after saving
     }
 
-    @GetMapping("/records/edit/{id}")
-    public String editPetRecord(@PathVariable Long id, Model model) {
-        PetRecord record = petRecordService.getPetRecordById(id);
-        model.addAttribute("record", record);
-        return "edit_record"; // Corresponding form page to edit the record
+    // Serve the edit record form page
+    @GetMapping("/edit/{id}")
+    public String showEditRecordForm(@PathVariable Long id, Model model) {
+        PetRecord petRecord = petRecordService.getPetRecordById(id);
+        model.addAttribute("petRecord", petRecord);
+        return "edit_record"; // This corresponds to edit_record.html
+    }
+
+    // Handle form submission to update an existing pet record
+    @PostMapping("/update/{id}")
+    public String updateRecord(@PathVariable Long id, @ModelAttribute("petRecord") PetRecord petRecord) {
+        PetRecord existingRecord = petRecordService.getPetRecordById(id);
+        existingRecord.setName(petRecord.getName());
+        existingRecord.setBreed(petRecord.getBreed());
+        existingRecord.setDateOfBirth(petRecord.getDateOfBirth());
+        existingRecord.setVeterinarian(petRecord.getVeterinarian());
+        existingRecord.setLastVisit(petRecord.getLastVisit());
+        existingRecord.setAllergies(petRecord.getAllergies());
+        existingRecord.setPrescriptions(petRecord.getPrescriptions());
+        existingRecord.setVaccinationHistory(petRecord.getVaccinationHistory());
+        existingRecord.setRecentTests(petRecord.getRecentTests());
+        existingRecord.setRecentSurgeries(petRecord.getRecentSurgeries());
+        existingRecord.setDietaryRecommendations(petRecord.getDietaryRecommendations());
+        existingRecord.setNotes(petRecord.getNotes());
+        petRecordService.update(existingRecord);
+        return "redirect:/records"; // Redirect to records list after updating
+    }
+
+    // Delete a pet record
+    @GetMapping("/delete/{id}")
+    public String deleteRecord(@PathVariable Long id) {
+        petRecordService.delete(id);
+        return "redirect:/records"; // Redirect to records list after deletion
     }
 }
