@@ -5,47 +5,47 @@ import au.edu.rmit.sept.webapp.services.PetRecordService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 
 @Controller
-@RequestMapping("/records")
 public class PetRecordController {
 
     @Autowired
-    private PetRecordService service;
+    private PetRecordService petRecordService;
 
-    @GetMapping
-    public String viewRecordsPage(Model model) {
-        List<PetRecord> records = service.getAllRecords();
-        model.addAttribute("records", records);
+    @GetMapping("/records")
+    public String getAllRecords(Model model) {
+        model.addAttribute("records", petRecordService.getAllPetRecords());
         return "records";
     }
 
-    @GetMapping("/new")
-    public String showNewRecordForm(Model model) {
+    @GetMapping("/records/{id}")
+    public String getPetRecord(@PathVariable Long id, Model model) {
+        PetRecord record = petRecordService.getPetRecordById(id);
+        model.addAttribute("record", record);
+        return "view_record"; // Make sure to have a `view_record.html` template
+    }
+
+    @GetMapping("/records/new")
+    public String createNewRecord(Model model) {
         PetRecord petRecord = new PetRecord();
-        model.addAttribute("petRecord", petRecord);
-        return "new_record";
+        model.addAttribute("record", petRecord);
+        return "new_record"; // Corresponding form page to create a new record
     }
 
-    @PostMapping("/save")
-    public String saveRecord(@ModelAttribute("petRecord") PetRecord petRecord) {
-        service.saveRecord(petRecord);
+    @PostMapping("/records")
+    public String savePetRecord(@ModelAttribute("record") PetRecord petRecord) {
+        petRecordService.savePetRecord(petRecord);
         return "redirect:/records";
     }
 
-    @GetMapping("/edit/{id}")
-    public String showEditRecordForm(@PathVariable Long id, Model model) {
-        PetRecord petRecord = service.getRecordById(id);
-        model.addAttribute("petRecord", petRecord);
-        return "edit_record";
-    }
-
-    @GetMapping("/delete/{id}")
-    public String deleteRecord(@PathVariable Long id) {
-        service.deleteRecord(id);
-        return "redirect:/records";
+    @GetMapping("/records/edit/{id}")
+    public String editPetRecord(@PathVariable Long id, Model model) {
+        PetRecord record = petRecordService.getPetRecordById(id);
+        model.addAttribute("record", record);
+        return "edit_record"; // Corresponding form page to edit the record
     }
 }

@@ -11,25 +11,20 @@ import java.util.List;
 public class PetRecordServiceImpl implements PetRecordService {
 
     @Autowired
-    private PetRecordRepository repository;
+    private PetRecordRepository petRecordRepository;
 
     @Override
-    public List<PetRecord> getAllRecords() {
-        return repository.findAll();
+    public List<PetRecord> getAllPetRecords() {
+        return petRecordRepository.findAll();
     }
 
     @Override
-    public PetRecord saveRecord(PetRecord record) {
-        return repository.save(record);
+    public PetRecord getPetRecordById(Long id) {
+        return petRecordRepository.findById(id).orElse(null);
     }
 
     @Override
-    public void deleteRecord(Long id) {
-        repository.deleteById(id);
-    }
-
-    @Override
-    public PetRecord getRecordById(Long id) {
-        return repository.findById(id).orElse(null);
+    public void savePetRecord(PetRecord petRecord) {
+        petRecordRepository.save(petRecord);
     }
 }

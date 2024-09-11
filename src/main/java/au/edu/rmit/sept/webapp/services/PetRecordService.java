@@ -1,14 +1,13 @@
 package au.edu.rmit.sept.webapp.services;
 
 import au.edu.rmit.sept.webapp.models.PetRecord;
+
 import java.util.List;
 
 public interface PetRecordService {
-    List<PetRecord> getAllRecords();
+    List<PetRecord> getAllPetRecords();
 
-    PetRecord saveRecord(PetRecord record);
+    PetRecord getPetRecordById(Long id);
 
-    void deleteRecord(Long id);
-
-    PetRecord getRecordById(Long id);
+    void savePetRecord(PetRecord petRecord);
 }

@@ -1,0 +1,168 @@
+/* Basic Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    color: #333;
+}
+
+/* Color Scheme */
+:root {
+    --primary-color: #35424a; /* Dark Blue-Grey */
+    --secondary-color: #5b9bd5; /* Soft Blue */
+    --accent-color: #2a75bb; /* Accent Blue */
+    --text-color: #333;
+    --background-color: #f4f4f4;
+    --white-color: #ffffff;
+}
+
+/* Header Styles */
+header {
+    background-color: #ffffff;
+    color: #35424a;
+    padding: 20px 0;
+}
+
+.navbar {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 20px;
+}
+
+.navbar-menu {
+    list-style: none;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex: 1;
+}
+
+.navbar-menu li {
+    margin-left: 20px;
+}
+
+.navbar-menu a {
+    color: var(--primary-color); /* Dark blue-grey text color */
+    text-decoration: none;
+    padding: 10px 20px;
+}
+
+.logo {
+    width: 60px;
+    height: auto;
+}
+
+.notification-icon {
+    width: 25px;
+    height: auto;
+}
+
+
+/* Pet Records Section */
+.pet-records {
+    padding: 40px;
+    max-width: 900px;
+    margin: auto;
+    background-color: var(--white-color);
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    margin-top: 20px;
+}
+
+.pet-records h1 {
+    text-align: center;
+    margin-bottom: 30px;
+    color: var(--primary-color);
+}
+
+.record-card {
+    background-color: var(--white-color);
+    padding: 20px;
+    margin-bottom: 20px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.record-card h2 {
+    margin-bottom: 15px;
+    color: var(--secondary-color);
+}
+
+.record-card p {
+    margin-bottom: 10px;
+}
+
+.record-card ul {
+    list-style: disc;
+    padding-left: 20px;
+}
+
+.btn-primary {
+    padding: 10px 20px;
+    background-color: var(--primary-color);
+    color: var(--white-color);
+    text-decoration: none;
+    border-radius: 5px;
+    border: none;
+    cursor: pointer;
+}
+
+.btn-primary:hover {
+    background-color: var(--accent-color);
+}
+
+/* Footer Styles */
+footer {
+    background-color: var(--primary-color);
+    padding: 20px 0;
+}
+
+.footer-nav {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.footer-nav ul {
+    list-style: none;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex: 1;
+}
+
+.footer-nav li {
+    margin-left: 20px;
+}
+
+.footer-nav a {
+    color: var(--white-color);
+    text-decoration: none;
+    padding: 10px 20px;
+}
+
+.footer-nav a:hover {
+    background-color: var(--accent-color);
+    border-radius: 5px;
+}
+
+.footer-logo {
+    width: 50px;
+    height: auto;
+}
+
+.social-icon {
+    width: 30px;
+    height: auto;
+    margin: 0 10px;
+}

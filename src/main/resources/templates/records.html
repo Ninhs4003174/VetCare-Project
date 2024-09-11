@@ -1,51 +1,111 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pet Records</title>
-    <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Gnb2GKIpZl3E48MfsS7s5u7GWQeQ2WObapb5zXTKfAoNmFpveb04nF/hJoK2lMj" crossorigin="anonymous">
+    <title>Pet Medical Records</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
 </head>
 <body>
-    <div class="container mt-5">
-        <h1 class="text-center mb-4">Pet Records</h1>
+    <header>
+        <nav class="navbar">
+            <ul class="navbar-menu">
+                <li><a href="index.html"><img src="img/logo.png" alt="Logo" class="logo"></a></li>
+                <li><a href="records.html">Pet Records</a></li>
+                <li><a href="appointments.html">Appointments</a></li>
+                <li><a href="resources.html">Resources</a></li>
+                <li><a href="contact.html">Contact</a></li>
+                <li><a href="profile.html">My Profile</a></li>
+                <li><a href="#"><img src="img/notif.png" alt="Notifications" class="notification-icon"></a></li>
+                <li><a href="logout.html" class="btn-secondary">Log out</a></li>
+            </ul>
+        </nav>
+    </header>
+    
+    
+    <main>
+        <section class="pet-records">
+            <h1>Pet Medical Records</h1>
+            <div class="record-card">
+                <h2>Bella's Medical Record</h2>
+                <p><strong>Owner Name:</strong> Emily Johnson</p>
+                <p><strong>Veterinarian:</strong> Dr. Smith</p>
+                <p><strong>Date of Birth:</strong> March 14, 2019</p>
+                <p><strong>Last Visit:</strong> August 1, 2024</p>
+                <p><strong>Allergies:</strong> None</p>
+                <p><strong>Prescriptions:</strong> Heartworm Prevention (Monthly), Flea Control (Monthly)</p>
+                <p><strong>Vaccination History:</strong>
+                    <ul>
+                        <li>Rabies - April 10, 2024</li>
+                        <li>Distemper - April 10, 2024</li>
+                        <li>Bordetella - October 5, 2023</li>
+                    </ul>
+                </p>
+                <p><strong>Recent Tests:</strong> Blood Test (Normal), Urine Test (Normal)</p>
+                <p><strong>Recent Surgeries:</strong> Spay - May 15, 2020</p>
+                <p><strong>Dietary Recommendations:</strong> High-protein diet, Grain-free food</p>
+                <p><strong>Notes:</strong> Bella is in good health. Recommended to continue with current diet and exercise routine.</p>
+                <button class="btn-primary">Download Full Record</button>
+            </div>
 
-        <!-- Add New Record Button -->
-        <div class="d-flex justify-content-end mb-3">
-            <a href="/records/new" class="btn btn-primary">Add New Record</a>
-        </div>
+            <div class="record-card">
+                <h2>Max's Medical Record</h2>
+                <p><strong>Owner Name:</strong> Jake Peterson</p>
+                <p><strong>Veterinarian:</strong> Dr. Jane</p>
+                <p><strong>Date of Birth:</strong> June 22, 2018</p>
+                <p><strong>Last Visit:</strong> July 15, 2024</p>
+                <p><strong>Allergies:</strong> Pollen, Dust</p>
+                <p><strong>Prescriptions:</strong> Allergy Medication (Daily), Joint Supplements (Daily)</p>
+                <p><strong>Vaccination History:</strong>
+                    <ul>
+                        <li>Rabies - January 20, 2024</li>
+                        <li>Distemper - January 20, 2024</li>
+                        <li>Leptospirosis - July 10, 2023</li>
+                    </ul>
+                </p>
+                <p><strong>Recent Tests:</strong> Allergy Test (Positive for pollen)</p>
+                <p><strong>Recent Surgeries:</strong> None</p>
+                <p><strong>Dietary Recommendations:</strong> Hypoallergenic diet</p>
+                <p><strong>Notes:</strong> Max has shown improvement with his allergy medication. Monitor for any changes in symptoms.</p>
+                <button class="btn-primary">Download Full Record</button>
+            </div>
 
-        <!-- Pet Records Table -->
-        <table class="table table-striped table-bordered">
-            <thead class="table-dark">
-                <tr>
-                    <th>Name</th>
-                    <th>Breed</th>
-                    <th>Date of Birth</th>
-                    <th>Last Visit</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                <!-- Example Pet Record Row -->
-                <tr>
-                    <td>Bella</td>
-                    <td>Golden Retriever</td>
-                    <td>March 14, 2019</td>
-                    <td>August 1, 2024</td>
-                    <td>
-                        <a href="#" class="btn btn-sm btn-info">View</a>
-                        <a href="#" class="btn btn-sm btn-warning">Edit</a>
-                        <a href="#" class="btn btn-sm btn-danger">Delete</a>
-                    </td>
-                </tr>
-                <!-- Add more pet records here -->
-            </tbody>
-        </table>
-    </div>
-
-    <!-- Bootstrap JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ppoiPYU8IHd7GyTUP8IUXgFaaUQ1gkkwP7u5TXtviN5MqaW8k8cnsicnxq/Ts1XI" crossorigin="anonymous"></script>
+            <!-- Add more records here to simulate a full database -->
+            <div class="record-card">
+                <h2>Luna's Medical Record</h2>
+                <p><strong>Owner Name:</strong> Sarah Thompson</p>
+                <p><strong>Veterinarian:</strong> Dr. Miller</p>
+                <p><strong>Date of Birth:</strong> October 11, 2020</p>
+                <p><strong>Last Visit:</strong> September 10, 2024</p>
+                <p><strong>Allergies:</strong> Chicken</p>
+                <p><strong>Prescriptions:</strong> Vitamin Supplements (Daily)</p>
+                <p><strong>Vaccination History:</strong>
+                    <ul>
+                        <li>Rabies - September 5, 2024</li>
+                        <li>Parvovirus - September 5, 2024</li>
+                        <li>Canine Influenza - March 10, 2023</li>
+                    </ul>
+                </p>
+                <p><strong>Recent Tests:</strong> Blood Test (Slightly Anemic)</p>
+                <p><strong>Recent Surgeries:</strong> None</p>
+                <p><strong>Dietary Recommendations:</strong> Grain-inclusive diet</p>
+                <p><strong>Notes:</strong> Luna requires regular checkups due to anemia. Ensure a balanced diet and monitor her energy levels.</p>
+                <button class="btn-primary">Download Full Record</button>
+            </div>
+        </section>
+    </main>
+    
+    <footer>
+        <nav class="footer-nav">
+            <ul>
+                <li><a href="index.html"><img src="img/logo.png" alt="Logo" class="footer-logo"></a></li>
+                <li><a href="records.html">Pet Records</a></li>
+                <li><a href="appointments.html">Appointments</a></li>
+                <li><a href="resources.html">Resources</a></li>
+                <li><a href="contact.html">Contact</a></li>
+                <li><a href="#"><img src="img/facebook.png" alt="Facebook" class="social-icon"></a></li>
+                <li><a href="#"><img src="img/linked.png" alt="LinkedIn" class="social-icon"></a></li>
+                <li><a href="#"><img src="img/insta.png" alt="Instagram" class="social-icon"></a></li>
+            </ul>
+        </nav>
+    </footer>    
 </body>
 </html>
