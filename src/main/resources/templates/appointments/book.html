@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+  layout:decorate="~{layout.html}">
+
+<head>
+  <title>Book Appointment</title>
+</head>
+
+<body>
+  <div layout:fragment="content">
+    <h1>Book an Appointment</h1>
+    <form th:action="@{/appointments/book}" th:object="${appointment}" method="post">
+      <label for="petName">Pet Name:</label>
+      <input type="text" id="petName" th:field="*{petName}" required />
+
+      <label for="vetName">Vet Name:</label>
+      <select id="vetName" th:field="*{vetName}">
+        <option value="" disabled selected>Select a vet</option>
+        <option th:each="vet : ${vets}" th:value="${vet.name}" th:text="${vet.name}"></option>
+      </select>
+
+      <label for="date">Date:</label>
+      <input type="date" id="date" th:field="*{date}" required />
+
+      <label for="time">Time:</label>
+      <input type="time" id="time" th:field="*{time}" required />
+
+      <label for="status">Status:</label>
+      <input type="text" id="status" th:field="*{status}" required />
+
+      <button type="submit">Book Appointment</button>
+    </form>
+    <div th:if="${errorMessage}" class="alert alert-danger">
+        <p th:text="${errorMessage}"></p>
+    </div>
+    
+  </div>
+</body>
+
+</html>
