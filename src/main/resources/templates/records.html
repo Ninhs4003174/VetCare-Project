@@ -26,7 +26,7 @@
 
             <!-- Button to create a new record -->
             <div class="new-record-btn">
-                <a href="/records/new" class="new-record-btn btn-primary">Create New Record</a>
+                <a th:href="@{/records/new}" class="btn-primary">Create New Record</a>
             </div>
 
             <!-- Example record with Edit and Delete buttons -->
@@ -35,8 +35,8 @@
                     <h2>Bella's Medical Record</h2>
                     <!-- Edit and Delete buttons next to each record -->
                     <div class="action-buttons">
-                        <a href="edit_record.html" class="btn-secondary">Edit Record</a>
-                        <a href="#" class="btn-danger" onclick="deleteRecord()">Delete Record</a>
+                        <a th:href="@{'/records/edit/1'}" class="btn-secondary">Edit Record</a>
+                        <a th:href="@{'/records/delete/1'}" class="btn-danger" onclick="return confirm('Are you sure you want to delete this record?')">Delete Record</a>
                     </div>
                 </div>
                 <p><strong>Owner Name:</strong> Emily Johnson</p>
@@ -59,13 +59,13 @@
                 <button class="btn-primary">Download Full Record</button>
             </div>
 
-            <!-- Add more records with Edit and Delete buttons for each -->
+            <!-- Second example record with Edit and Delete buttons -->
             <div class="record-card">
                 <div class="record-header">
                     <h2>Max's Medical Record</h2>
                     <div class="action-buttons">
-                        <a href="edit_record.html" class="btn-secondary">Edit Record</a>
-                        <a href="#" class="btn-danger" onclick="deleteRecord()">Delete Record</a>
+                        <a th:href="@{'/records/edit/2'}" class="btn-secondary">Edit Record</a>
+                        <a th:href="@{'/records/delete/2'}" class="btn-danger" onclick="return confirm('Are you sure you want to delete this record?')">Delete Record</a>
                     </div>
                 </div>
                 <p><strong>Owner Name:</strong> Jake Peterson</p>
@@ -88,6 +88,34 @@
                 <button class="btn-primary">Download Full Record</button>
             </div>
 
+            <!-- Dynamic records loaded via Thymeleaf -->
+            <div th:each="record : ${records}" class="record-card">
+                <div class="record-header">
+                    <h2 th:text="${record.name} + ' Medical Record'"></h2>
+                    <div class="action-buttons">
+                        <!-- Dynamic edit and delete links using record.id -->
+                        <a th:href="@{'/records/edit/' + ${record.id}}" class="btn-secondary">Edit Record</a>
+                        <a th:href="@{'/records/delete/' + ${record.id}}" class="btn-danger" onclick="return confirm('Are you sure you want to delete this record?')">Delete Record</a>
+                    </div>
+                </div>
+                <p><strong>Owner Name:</strong> <span th:text="${record.ownerName}"></span></p>
+                <p><strong>Veterinarian:</strong> <span th:text="${record.veterinarian}"></span></p>
+                <p><strong>Date of Birth:</strong> <span th:text="${#dates.format(record.dateOfBirth, 'dd/MM/yyyy')}"></span></p>
+                <p><strong>Last Visit:</strong> <span th:text="${#dates.format(record.lastVisit, 'dd/MM/yyyy')}"></span></p>
+                <p><strong>Allergies:</strong> <span th:text="${record.allergies}"></span></p>
+                <p><strong>Prescriptions:</strong> <span th:text="${record.prescriptions}"></span></p>
+                <p><strong>Vaccination History:</strong> 
+                    <ul>
+                        <li th:each="vaccine : ${record.vaccinationHistory}" th:text="${vaccine}"></li>
+                    </ul>
+                </p>
+                <p><strong>Recent Tests:</strong> <span th:text="${record.recentTests}"></span></p>
+                <p><strong>Recent Surgeries:</strong> <span th:text="${record.recentSurgeries}"></span></p>
+                <p><strong>Dietary Recommendations:</strong> <span th:text="${record.dietaryRecommendations}"></span></p>
+                <p><strong>Notes:</strong> <span th:text="${record.notes}"></span></p>
+                <button class="btn-primary">Download Full Record</button>
+            </div>
+
         </section>
     </main>
     
@@ -106,17 +134,5 @@
             </ul>
         </nav>
     </footer>
-    
-    
-
-    <!-- Dummy delete function -->
-    <script>
-        function deleteRecord() {
-            if (confirm("Are you sure you want to delete this record?")) {
-                // Handle the delete action here
-                alert("Record deleted successfully!");
-            }
-        }
-    </script>
 </body>
 </html>

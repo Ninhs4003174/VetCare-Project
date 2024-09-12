@@ -48,26 +48,38 @@ public class PetRecordController {
     @PostMapping("/update/{id}")
     public String updateRecord(@PathVariable Long id, @ModelAttribute("petRecord") PetRecord petRecord) {
         PetRecord existingRecord = petRecordService.getPetRecordById(id);
-        existingRecord.setName(petRecord.getName());
-        existingRecord.setBreed(petRecord.getBreed());
-        existingRecord.setDateOfBirth(petRecord.getDateOfBirth());
-        existingRecord.setVeterinarian(petRecord.getVeterinarian());
-        existingRecord.setLastVisit(petRecord.getLastVisit());
-        existingRecord.setAllergies(petRecord.getAllergies());
-        existingRecord.setPrescriptions(petRecord.getPrescriptions());
-        existingRecord.setVaccinationHistory(petRecord.getVaccinationHistory());
-        existingRecord.setRecentTests(petRecord.getRecentTests());
-        existingRecord.setRecentSurgeries(petRecord.getRecentSurgeries());
-        existingRecord.setDietaryRecommendations(petRecord.getDietaryRecommendations());
-        existingRecord.setNotes(petRecord.getNotes());
-        petRecordService.update(existingRecord);
-        return "redirect:/records"; // Redirect to records list after updating
+
+        if (existingRecord != null) {
+            // Update the fields of the existing record with the form data
+            existingRecord.setName(petRecord.getName());
+            existingRecord.setBreed(petRecord.getBreed());
+            existingRecord.setDateOfBirth(petRecord.getDateOfBirth());
+            existingRecord.setVeterinarian(petRecord.getVeterinarian());
+            existingRecord.setLastVisit(petRecord.getLastVisit());
+            existingRecord.setAllergies(petRecord.getAllergies());
+            existingRecord.setPrescriptions(petRecord.getPrescriptions());
+            existingRecord.setVaccinationHistory(petRecord.getVaccinationHistory());
+            existingRecord.setRecentTests(petRecord.getRecentTests());
+            existingRecord.setRecentSurgeries(petRecord.getRecentSurgeries());
+            existingRecord.setDietaryRecommendations(petRecord.getDietaryRecommendations());
+            existingRecord.setNotes(petRecord.getNotes());
+
+            petRecordService.update(existingRecord); // Call service to update the record
+        }
+
+        return "redirect:/records"; // Redirect to records page after update
     }
 
     // Delete a pet record
     @GetMapping("/delete/{id}")
     public String deleteRecord(@PathVariable Long id) {
-        petRecordService.delete(id);
-        return "redirect:/records"; // Redirect to records list after deletion
+        PetRecord record = petRecordService.getPetRecordById(id);
+
+        if (record != null) {
+            petRecordService.delete(id);
+            return "redirect:/records?success"; // Success message can be handled in the frontend
+        }
+
+        return "redirect:/records?error"; // Redirect with error if record not found
     }
 }
