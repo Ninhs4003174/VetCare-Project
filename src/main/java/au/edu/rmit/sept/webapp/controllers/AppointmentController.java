@@ -52,6 +52,8 @@ public class AppointmentController {
     //     appointmentService.saveAppointment(appointment);
     //     return "redirect:/appointments";
     // }
+
+    
     @PostMapping("/book")
 public String bookAppointment(@ModelAttribute Appointment appointment, BindingResult result, Model model) {
     if (result.hasErrors()) {
@@ -67,6 +69,12 @@ public String bookAppointment(@ModelAttribute Appointment appointment, BindingRe
         return "appointments/book";
     }
 
+    return "redirect:/appointments";
+}
+
+    @PostMapping("/cancel")
+public String cancelAppointment(@ModelAttribute("id") Long id) {
+    appointmentService.cancelAppointment(id);
     return "redirect:/appointments";
 }
 

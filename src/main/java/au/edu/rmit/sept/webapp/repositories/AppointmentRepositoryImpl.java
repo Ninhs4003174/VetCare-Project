@@ -75,6 +75,20 @@ public class AppointmentRepositoryImpl implements AppointmentRepository {
                     throw new RuntimeException("Error saving appointment", e);
                 }
             }
+        
+
+    @Override
+    public void deleteById(Long id) {
+                try {
+                    Connection connection = source.getConnection();
+                    PreparedStatement stm = connection.prepareStatement("DELETE FROM appointments WHERE id = ?;");
+                    stm.setLong(1, id);
+                    stm.executeUpdate();
+                    connection.close();
+                } catch (SQLException e) {
+                    throw new RuntimeException("Error canceling appointment", e);
+                }
+            }
         }
         
 

@@ -65,4 +65,9 @@ public class AppointmentServiceImpl implements AppointmentService {
         }
         return false;
     }
+
+    @Override
+    public void cancelAppointment(Long id) {
+        repository.deleteById(id);
+    }
 }

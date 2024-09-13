@@ -9,5 +9,7 @@ public interface AppointmentRepository {
 
     public void save(Appointment appointment);
     List<Appointment> findByVetName(String vetName);
+
+    public void deleteById(Long id);
  
 }
