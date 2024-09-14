@@ -11,8 +11,12 @@ public class UserService {
     @Autowired
     private UserRepository userRepository;
 
-    public void registerUser(String username, String password) {
-        User user = new User(username, password);
-        userRepository.save(user);
+    public void registerUser(String username, String email, String password) throws Exception {
+        // Add logic here to check if the user already exists, hash the password, etc.
+        User newUser = new User();
+        newUser.setUsername(username);
+        newUser.setEmail(email);
+        newUser.setPassword(password); // Ensure to hash the password before storing it.
+        userRepository.save(newUser);
     }
 }
