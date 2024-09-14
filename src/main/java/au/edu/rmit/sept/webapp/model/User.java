@@ -2,6 +2,9 @@ package au.edu.rmit.sept.webapp.model;
 
 import jakarta.persistence.*;
 
+import java.util.HashSet;
+import java.util.Set;
+
 @Entity
 @Table(name = "vet_users")
 public class User {
@@ -13,6 +16,8 @@ public class User {
     private String username;
     private String password;
     private String email;
+    @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<Pet> pets = new HashSet<>(); // Initialize the set
 
     // Constructors, getters, setters
     public User() {
@@ -53,5 +58,13 @@ public class User {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public Set<Pet> getPets() {
+        return pets;
+    }
+
+    public void setPets(Set<Pet> pets) {
+        this.pets = pets;
     }
 }
