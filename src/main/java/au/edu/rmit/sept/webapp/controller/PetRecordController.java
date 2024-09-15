@@ -15,6 +15,11 @@ public class PetRecordController {
     @Autowired
     private PetRecordService petRecordService;
 
+    @GetMapping("/records")
+    public String showRecordsPage() {
+        return "records"; // This corresponds to home.html
+    }
+
     // Serve the list of all pet records
     @GetMapping
     public String getAllRecords(Model model) {
