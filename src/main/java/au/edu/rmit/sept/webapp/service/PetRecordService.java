@@ -1,7 +1,8 @@
-package au.edu.rmit.sept.webapp.services;
+package au.edu.rmit.sept.webapp.service;
 
-import au.edu.rmit.sept.webapp.models.PetRecord;
 import java.util.List;
+
+import au.edu.rmit.sept.webapp.model.PetRecord;
 
 public interface PetRecordService {
 
