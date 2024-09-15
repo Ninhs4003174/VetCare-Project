@@ -36,7 +36,7 @@ public class BasicConfiguration {
         http
                 .authorizeHttpRequests(request -> request
                         .requestMatchers("/css/**", "/js/**", "/img/**").permitAll()
-                        .requestMatchers("/login", "/signup", "/home").permitAll()
+                        .requestMatchers("/**").permitAll() 
                         .requestMatchers("/user/**").hasRole("USER")
                         .anyRequest().authenticated())
                 .formLogin(formLogin -> formLogin
