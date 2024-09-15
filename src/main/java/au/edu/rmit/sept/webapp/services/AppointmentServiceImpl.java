@@ -24,19 +24,21 @@ public class AppointmentServiceImpl implements AppointmentService {
         return repository.findAll();
     }
 
-    @Override
     public void saveAppointment(Appointment appointment) {
-        // Validate appointment time
-        if (!isValidAppointmentTime(appointment.getTime())) {
-            throw new IllegalArgumentException("Appointment time must be between 9 AM and 5 PM, in 15-minute intervals.");
+        // If the appointment is new (id is null), validate and save as a new record
+        if (appointment.getId() == null) {
+            if (!isValidAppointmentTime(appointment.getTime())) {
+                throw new IllegalArgumentException("Appointment time must be between 9 AM and 5 PM, in 15-minute intervals.");
+            }
+    
+            if (isOverlappingAppointment(appointment)) {
+                throw new IllegalArgumentException("This time slot is already booked for the selected vet.");
+            }
+    
+            repository.save(appointment); // Save as a new appointment
+        } else {
+            updateAppointment(appointment); // Update the existing appointment
         }
-
-        // Check for overlapping appointments with the same vet
-        if (isOverlappingAppointment(appointment)) {
-            throw new IllegalArgumentException("This time slot is already booked for the selected vet.");
-        }
-
-        repository.save(appointment);
     }
 
     // Validate if the time is between 9 AM and 5 PM and 15-minute interval

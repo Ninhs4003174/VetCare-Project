@@ -58,23 +58,42 @@ public class AppointmentRepositoryImpl implements AppointmentRepository {
             throw new RuntimeException("Error retrieving vet appointments", e);
         }
     }
-    public void save(Appointment appointment) {
-                try {
-                    Connection connection = this.source.getConnection();
-                    PreparedStatement stm = connection.prepareStatement(
-                        "INSERT INTO appointments (pet_name, vet_name, date, time, status) VALUES (?, ?, ?, ?, ?)"
-                    );
-                    stm.setString(1, appointment.getPetName());
-                    stm.setString(2, appointment.getVetName());
-                    stm.setString(3, appointment.getDate());
-                    stm.setString(4, appointment.getTime());
-                    stm.setString(5, appointment.getStatus());
-                    stm.executeUpdate();
-                    connection.close();
-                } catch (SQLException e) {
-                    throw new RuntimeException("Error saving appointment", e);
-                }
-            }
+    
+    @Override
+public void save(Appointment appointment) {
+    try {
+        Connection connection = this.source.getConnection();
+
+        if (appointment.getId() == null) {
+            // New appointment, insert into the database
+            PreparedStatement insertStm = connection.prepareStatement(
+                "INSERT INTO appointments (pet_name, vet_name, date, time, status) VALUES (?, ?, ?, ?, ?)"
+            );
+            insertStm.setString(1, appointment.getPetName());
+            insertStm.setString(2, appointment.getVetName());
+            insertStm.setString(3, appointment.getDate());
+            insertStm.setString(4, appointment.getTime());
+            insertStm.setString(5, appointment.getStatus());
+            insertStm.executeUpdate();
+        } else {
+            // Existing appointment, update the database
+            PreparedStatement updateStm = connection.prepareStatement(
+                "UPDATE appointments SET pet_name = ?, vet_name = ?, date = ?, time = ?, status = ? WHERE id = ?"
+            );
+            updateStm.setString(1, appointment.getPetName());
+            updateStm.setString(2, appointment.getVetName());
+            updateStm.setString(3, appointment.getDate());
+            updateStm.setString(4, appointment.getTime());
+            updateStm.setString(5, appointment.getStatus());
+            updateStm.setLong(6, appointment.getId());
+            updateStm.executeUpdate();
+        }
+
+        connection.close();
+    } catch (SQLException e) {
+        throw new RuntimeException("Error saving appointment", e);
+    }
+}
         
 
     @Override
@@ -94,20 +113,25 @@ public class AppointmentRepositoryImpl implements AppointmentRepository {
     public Appointment findById(Long id) {
                 try {
                     Connection connection = source.getConnection();
-                    PreparedStatement stm = connection.prepareStatement("SELECT * FROM appointments WHERE id = ?;");
+                    PreparedStatement stm = connection.prepareStatement("SELECT * FROM appointments WHERE id = ?");
                     stm.setLong(1, id);
                     ResultSet rs = stm.executeQuery();
+            
                     if (rs.next()) {
-                        return new Appointment(rs.getLong(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5), rs.getString(6));
+                        Appointment appointment = new Appointment(
+                            rs.getLong(1), rs.getString(2), rs.getString(3),
+                            rs.getString(4), rs.getString(5), rs.getString(6)
+                        );
+                        connection.close();
+                        return appointment;
+                    } else {
+                        connection.close();
+                        throw new IllegalArgumentException("Invalid appointment ID: " + id);
                     }
-                    connection.close();
-                    return null;
                 } catch (SQLException e) {
-                    throw new RuntimeException("Error retrieving appointment by ID", e);
+                    throw new RuntimeException("Error finding appointment", e);
                 }
             }
-
-    
         }
         
 
