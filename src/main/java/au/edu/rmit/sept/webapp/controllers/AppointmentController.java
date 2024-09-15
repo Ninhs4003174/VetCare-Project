@@ -8,6 +8,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -53,7 +54,7 @@ public class AppointmentController {
     //     return "redirect:/appointments";
     // }
 
-    
+
     @PostMapping("/book")
 public String bookAppointment(@ModelAttribute Appointment appointment, BindingResult result, Model model) {
     if (result.hasErrors()) {
@@ -76,6 +77,32 @@ public String bookAppointment(@ModelAttribute Appointment appointment, BindingRe
 public String cancelAppointment(@ModelAttribute("id") Long id) {
     appointmentService.cancelAppointment(id);
     return "redirect:/appointments";
+}
+
+@GetMapping("/edit/{id}")
+public String showEditForm(@PathVariable("id") Long id, Model model) {
+    Appointment appointment = appointmentService.findAppointmentById(id); // Add a method to get the appointment by ID
+    model.addAttribute("appointment", appointment);
+    model.addAttribute("vets", vetService.getAllVets()); // Pass the list of vets
+    return "appointments/edit"; // Return the edit form
+}
+
+@PostMapping("/edit")
+public String editAppointment(@ModelAttribute Appointment appointment, BindingResult result, Model model) {
+    if (result.hasErrors()) {
+        model.addAttribute("vets", vetService.getAllVets());
+        return "appointments/edit";
+    }
+
+    try {
+        appointmentService.updateAppointment(appointment); // Call the update method in your service
+    } catch (IllegalArgumentException e) {
+        model.addAttribute("errorMessage", e.getMessage());
+        model.addAttribute("vets", vetService.getAllVets());
+        return "appointments/edit";
+    }
+
+    return "redirect:/appointments"; // Redirect to the list after successful update
 }
 
 }

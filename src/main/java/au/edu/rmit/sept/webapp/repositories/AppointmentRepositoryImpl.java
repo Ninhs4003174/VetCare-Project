@@ -89,6 +89,25 @@ public class AppointmentRepositoryImpl implements AppointmentRepository {
                     throw new RuntimeException("Error canceling appointment", e);
                 }
             }
+    
+    @Override
+    public Appointment findById(Long id) {
+                try {
+                    Connection connection = source.getConnection();
+                    PreparedStatement stm = connection.prepareStatement("SELECT * FROM appointments WHERE id = ?;");
+                    stm.setLong(1, id);
+                    ResultSet rs = stm.executeQuery();
+                    if (rs.next()) {
+                        return new Appointment(rs.getLong(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5), rs.getString(6));
+                    }
+                    connection.close();
+                    return null;
+                } catch (SQLException e) {
+                    throw new RuntimeException("Error retrieving appointment by ID", e);
+                }
+            }
+
+    
         }
         
 

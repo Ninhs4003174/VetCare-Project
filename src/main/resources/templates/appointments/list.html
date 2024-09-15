@@ -1,30 +1,28 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-  layout:decorate="~{layout.html}">
+      layout:decorate="~{layout.html}">
 
 <head>
-  <title>Appointments List</title>
+    <title>Your Appointments</title>
 </head>
 
 <body>
-  <div layout:fragment="content">
+<div layout:fragment="content">
     <h1>Your Appointments</h1>
     <ul th:each="a : ${appointments}">
-      <li>
-        <span th:text="${a.formattedDetails()}">Appointment details</span>
+        <li>
+            <span th:text="${a.formattedDetails()}">Appointment details</span>
 
-        <!-- Form for canceling an appointment -->
-        <form th:action="@{/appointments/cancel}" method="post" style="display:inline;">
-          <input type="hidden" th:value="${a.id}" name="id"/>
-          <button type="submit">Cancel</button>
-        </form>
+            <!-- Cancel button -->
+            <form th:action="@{/appointments/cancel}" method="post" style="display:inline;">
+                <input type="hidden" th:value="${a.id}" name="id"/>
+                <button type="submit">Cancel</button>
+            </form>
 
-        <!-- Link to the appointment editing page -->
-        <a th:href="@{/appointments/edit/{id}(id=${a.id})}">Edit</a>
-      </li>
+            <!-- Edit button that links to the edit page -->
+            <a th:href="@{/appointments/edit/{id}(id=${a.id})}">Edit</a>
+        </li>
     </ul>
-  </div>
+</div>
 </body>
-
 </html>
-

@@ -11,5 +11,5 @@ public interface AppointmentRepository {
     List<Appointment> findByVetName(String vetName);
 
     public void deleteById(Long id);
- 
+    public Appointment findById(Long id);
 }

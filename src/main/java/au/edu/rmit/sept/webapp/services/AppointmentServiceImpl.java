@@ -70,4 +70,28 @@ public class AppointmentServiceImpl implements AppointmentService {
     public void cancelAppointment(Long id) {
         repository.deleteById(id);
     }
+
+    public Appointment findAppointmentById(Long id) {
+        Appointment appointment = repository.findById(id);
+    if (appointment == null) {
+        throw new IllegalArgumentException("Invalid appointment ID: " + id);
+    }
+    return appointment;
+}
+
+    @Override
+    public void updateAppointment(Appointment appointment) {
+    // Validate and check for conflicts similar to saveAppointment
+    if (!isValidAppointmentTime(appointment.getTime())) {
+        throw new IllegalArgumentException("Appointment time must be between 9 AM and 5 PM, in 15-minute intervals.");
+    }
+
+    if (isOverlappingAppointment(appointment)) {
+        throw new IllegalArgumentException("This time slot is already booked for the selected vet.");
+    }
+
+    repository.save(appointment); // Saves the edited appointment
+    }
+
+
 }
