@@ -25,8 +25,15 @@
       <label for="time">Time:</label>
       <input type="time" id="time" th:field="*{time}" required />
 
-      <label for="status">Status:</label>
-      <input type="text" id="status" th:field="*{status}" required />
+       <!-- New Status Field -->
+      
+        <label for="status">Status:</label>
+        <select id="status" th:field="*{status}">
+          <option value="A" th:selected="${appointment.status == 'A'}">A</option>
+          <option value="B" th:selected="${appointment.status == 'B'}">B</option>
+          <option value="C" th:selected="${appointment.status == 'C'}">C</option>
+        </select>
+      
 
       <button type="submit">Book Appointment</button>
     </form>

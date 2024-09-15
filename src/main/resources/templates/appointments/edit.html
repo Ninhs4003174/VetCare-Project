@@ -37,6 +37,16 @@
             <input type="time" id="time" th:field="*{time}" step="900"/>
         </div>
 
+         <!-- New Status Field -->
+      
+        <label for="status">Status:</label>
+        <select id="status" th:field="*{status}">
+          <option value="A" th:selected="${appointment.status == 'A'}">A</option>
+          <option value="B" th:selected="${appointment.status == 'B'}">B</option>
+          <option value="C" th:selected="${appointment.status == 'Cancel'}">C</option>
+        </select>
+     
+
         <div>
             <button type="submit">Save Changes</button>
             <a th:href="@{/appointments}">Cancel</a>
