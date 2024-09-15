@@ -52,6 +52,14 @@ public class SignupController {
                 model.addAttribute("message", "Invalid email format");
                 return "signup";
             }
+            if (userService.isUsernameTaken(username)) {
+                model.addAttribute("message", "Username is already taken");
+                return "signup";
+            }
+            if (userService.isEmailTaken(email)) {
+                model.addAttribute("message", "Email is already taken");
+                return "signup";
+            }
 
             // Validate password strength
             if (password.length() < 8) {
