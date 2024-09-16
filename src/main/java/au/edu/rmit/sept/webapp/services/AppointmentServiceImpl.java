@@ -41,8 +41,12 @@ public class AppointmentServiceImpl implements AppointmentService {
         }
     }
 
-    // Validate if the time is between 9 AM and 5 PM and 15-minute interval
+    // Validate if the time is between 9 AM and 5 PM and in 15-minute intervals
     private boolean isValidAppointmentTime(String time) {
+        if (time == null || time.isEmpty()) {
+            throw new IllegalArgumentException("Appointment time cannot be null or empty.");
+        }
+
         LocalTime appointmentTime = LocalTime.parse(time);
         LocalTime startTime = LocalTime.of(9, 0);  // 9 AM
         LocalTime endTime = LocalTime.of(17, 0);   // 5 PM
@@ -54,11 +58,21 @@ public class AppointmentServiceImpl implements AppointmentService {
 
     // Check for overlapping appointments for the same vet
     private boolean isOverlappingAppointment(Appointment newAppointment) {
+        String newAppointmentTime = newAppointment.getTime();
+        if (newAppointmentTime == null || newAppointmentTime.isEmpty()) {
+            throw new IllegalArgumentException("Appointment time cannot be null or empty.");
+        }
+
+        LocalTime newTime = LocalTime.parse(newAppointmentTime);
         Collection<Appointment> existingAppointments = repository.findByVetName(newAppointment.getVetName());
 
         for (Appointment appointment : existingAppointments) {
-            LocalTime newTime = LocalTime.parse(newAppointment.getTime());
-            LocalTime existingTime = LocalTime.parse(appointment.getTime());
+            String existingAppointmentTime = appointment.getTime();
+            if (existingAppointmentTime == null || existingAppointmentTime.isEmpty()) {
+                continue; // Skip invalid appointment times
+            }
+
+            LocalTime existingTime = LocalTime.parse(existingAppointmentTime);
 
             // Compare appointment times (assuming 15-minute slots)
             if (newTime.equals(existingTime)) {
@@ -75,25 +89,25 @@ public class AppointmentServiceImpl implements AppointmentService {
 
     public Appointment findAppointmentById(Long id) {
         Appointment appointment = repository.findById(id);
-    if (appointment == null) {
-        throw new IllegalArgumentException("Invalid appointment ID: " + id);
+        if (appointment == null) {
+            throw new IllegalArgumentException("Invalid appointment ID: " + id);
+        }
+        return appointment;
     }
-    return appointment;
-}
 
     @Override
     public void updateAppointment(Appointment appointment) {
-    // Validate and check for conflicts similar to saveAppointment
-    if (!isValidAppointmentTime(appointment.getTime())) {
-        throw new IllegalArgumentException("Appointment time must be between 9 AM and 5 PM, in 15-minute intervals.");
+        // Validate and check for conflicts similar to saveAppointment
+        if (!isValidAppointmentTime(appointment.getTime())) {
+            throw new IllegalArgumentException("Appointment time must be between 9 AM and 5 PM, in 15-minute intervals.");
+        }
+
+        if (isOverlappingAppointment(appointment)) {
+            throw new IllegalArgumentException("This time slot is already booked for the selected vet.");
+        }
+
+        repository.save(appointment); // Saves the edited appointment
     }
-
-    if (isOverlappingAppointment(appointment)) {
-        throw new IllegalArgumentException("This time slot is already booked for the selected vet.");
-    }
-
-    repository.save(appointment); // Saves the edited appointment
-    }
-
-
 }
+
+

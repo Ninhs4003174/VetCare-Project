@@ -1,6 +1,10 @@
 package au.edu.rmit.sept.webapp.controllers;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -23,7 +27,6 @@ public class AppointmentController {
     private final AppointmentService appointmentService;
     private final VetService vetService;
     
-    // Constructor to inject both services
     @Autowired
     public AppointmentController(AppointmentService appointmentService, VetService vetService) {
         this.appointmentService = appointmentService;
@@ -40,39 +43,53 @@ public class AppointmentController {
     @GetMapping("/book")
     public String showBookingForm(Model model) {
         model.addAttribute("appointment", new Appointment());
-        model.addAttribute("vets", vetService.getAllVets()); // Pass list of vets to the form
+        model.addAttribute("vets", vetService.getAllVets());  // Pass list of vets to the form
+
+        // Generate time slots and add them to the model
+        List<String> timeSlots = getTimeSlots();
+        model.addAttribute("timeSlots", timeSlots);
+
+        // Pass today's date and five days later for the date picker
+        LocalDate today = LocalDate.now();
+        LocalDate fiveDaysLater = today.plusDays(5);
+        model.addAttribute("today", today);
+        model.addAttribute("fiveDaysLater", fiveDaysLater);
+        
         return "appointments/book";
     }
-
-    // @PostMapping("/book")
-    // public String bookAppointment(@ModelAttribute Appointment appointment, BindingResult result, Model model) {
-    //     if (result.hasErrors()) {
-    //         model.addAttribute("vets", vetService.getAllVets()); // Ensure vets are available on error
-    //         return "appointments/book";
-    //     }
-    //     appointmentService.saveAppointment(appointment);
-    //     return "redirect:/appointments";
-    // }
-
 
     @PostMapping("/book")
-public String bookAppointment(@ModelAttribute Appointment appointment, BindingResult result, Model model) {
-    if (result.hasErrors()) {
-        model.addAttribute("vets", vetService.getAllVets());
-        return "appointments/book";
+    public String bookAppointment(@ModelAttribute Appointment appointment, BindingResult result, Model model) {
+        if (result.hasErrors()) {
+            model.addAttribute("vets", vetService.getAllVets());
+            model.addAttribute("timeSlots", getTimeSlots());  // Add time slots on error
+            return "appointments/book";
+        }
+
+        try {
+            appointmentService.saveAppointment(appointment);
+        } catch (IllegalArgumentException e) {
+            model.addAttribute("errorMessage", e.getMessage());
+            model.addAttribute("vets", vetService.getAllVets());
+            model.addAttribute("timeSlots", getTimeSlots());  // Add time slots on error
+            return "appointments/book";
+        }
+
+        return "redirect:/appointments";
     }
 
-    try {
-        appointmentService.saveAppointment(appointment);
-    } catch (IllegalArgumentException e) {
-        model.addAttribute("errorMessage", e.getMessage());
-        model.addAttribute("vets", vetService.getAllVets());
-        return "appointments/book";
+    // Helper method to generate time slots from 9 AM to 5 PM
+    private List<String> getTimeSlots() {
+        List<String> timeSlots = new ArrayList<>();
+        LocalTime startTime = LocalTime.of(9, 0);
+        LocalTime endTime = LocalTime.of(17, 0);
+
+        while (startTime.isBefore(endTime)) {
+            timeSlots.add(startTime.toString());
+            startTime = startTime.plusMinutes(15);
+        }
+        return timeSlots;
     }
-
-    return "redirect:/appointments";
-}
-
     @PostMapping("/cancel")
 public String cancelAppointment(@ModelAttribute("id") Long id) {
     appointmentService.cancelAppointment(id);
@@ -104,5 +121,6 @@ public String editAppointment(@ModelAttribute Appointment appointment, BindingRe
 
     return "redirect:/appointments"; // Redirect to the list after successful update
 }
+
 
 }
