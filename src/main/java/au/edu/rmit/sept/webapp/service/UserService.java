@@ -12,6 +12,12 @@ import au.edu.rmit.sept.webapp.model.User; // Assuming UserEntity is your custom
 
 @Service
 public class UserService implements UserDetailsService {
+    @Autowired
+    private UserRepository userRepository;
+
+    public Iterable<User> getAllUsers() {
+        return userRepository.findAll();
+    }
 
     @Autowired
     private UserRepository repository;

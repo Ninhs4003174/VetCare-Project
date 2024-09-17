@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Vet and Pet Management</title>
+</head>
+<body>
+    <h1>Vet and Pet Management</h1>
+
+    <h2>Manage Pets</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Breed</th>
+                <th>Medical History</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="pet : ${pets}">
+                <td th:text="${pet.name}"></td>
+                <td th:text="${pet.breed}"></td>
+                <td th:text="${pet.medicalHistory}"></td>
+                <td>
+                    <!-- Example action for viewing details -->
+                    <a th:href="@{/pets/{id}(id=${pet.id})}">View Details</a>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h2>Manage Vets</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Clinic Name</th>
+                <th>Address</th>
+                <th>Phone Number</th>
+                <th>Email</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="vet : ${vets}">
+                <td th:text="${vet.clinicName}"></td>
+                <td th:text="${vet.address}"></td>
+                <td th:text="${vet.phoneNumber}"></td>
+                <td th:text="${vet.email}"></td>
+            </tr>
+        </tbody>
+    </table>
+</body>
+</html>
