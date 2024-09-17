@@ -2,12 +2,9 @@ package au.edu.rmit.sept.webapp.model;
 
 import jakarta.persistence.*;
 
-import java.util.HashSet;
-import java.util.Set;
-
 @Entity
-@Table(name = "vet")
 public class Vet {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long vetId;
@@ -17,5 +14,54 @@ public class Vet {
     private String phoneNumber;
     private String email;
 
-    // Getters and Setters
+    // Constructors, getters, setters
+    public Vet() {
+    }
+
+    public Vet(String clinicName, String address, String phoneNumber, String email) {
+        this.clinicName = clinicName;
+        this.address = address;
+        this.phoneNumber = phoneNumber;
+        this.email = email;
+    }
+
+    public Long getVetId() {
+        return vetId;
+    }
+
+    public void setVetId(Long vetId) {
+        this.vetId = vetId;
+    }
+
+    public String getClinicName() {
+        return clinicName;
+    }
+
+    public void setClinicName(String clinicName) {
+        this.clinicName = clinicName;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
 }
