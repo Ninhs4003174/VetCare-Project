@@ -1,0 +1,3 @@
+ALTER TABLE vet_users
+DROP COLUMN IF EXISTS address,
+DROP COLUMN IF EXISTS phone_number;
