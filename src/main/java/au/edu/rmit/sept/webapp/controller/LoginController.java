@@ -18,5 +18,11 @@ public class LoginController {
         return "welcome";
     }
 
+    @GetMapping("/userhome")
+    public String userhome() {
+        System.out.println("Navigating to logged in home page");
+        return "userhome";
+    }
+
     // Add mappings for other endpoints as needed
 }

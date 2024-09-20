@@ -14,11 +14,13 @@ public class VetController {
 
     @Autowired
     private VetService vetService;
-
-    @GetMapping("/profile")
-    public String showProfilePage(Model model) {
-        List<Vet> vets = vetService.getAllVets();
-        model.addAttribute("vets", vets);
-        return "profile"; // This should match your Thymeleaf template name
-    }
+    // for vet listing page
+    /*
+     * @GetMapping("/profile")
+     * public String showProfilePage(Model model) {
+     * List<Vet> vets = vetService.getAllVets();
+     * model.addAttribute("vets", vets);
+     * return "profile"; // This should match your Thymeleaf template name
+     * }
+     */
 }
