@@ -1,4 +1,4 @@
-package au.edu.rmit.sept.webapp.repositories;
+package au.edu.rmit.sept.webapp.repository;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -11,26 +11,26 @@ import javax.sql.DataSource;
 
 import org.springframework.stereotype.Repository;
 
-import au.edu.rmit.sept.webapp.models.Vet;
+import au.edu.rmit.sept.webapp.model.Vets;
 
 @Repository
-public class VetRepositoryImpl implements VetRepository {
+public class VetsRepositoryImpl implements VetsRepository {
 
     private final DataSource source;
 
-    public VetRepositoryImpl(DataSource source) {
+    public VetsRepositoryImpl(DataSource source) {
         this.source = source;
     }
 
     @Override
-    public List<Vet> findAll() {
+    public List<Vets> findAll() {
         try {
             Connection connection = source.getConnection();
             PreparedStatement stm = connection.prepareStatement("SELECT * FROM vets;");
             ResultSet rs = stm.executeQuery();
-            List<Vet> vets = new ArrayList<>();
+            List<Vets> vets = new ArrayList<>();
             while (rs.next()) {
-                Vet vet = new Vet(rs.getLong(1), rs.getString(2), rs.getString(3));
+                Vets vet = new Vets(rs.getLong(1), rs.getString(2), rs.getString(3));
                 vets.add(vet);
             }
             connection.close();

@@ -1,8 +1,8 @@
-package au.edu.rmit.sept.webapp.services;
+package au.edu.rmit.sept.webapp.service;
 
 import java.util.Collection;
 
-import au.edu.rmit.sept.webapp.models.Appointment;
+import au.edu.rmit.sept.webapp.model.Appointment;
 
 public interface AppointmentService {
     public Collection<Appointment> getAppointments();

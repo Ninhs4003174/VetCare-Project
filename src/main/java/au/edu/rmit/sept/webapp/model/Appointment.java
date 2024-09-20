@@ -1,4 +1,4 @@
-package au.edu.rmit.sept.webapp.models;
+package au.edu.rmit.sept.webapp.model;
 
 public class Appointment {
     private Long id;

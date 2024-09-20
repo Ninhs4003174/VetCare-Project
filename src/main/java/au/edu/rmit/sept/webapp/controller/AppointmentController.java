@@ -1,4 +1,4 @@
-package au.edu.rmit.sept.webapp.controllers;
+package au.edu.rmit.sept.webapp.controller;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -16,19 +16,19 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import au.edu.rmit.sept.webapp.models.Appointment;
-import au.edu.rmit.sept.webapp.services.AppointmentService;
-import au.edu.rmit.sept.webapp.services.VetService;
+import au.edu.rmit.sept.webapp.model.Appointment;
+import au.edu.rmit.sept.webapp.service.AppointmentService;
+import au.edu.rmit.sept.webapp.service.VetsService;
 
 @Controller
 @RequestMapping("/appointments")
 public class AppointmentController {
 
     private final AppointmentService appointmentService;
-    private final VetService vetService;
+    private final VetsService vetService;
     
     @Autowired
-    public AppointmentController(AppointmentService appointmentService, VetService vetService) {
+    public AppointmentController(AppointmentService appointmentService, VetsService vetService) {
         this.appointmentService = appointmentService;
         this.vetService = vetService;
     }

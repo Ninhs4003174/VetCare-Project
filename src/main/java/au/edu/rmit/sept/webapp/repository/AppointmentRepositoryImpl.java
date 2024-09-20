@@ -1,4 +1,4 @@
-package au.edu.rmit.sept.webapp.repositories;
+package au.edu.rmit.sept.webapp.repository;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -11,7 +11,7 @@ import javax.sql.DataSource;
 
 import org.springframework.stereotype.Repository;
 
-import au.edu.rmit.sept.webapp.models.Appointment;
+import au.edu.rmit.sept.webapp.model.Appointment;
 
 @Repository
 public class AppointmentRepositoryImpl implements AppointmentRepository {

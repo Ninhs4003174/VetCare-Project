@@ -1,4 +1,4 @@
-package au.edu.rmit.sept.webapp.services;
+package au.edu.rmit.sept.webapp.service;
 
 import java.time.LocalTime;
 import java.util.Collection;
@@ -6,8 +6,8 @@ import java.util.Collection;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import au.edu.rmit.sept.webapp.models.Appointment;
-import au.edu.rmit.sept.webapp.repositories.AppointmentRepository;
+import au.edu.rmit.sept.webapp.model.Appointment;
+import au.edu.rmit.sept.webapp.repository.AppointmentRepository;
 
 @Service
 public class AppointmentServiceImpl implements AppointmentService {

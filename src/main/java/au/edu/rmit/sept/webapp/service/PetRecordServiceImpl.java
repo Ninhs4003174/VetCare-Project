@@ -1,7 +1,8 @@
-package au.edu.rmit.sept.webapp.services;
+package au.edu.rmit.sept.webapp.service;
 
-import au.edu.rmit.sept.webapp.models.PetRecord;
-import au.edu.rmit.sept.webapp.repositories.PetRecordRepository;
+import au.edu.rmit.sept.webapp.model.PetRecord;
+import au.edu.rmit.sept.webapp.repository.PetRecordRepository;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

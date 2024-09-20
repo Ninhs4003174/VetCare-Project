@@ -1,14 +1,14 @@
-package au.edu.rmit.sept.webapp.models;
+package au.edu.rmit.sept.webapp.model;
 
-public class Vet {
+public class Vets {
     private Long id;
     private String name;
     private String clinic;
 
     // Constructors, getters, and setters
-    public Vet() {}
+    public Vets() {}
 
-    public Vet(Long id, String name, String clinic) {
+    public Vets(Long id, String name, String clinic) {
         this.id = id;
         this.name = name;
         this.clinic = clinic;
