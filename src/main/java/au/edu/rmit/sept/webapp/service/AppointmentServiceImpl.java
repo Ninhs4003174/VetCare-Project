@@ -1,0 +1,113 @@
+package au.edu.rmit.sept.webapp.service;
+
+import java.time.LocalTime;
+import java.util.Collection;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import au.edu.rmit.sept.webapp.model.Appointment;
+import au.edu.rmit.sept.webapp.repository.AppointmentRepository;
+
+@Service
+public class AppointmentServiceImpl implements AppointmentService {
+
+    private final AppointmentRepository repository;
+
+    @Autowired
+    public AppointmentServiceImpl(AppointmentRepository repository) {
+        this.repository = repository;
+    }
+
+    @Override
+    public Collection<Appointment> getAppointments() {
+        return repository.findAll();
+    }
+
+    public void saveAppointment(Appointment appointment) {
+        // If the appointment is new (id is null), validate and save as a new record
+        if (appointment.getId() == null) {
+            if (!isValidAppointmentTime(appointment.getTime())) {
+                throw new IllegalArgumentException("Appointment time must be between 9 AM and 5 PM, in 15-minute intervals.");
+            }
+    
+            if (isOverlappingAppointment(appointment)) {
+                throw new IllegalArgumentException("This time slot is already booked for the selected vet.");
+            }
+    
+            repository.save(appointment); // Save as a new appointment
+        } else {
+            updateAppointment(appointment); // Update the existing appointment
+        }
+    }
+
+    // Validate if the time is between 9 AM and 5 PM and in 15-minute intervals
+    private boolean isValidAppointmentTime(String time) {
+        if (time == null || time.isEmpty()) {
+            throw new IllegalArgumentException("Appointment time cannot be null or empty.");
+        }
+
+        LocalTime appointmentTime = LocalTime.parse(time);
+        LocalTime startTime = LocalTime.of(9, 0);  // 9 AM
+        LocalTime endTime = LocalTime.of(17, 0);   // 5 PM
+
+        return (appointmentTime.equals(startTime) || appointmentTime.isAfter(startTime))
+                && appointmentTime.isBefore(endTime)
+                && appointmentTime.getMinute() % 15 == 0; // Must be a multiple of 15 minutes
+    }
+
+    // Check for overlapping appointments for the same vet
+    private boolean isOverlappingAppointment(Appointment newAppointment) {
+        String newAppointmentTime = newAppointment.getTime();
+        if (newAppointmentTime == null || newAppointmentTime.isEmpty()) {
+            throw new IllegalArgumentException("Appointment time cannot be null or empty.");
+        }
+
+        LocalTime newTime = LocalTime.parse(newAppointmentTime);
+        Collection<Appointment> existingAppointments = repository.findByVetName(newAppointment.getVetName());
+
+        for (Appointment appointment : existingAppointments) {
+            String existingAppointmentTime = appointment.getTime();
+            if (existingAppointmentTime == null || existingAppointmentTime.isEmpty()) {
+                continue; // Skip invalid appointment times
+            }
+
+            LocalTime existingTime = LocalTime.parse(existingAppointmentTime);
+
+            // Compare appointment times (assuming 15-minute slots)
+            if (newTime.equals(existingTime)) {
+                return true; // Overlapping appointment found
+            }
+        }
+        return false;
+    }
+
+    @Override
+    public void cancelAppointment(Long id) {
+        repository.deleteById(id);
+    }
+
+    public Appointment findAppointmentById(Long id) {
+        Appointment appointment = repository.findById(id);
+        if (appointment == null) {
+            throw new IllegalArgumentException("Invalid appointment ID: " + id);
+        }
+        return appointment;
+    }
+
+    @Override
+    public void updateAppointment(Appointment appointment) {
+        // Validate and check for conflicts similar to saveAppointment
+        if (!isValidAppointmentTime(appointment.getTime())) {
+            throw new IllegalArgumentException("Appointment time must be between 9 AM and 5 PM, in 15-minute intervals.");
+        }
+
+        if (isOverlappingAppointment(appointment)) {
+            throw new IllegalArgumentException("This time slot is already booked for the selected vet.");
+        }
+
+        repository.save(appointment); // Saves the edited appointment
+    }
+}
+
+

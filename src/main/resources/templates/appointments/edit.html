@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout.html}">
+
+<head>
+    <title>Edit Appointment</title>
+</head>
+
+<body>
+<div layout:fragment="content">
+    <h1>Edit Appointment</h1>
+
+    <!-- Form for editing the appointment -->
+    <form th:action="@{/appointments/edit}" th:object="${appointment}" method="post">
+        <input type="hidden" th:field="*{id}"/>
+
+        <div>
+            <label for="petName">Pet Name:</label>
+            <input type="text" id="petName" th:field="*{petName}" readonly="readonly"/>
+        </div>
+
+        <div>
+            <label for="vetName">Vet:</label>
+            <select id="vetName" th:field="*{vetName}">
+                <option th:each="vet : ${vets}" th:value="${vet.name}" th:text="${vet.name}"
+                        th:selected="${vet.name == appointment.vetName}">Vet</option>
+            </select>
+        </div>
+
+        <div>
+            <label for="date">Date:</label>
+            <input type="date" id="date" th:field="*{date}"/>
+        </div>
+
+        <div>
+            <label for="time">Time:</label>
+            <input type="time" id="time" th:field="*{time}" step="900"/>
+        </div>
+
+         <!-- New Status Field -->
+      
+        <label for="status">Status:</label>
+        <select id="status" th:field="*{status}">
+          <option value="A" th:selected="${appointment.status == 'A'}">A</option>
+          <option value="B" th:selected="${appointment.status == 'B'}">B</option>
+          <option value="C" th:selected="${appointment.status == 'Cancel'}">C</option>
+        </select>
+     
+
+        <div>
+            <button type="submit">Save Changes</button>
+            <a th:href="@{/appointments}">Cancel</a>
+        </div>
+
+        <!-- Display error message if present -->
+        <div th:if="${errorMessage != null}">
+            <p th:text="${errorMessage}" style="color:red;"></p>
+        </div>
+    </form>
+</div>
+</body>
+</html>
