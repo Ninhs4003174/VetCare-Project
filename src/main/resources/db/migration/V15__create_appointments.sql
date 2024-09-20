@@ -1,8 +1,9 @@
 CREATE TABLE appointments (
-    id BIGINT AUTO_INCREMENT PRIMARY KEY,
-    pet_name VARCHAR(255),
-    vet_name VARCHAR(255),
-    date VARCHAR(255),
-    time VARCHAR(255),
-    status VARCHAR(255)
+    id BIGSERIAL PRIMARY KEY,   
+  pet_name VARCHAR(255),     
+       date VARCHAR(255),           
+  time VARCHAR(255),         
+    status VARCHAR(255),      
+    user_id BIGINT,            
+    CONSTRAINT fk_vet_user FOREIGN KEY (user_id) REFERENCES vet_users(id) ON DELETE CASCADE
 );
