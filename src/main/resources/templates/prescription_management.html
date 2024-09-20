@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Prescription Management</title>
+</head>
+<body>
+    <h1>Manage Prescriptions</h1>
+    <h2>My Prescriptions</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Medication</th>
+                <th>Dosage</th>
+                <th>Instructions</th>
+                <th>Issue Date</th>
+                <th>Expiration Date</th>
+                <th>Refill Status</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="prescription : ${prescriptions}">
+                <td th:text="${prescription.medicationName}"></td>
+                <td th:text="${prescription.dosage}"></td>
+                <td th:text="${prescription.instructions}"></td>
+                <td th:text="${prescription.issueDate}"></td>
+                <td th:text="${prescription.expirationDate}"></td>
+                <td th:text="${prescription.refillStatus}"></td>
+                <td>
+                    <form th:action="@{/requestRefill}" method="post">
+                        <input type="hidden" name="prescriptionId" th:value="${prescription.prescriptionId}" />
+                        <button type="submit">Request Refill</button>
+                    </form>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</body>
+</html>

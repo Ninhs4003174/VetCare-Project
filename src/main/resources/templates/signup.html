@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pet Sign Up Form</title>
+    <link href='https://fonts.googleapis.com/css?family=Nunito:400,300' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" href="/css/styles.css" />
+    <link rel="stylesheet" href="/css/signupstyles.css">
+</head>
+<body>
+    <header>
+        <nav>
+            <ul class="navbar-menu">
+                <li><a href="home"><img src="img/logo.png" alt="Logo" class="logo"></a></li>
+                <li><a href="records.html">Pet Records</a></li>
+                <li><a href="appointments.html">Appointments</a></li>
+                <li><a href="resources.html">Resources</a></li>
+                <li><a href="contact.html">Contact</a></li>
+                <li><a href="profile.html">My Profile</a></li>
+                <li><a href="#"><img src="img/notif.png" alt="Notifications" class="notification-icon"></a></li>
+                <li><a href="signup" class="btn-secondary">Sign Up</a></li>
+            </ul>
+        </nav>
+    </header>
+    <!-- Header End -->
+    <main class="container">
+        <div class="col-md-6 login-link">
+            <!-- Login Link -->
+            <h2>Already have an account?</h2>
+            <p>If you already have an account, you can <a href="/login">log in here</a>.</p>
+        </div>
+        <div class="row">
+            <div class="col-md-6 sign-up-form">
+                <!-- Sign Up Form -->
+                <form action="/signup" method="post" th:action="@{/signup}" th:object="${signupForm}">
+                    <input type="hidden" />
+                    <h1>Sign Up Your Pet</h1>
+                    <fieldset>
+                        <legend><span class="number">1</span> Pet Owner Info</legend>
+                        <label for="owner_name">Owner Name:</label>
+                        <input type="text" id="owner_name" name="username" required>
+                        <label for="owner_email">Email:</label>
+                        <input type="email" id="owner_email" name="email" required>
+                        <label for="password">Password:</label>
+                        <input type="password" id="password" name="password" required>
+                    </fieldset>
+                    <fieldset>
+                        <legend><span class="number">2</span> Pet Info</legend>
+                        <label for="pet_name">Pet Name:</label>
+                        <input type="text" id="pet_name" name="petName" required>
+                        <label for="pet_type">Pet Type:</label>
+                        <select id="pet_type" name="petType" required>
+                            <option value="dog">Dog</option>
+                            <option value="cat">Cat</option>
+                            <option value="bird">Bird</option>
+                            <option value="reptile">Reptile</option>
+                            <option value="other">Other</option>
+                        </select>
+                        <label for="pet_age">Pet Age:</label>
+                        <input type="number" id="pet_age" name="petAge" min="0" required>
+                        <label for="pet_bio">Pet Bio:</label>
+                        <textarea id="pet_bio" name="petBio" placeholder="Tell us about your pet" required></textarea>
+                    </fieldset>
+                    <fieldset>
+                        <legend><span class="number">3</span> Veterinary Services</legend>
+                        <label for="service">Select Services:</label>
+                        <select id="service">
+                            <option value="general_checkup">General Checkup</option>
+                            <option value="vaccination">Vaccination</option>
+                            <option value="dental_care">Dental Care</option>
+                            <option value="surgery">Surgery</option>
+                            <option value="emergency_care">Emergency Care</option>
+                        </select>
+                        <label>Additional Requests:</label>
+                        <input type="checkbox" id="grooming" value="grooming"><label class="light" for="grooming">Grooming</label><br>
+                        <input type="checkbox" id="boarding" value="boarding"><label class="light" for="boarding">Boarding</label><br>
+                        <input type="checkbox" id="nutrition" value="nutrition"><label class="light" for="nutrition">Nutritional Counseling</label>
+                    </fieldset>
+                    <button type="submit">Sign Up</button>
+                </form>
+            </div>
+        </div>
+    </main>
+    <!-- Footer with Social Links -->
+</body>
+</html>
