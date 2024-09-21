@@ -3,35 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Request a Prescription</title>
+    <title>View Prescriptions</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/4.5.2/css/bootstrap.min.css">
 </head>
 <body>
     <div class="container">
-        <h1 class="mt-5">Request a Prescription</h1>
-        <form id="prescriptionForm" method="POST" action="/prescription-management/request">
-            <div class="form-group">
-                <label for="medication">Medication</label>
-                <input type="text" class="form-control" id="medication" name="medication" required>
-            </div>
-            <div class="form-group">
-                <label for="reason">Reason for Request</label>
-                <textarea class="form-control" id="reason" name="reason" required></textarea>
-            </div>
-            <div class="form-group">
-                <label for="petId">Select Pet</label>
-                <select class="form-control" id="petId" name="petId" required>
-                    <option value="">--Select Pet--</option>
-                    <!-- Iterate through pets -->
-                    <th:block th:each="pet : ${pets}">
-                        <option th:value="${pet.id}" th:text="${pet.name}"></option>
-                    </th:block>
-                </select>
-            </div>
-            <button type="submit" class="btn btn-primary">Submit Request</button>
-        </form>
-
-        <h2 class="mt-5">View Prescriptions</h2>
+        <h1 class="mt-5">View Prescriptions</h1>
         <div class="prescription-requests">
             <table class="table table-bordered">
                 <thead>
