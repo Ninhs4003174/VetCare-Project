@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Appointments</title>
+    <link rel="stylesheet" href="/css/styles.css" />
+    <link rel="stylesheet" href="/css/appointment.css">
+</head>
+<body>
+    <!-- Header with Navigation -->
+    <header>
+        <nav>
+            <ul class="navbar-menu">
+                <li><a href="home"><img src="img/logo.png" alt="Logo" class="logo"></a></li>
+                <li><a href="about.html">About</a></li>
+                <li><a href="resources.html">Resources</a></li>
+                <li><a href="contact.html">Contact</a></li>
+                <li><a href="/login">Log In</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+        <div class="appointments-container">
+            <h1>Your Appointments</h1>
+            <ul th:each="a : ${appointments}">
+                <li>
+                    <span th:text="${a.formattedDetails()}">Appointment details</span>
+
+                    <!-- Cancel button -->
+                    <form th:action="@{/appointments/cancel}" method="post" style="display:inline;">
+                        <input type="hidden" th:value="${a.id}" name="id"/>
+                        <button class="cancel" type="submit">Cancel</button>
+                    </form>
+
+                    <!-- Edit button that links to the edit page -->
+                    <a th:href="@{/appointments/edit/{id}(id=${a.id})}">Edit</a>
+                </li>
+            </ul>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2024 Your Company. All Rights Reserved.</p>
+        <nav>
+            <ul class="footer-menu">
+                <li><a href="home">Home</a></li>
+                <li><a href="privacy.html">Privacy Policy</a></li>
+                <li><a href="terms.html">Terms of Service</a></li>
+            </ul>
+        </nav>
+    </footer>
+</body>
+</html>
