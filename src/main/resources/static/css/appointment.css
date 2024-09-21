@@ -1,5 +1,24 @@
 /* Global Styling */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
 
+body {
+    font-family: Arial, sans-serif;
+    background-color: var(--background-color);
+    color: var(--text-color);
+}
+
+:root {
+    --primary-color: #35424a;
+    --secondary-color: #5b9bd5;
+    --accent-color: #2a75bb;
+    --text-color: #333;
+    --background-color: #f4f4f4;
+    --white-color: #ffffff;
+}
 
 /* Styling for the Appointments Page */
 .appointments-container {
@@ -17,12 +36,12 @@
     text-align: center;
 }
 
-ul {
+.appointments-container ul {
     list-style: none;
     padding: 0;
 }
 
-ul li {
+.appointments-container ul li {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -33,18 +52,20 @@ ul li {
     box-shadow: 0 1px 5px rgba(0, 0, 0, 0.1);
 }
 
-ul li span {
+.appointments-container ul li span {
     flex-grow: 1;
     font-size: 16px;
     color: var(--text-color);
 }
 
-ul li form, ul li a {
+.appointments-container ul li form,
+.appointments-container ul li a {
     margin-left: 10px;
 }
 
-/* Cancel and Edit Buttons Styling */
-button, a {
+/* Cancel and Edit Buttons Styling in Appointment List */
+.appointments-container button, 
+.appointments-container a {
     padding: 8px 16px;
     text-decoration: none;
     color: var(--white-color);
@@ -55,15 +76,31 @@ button, a {
     font-size: 14px;
 }
 
-button:hover, a:hover {
+.appointments-container button:hover, 
+.appointments-container a:hover {
     background-color: var(--accent-color);
 }
 
-button.cancel {
+.appointments-container button.cancel {
     background-color: #e74c3c;
 }
 
-button.cancel:hover {
+.appointments-container button.cancel:hover {
     background-color: #c0392b;
 }
 
+/* Styling for the Book Appointment button */
+.book-appointment a.book-button {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: var(--secondary-color);
+    color: var(--white-color);
+    border-radius: 5px;
+    text-decoration: none;
+    font-weight: bold;
+    text-align: center;
+}
+
+.book-appointment a.book-button:hover {
+    background-color: var(--accent-color);
+}

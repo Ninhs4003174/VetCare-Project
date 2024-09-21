@@ -25,6 +25,12 @@
     <main>
         <div class="appointments-container">
             <h1>Your Appointments</h1>
+
+            <!-- Link to book a new appointment -->
+            <div class="book-appointment">
+                <a href="/appointments/book" class="book-button">Book a New Appointment</a>
+            </div>
+
             <ul th:each="a : ${appointments}">
                 <li>
                     <span th:text="${a.formattedDetails()}">Appointment details</span>
