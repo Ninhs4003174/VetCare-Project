@@ -29,7 +29,7 @@
             <div class="articles-list">
                 <div class="resource-card" th:each="resource : ${resources}">
                     <div class="resource-content">
-                        <h2 th:text="${resource.title}" class="resource-title"></h2>
+                        <h2><a th:href="@{'/resources/' + ${resource.id}}" th:text="${resource.title}"></a></h2>
                         <p th:text="${resource.description}" class="resource-description"></p>
                         <a th:href="${resource.url}" class="btn-secondary" target="_blank">Read More</a>
                     </div>

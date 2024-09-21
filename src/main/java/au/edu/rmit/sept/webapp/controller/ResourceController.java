@@ -38,10 +38,17 @@ public class ResourceController {
         return "redirect:/resources";
     }
 
-    // Add delete mapping for removing a resource
     @GetMapping("/resources/delete/{id}")
     public String deleteResource(@PathVariable("id") Long id) {
-        resourceService.deleteResourceById(id);  // Call delete method
+        resourceService.deleteResourceById(id);
         return "redirect:/resources";
+    }
+
+    // New method for viewing individual resource details
+    @GetMapping("/resources/{id}")
+    public String viewResource(@PathVariable Long id, Model model) {
+        Resource resource = resourceService.getResourceById(id);
+        model.addAttribute("resource", resource);
+        return "resources/view";
     }
 }
