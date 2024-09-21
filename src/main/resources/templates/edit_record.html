@@ -9,7 +9,7 @@
         <nav>
             <ul class="navbar-menu">
                 <li><a href="index.html"><img th:src="@{/img/logo.png}" alt="Logo" class="logo"></a></li>
-                <li><a href="records.html">Pet Records</a></li>
+                <li><a href="/records">Pet Records</a></li>
                 <li><a href="appointments.html">Appointments</a></li>
                 <li><a href="resources.html">Resources</a></li>
                 <li><a href="contact.html">Contact</a></li>
@@ -23,45 +23,45 @@
     <main>
         <section class="pet-record-form">
             <h1>Edit Pet Record</h1>
-            <form th:action="@{/records/update}" method="post" th:object="${petRecord}" class="form-container">
+            <form th:action="@{'/records/update/' + ${petRecord.id}}" method="post" th:object="${petRecord}" class="form-container">
                 <input type="hidden" th:field="*{id}" />
-
+            
                 <label for="name">Pet Name:</label>
                 <input type="text" id="name" th:field="*{name}" required>
-
+            
                 <label for="breed">Breed:</label>
                 <input type="text" id="breed" th:field="*{breed}" required>
-
+            
                 <label for="dateOfBirth">Date of Birth:</label>
                 <input type="date" id="dateOfBirth" th:field="*{dateOfBirth}" required>
-
+            
                 <label for="veterinarian">Veterinarian:</label>
                 <input type="text" id="veterinarian" th:field="*{veterinarian}" required>
-
+            
                 <label for="lastVisit">Last Visit:</label>
                 <input type="date" id="lastVisit" th:field="*{lastVisit}">
-
+            
                 <label for="allergies">Allergies:</label>
                 <input type="text" id="allergies" th:field="*{allergies}">
-
+            
                 <label for="prescriptions">Prescriptions:</label>
                 <input type="text" id="prescriptions" th:field="*{prescriptions}">
-
+            
                 <label for="vaccinationHistory">Vaccination History:</label>
                 <textarea id="vaccinationHistory" th:field="*{vaccinationHistory}"></textarea>
-
+            
                 <label for="recentTests">Recent Tests:</label>
                 <input type="text" id="recentTests" th:field="*{recentTests}">
-
+            
                 <label for="recentSurgeries">Recent Surgeries:</label>
                 <input type="text" id="recentSurgeries" th:field="*{recentSurgeries}">
-
+            
                 <label for="dietaryRecommendations">Dietary Recommendations:</label>
                 <input type="text" id="dietaryRecommendations" th:field="*{dietaryRecommendations}">
-
+            
                 <label for="notes">Notes:</label>
                 <textarea id="notes" th:field="*{notes}"></textarea>
-
+            
                 <button type="submit" class="btn-primary">Update Record</button>
             </form>
         </section>
@@ -71,7 +71,7 @@
         <nav>
             <ul>
                 <li><a href="index.html"><img th:src="@{/img/logo.png}" alt="Logo"></a></li>
-                <li><a href="records.html">Pet Records</a></li>
+                <li><a href="/records">Pet Records</a></li>
                 <li><a href="appointments.html">Appointments</a></li>
                 <li><a href="resources.html">Resources</a></li>
                 <li><a href="contact.html">Contact</a></li>
