@@ -3,13 +3,15 @@
 <head>
     <title>Pet Records</title>
     <link rel="stylesheet" th:href="@{/css/styles.css}">
+    <!-- jsPDF Library (CDN) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 </head>
 <body>
     <header>
         <nav>
             <ul class="navbar-menu">
                 <li><a href="index.html"><img src="img/logo.png" alt="Logo" class="logo"></a></li>
-                <li><a href="records.html">Pet Records</a></li>
+                <li><a th:href="@{/records}">Pet Records</a></li>
                 <li><a href="appointments.html">Appointments</a></li>
                 <li><a href="resources.html">Resources</a></li>
                 <li><a href="contact.html">Contact</a></li>
@@ -29,65 +31,6 @@
                 <a th:href="@{/records/new}" class="btn-primary">Create New Record</a>
             </div>
 
-            <!-- Example record with Edit and Delete buttons -->
-            <div class="record-card">
-                <div class="record-header">
-                    <h2>Bella's Medical Record</h2>
-                    <!-- Edit and Delete buttons next to each record -->
-                    <div class="action-buttons">
-                        <a th:href="@{'/records/edit/1'}" class="btn-secondary">Edit Record</a>
-                        <a th:href="@{'/records/delete/1'}" class="btn-danger" onclick="return confirm('Are you sure you want to delete this record?')">Delete Record</a>
-                    </div>
-                </div>
-                <p><strong>Owner Name:</strong> Emily Johnson</p>
-                <p><strong>Veterinarian:</strong> Dr. Smith</p>
-                <p><strong>Date of Birth:</strong> March 14, 2019</p>
-                <p><strong>Last Visit:</strong> August 1, 2024</p>
-                <p><strong>Allergies:</strong> None</p>
-                <p><strong>Prescriptions:</strong> Heartworm Prevention (Monthly), Flea Control (Monthly)</p>
-                <p><strong>Vaccination History:</strong>
-                    <ul>
-                        <li>Rabies - April 10, 2024</li>
-                        <li>Distemper - April 10, 2024</li>
-                        <li>Bordetella - October 5, 2023</li>
-                    </ul>
-                </p>
-                <p><strong>Recent Tests:</strong> Blood Test (Normal), Urine Test (Normal)</p>
-                <p><strong>Recent Surgeries:</strong> Spay - May 15, 2020</p>
-                <p><strong>Dietary Recommendations:</strong> High-protein diet, Grain-free food</p>
-                <p><strong>Notes:</strong> Bella is in good health. Recommended to continue with current diet and exercise routine.</p>
-                <button class="btn-primary">Download Full Record</button>
-            </div>
-
-            <!-- Second example record with Edit and Delete buttons -->
-            <div class="record-card">
-                <div class="record-header">
-                    <h2>Max's Medical Record</h2>
-                    <div class="action-buttons">
-                        <a th:href="@{'/records/edit/2'}" class="btn-secondary">Edit Record</a>
-                        <a th:href="@{'/records/delete/2'}" class="btn-danger" onclick="return confirm('Are you sure you want to delete this record?')">Delete Record</a>
-                    </div>
-                </div>
-                <p><strong>Owner Name:</strong> Jake Peterson</p>
-                <p><strong>Veterinarian:</strong> Dr. Jane</p>
-                <p><strong>Date of Birth:</strong> June 22, 2018</p>
-                <p><strong>Last Visit:</strong> July 15, 2024</p>
-                <p><strong>Allergies:</strong> Pollen, Dust</p>
-                <p><strong>Prescriptions:</strong> Allergy Medication (Daily), Joint Supplements (Daily)</p>
-                <p><strong>Vaccination History:</strong>
-                    <ul>
-                        <li>Rabies - January 20, 2024</li>
-                        <li>Distemper - January 20, 2024</li>
-                        <li>Leptospirosis - July 10, 2023</li>
-                    </ul>
-                </p>
-                <p><strong>Recent Tests:</strong> Allergy Test (Positive for pollen)</p>
-                <p><strong>Recent Surgeries:</strong> None</p>
-                <p><strong>Dietary Recommendations:</strong> Hypoallergenic diet</p>
-                <p><strong>Notes:</strong> Max has shown improvement with his allergy medication. Monitor for any changes in symptoms.</p>
-                <button class="btn-primary">Download Full Record</button>
-            </div>
-
             <!-- Dynamic records loaded via Thymeleaf -->
             <div th:each="record : ${records}" class="record-card">
                 <div class="record-header">
@@ -98,22 +41,19 @@
                         <a th:href="@{'/records/delete/' + ${record.id}}" class="btn-danger" onclick="return confirm('Are you sure you want to delete this record?')">Delete Record</a>
                     </div>
                 </div>
-                <p><strong>Owner Name:</strong> <span th:text="${record.ownerName}"></span></p>
                 <p><strong>Veterinarian:</strong> <span th:text="${record.veterinarian}"></span></p>
-                <p><strong>Date of Birth:</strong> <span th:text="${#dates.format(record.dateOfBirth, 'dd/MM/yyyy')}"></span></p>
-                <p><strong>Last Visit:</strong> <span th:text="${#dates.format(record.lastVisit, 'dd/MM/yyyy')}"></span></p>
+                <p><strong>Date of Birth:</strong> <span th:text="${record.dateOfBirth}"></span></p>
+                <p><strong>Last Visit:</strong> <span th:text="${record.lastVisit}"></span></p>
                 <p><strong>Allergies:</strong> <span th:text="${record.allergies}"></span></p>
                 <p><strong>Prescriptions:</strong> <span th:text="${record.prescriptions}"></span></p>
-                <p><strong>Vaccination History:</strong> 
-                    <ul>
-                        <li th:each="vaccine : ${record.vaccinationHistory}" th:text="${vaccine}"></li>
-                    </ul>
-                </p>
+                <p><strong>Vaccination History:</strong> <span th:text="${record.vaccinationHistory}"></span></p>
                 <p><strong>Recent Tests:</strong> <span th:text="${record.recentTests}"></span></p>
                 <p><strong>Recent Surgeries:</strong> <span th:text="${record.recentSurgeries}"></span></p>
                 <p><strong>Dietary Recommendations:</strong> <span th:text="${record.dietaryRecommendations}"></span></p>
                 <p><strong>Notes:</strong> <span th:text="${record.notes}"></span></p>
-                <button class="btn-primary">Download Full Record</button>
+                
+                <!-- Button to download the record as a PDF -->
+                <button class="btn-primary" onclick="downloadRecordPDF(this)">Download Full Record</button>
             </div>
 
         </section>
@@ -123,7 +63,7 @@
         <nav>
             <ul>
                 <li><a href="index.html"><img src="img/logo.png" alt="Logo"></a></li>
-                <li><a href="records.html">Pet Records</a></li>
+                <li><a th:href="@{/records}">Pet Records</a></li>
                 <li><a href="appointments.html">Appointments</a></li>
                 <li><a href="resources.html">Resources</a></li>
                 <li><a href="contact.html">Contact</a></li>
@@ -134,5 +74,43 @@
             </ul>
         </nav>
     </footer>
+
+    <!-- JavaScript to handle PDF generation -->
+    <script>
+        function downloadRecordPDF(button) {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+            
+            // Get the pet record details from the DOM
+            const recordCard = button.closest('.record-card');
+            const petName = recordCard.querySelector('h2').textContent;
+            const veterinarian = recordCard.querySelector('p:nth-child(2) span').textContent;
+            const dateOfBirth = recordCard.querySelector('p:nth-child(3) span').textContent;
+            const lastVisit = recordCard.querySelector('p:nth-child(4) span').textContent;
+            const allergies = recordCard.querySelector('p:nth-child(5) span').textContent;
+            const prescriptions = recordCard.querySelector('p:nth-child(6) span').textContent;
+            const vaccinationHistory = recordCard.querySelector('p:nth-child(7) span').textContent;
+            const recentTests = recordCard.querySelector('p:nth-child(8) span').textContent;
+            const recentSurgeries = recordCard.querySelector('p:nth-child(9) span').textContent;
+            const dietaryRecommendations = recordCard.querySelector('p:nth-child(10) span').textContent;
+            const notes = recordCard.querySelector('p:nth-child(11) span').textContent;
+
+            // Add the text content to the PDF
+            doc.text(petName, 10, 10);
+            doc.text(`Veterinarian: ${veterinarian}`, 10, 20);
+            doc.text(`Date of Birth: ${dateOfBirth}`, 10, 30);
+            doc.text(`Last Visit: ${lastVisit}`, 10, 40);
+            doc.text(`Allergies: ${allergies}`, 10, 50);
+            doc.text(`Prescriptions: ${prescriptions}`, 10, 60);
+            doc.text(`Vaccination History: ${vaccinationHistory}`, 10, 70);
+            doc.text(`Recent Tests: ${recentTests}`, 10, 80);
+            doc.text(`Recent Surgeries: ${recentSurgeries}`, 10, 90);
+            doc.text(`Dietary Recommendations: ${dietaryRecommendations}`, 10, 100);
+            doc.text(`Notes: ${notes}`, 10, 110);
+
+            // Save the generated PDF
+            doc.save(`${petName}-Record.pdf`);
+        }
+    </script>
 </body>
 </html>

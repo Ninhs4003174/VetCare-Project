@@ -1,3 +1,0 @@
-ALTER TABLE vet_users
-ADD COLUMN IF EXISTS address,
-ADD COLUMN IF EXISTS phone_number;

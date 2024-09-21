@@ -47,11 +47,12 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .formLogin(httpForm -> {
                     httpForm.loginPage("/login").permitAll();
-                    httpForm.defaultSuccessUrl("/profile");
+                    httpForm.defaultSuccessUrl("/userhome", true);
 
                 })
                 .authorizeHttpRequests(registry -> {
-                    registry.requestMatchers("/signup", "/home", "/records", "/profile", "/css/**", "/img/**")
+                    registry.requestMatchers("/appointments", "/appointments/book").permitAll();
+                    registry.requestMatchers("/signup", "home", "/records", "/profile", "/css/**", "/img/**")
                             .permitAll(); // Ensure
                     // static
                     // resources are

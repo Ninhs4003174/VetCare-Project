@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/styles.css">
+    <title>Edit User Info</title>
+</head>
+<body>
+    <header>
+        <!-- Include navigation here -->
+    </header>
+    <main>
+        <h1>Edit User Information</h1>
+        <form action="/edit-user" method="post">
+            <input type="hidden" name="userId" th:value="${user.id}" />
+            <label for="address">Address:</label>
+            <input type="text" id="address" name="address" th:value="${user.address}" required>
+            <label for="phoneNumber">Phone Number:</label>
+            <input type="text" id="phoneNumber" name="phoneNumber" th:value="${user.phoneNumber}" required>
+            <button type="submit">Update Info</button>
+        </form>
+    </main>
+</body>
+</html>
