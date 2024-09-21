@@ -29,4 +29,13 @@ public class PetService {
     public Pet findPetById(Long id) {
         return petRepository.findById(id).orElse(null);
     }
+
+    /**
+     * Updates an existing pet in the database.
+     *
+     * @param pet the Pet object with updated information.
+     */
+    public void updatePet(Pet pet) {
+        petRepository.save(pet); // This will update the pet if it exists
+    }
 }

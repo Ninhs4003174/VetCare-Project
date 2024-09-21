@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Pet</title>
+    <link rel="stylesheet" href="/css/styles.css" />
+</head>
+<body>
+    <header>
+        <!-- Include navigation here -->
+    </header>
+    <main>
+        <h1>Edit Pet Details</h1>
+        <form action="/edit-pet" method="post">
+            <input type="hidden" name="petId" th:value="${pet.id}" />
+            <label for="pet_name">Pet Name:</label>
+            <input type="text" id="pet_name" name="petName" th:value="${pet.name}" required>
+            <label for="pet_type">Pet Type:</label>
+            <select id="pet_type" name="petType" required>
+                <option value="dog" th:selected="${pet.type == 'dog'}">Dog</option>
+                <option value="cat" th:selected="${pet.type == 'cat'}">Cat</option>
+                <option value="bird" th:selected="${pet.type == 'bird'}">Bird</option>
+                <option value="reptile" th:selected="${pet.type == 'reptile'}">Reptile</option>
+                <option value="other" th:selected="${pet.type == 'other'}">Other</option>
+            </select>
+            <label for="pet_age">Pet Age:</label>
+            <input type="number" id="pet_age" name="petAge" th:value="${pet.age}" min="0" required>
+            <label for="pet_bio">Pet Bio:</label>
+            <textarea id="pet_bio" name="petBio" required th:text="${pet.bio}"></textarea>
+            <button type="submit">Update Pet</button>
+        </form>
+    </main>
+</body>
+</html>

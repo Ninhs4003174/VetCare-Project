@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>User Profile</title>
     <link href='https://fonts.googleapis.com/css?family=Nunito:400,300' rel='stylesheet' type='text/css'>
     <link rel="stylesheet" href="css/styles.css" />
+    <link rel="stylesheet" href="/css/profile.css">
 </head>
 <body>
     <!-- Header Start -->
@@ -26,18 +26,19 @@
     
     <!-- Main Content Start -->
     <div class="profile-content">
-        <h1>User Profile</h1>
-
         <div class="profile-info">
-            <h2>Profile Information</h2>
+            <h2>Profile</h2>
             <div class="info-box">
                 <p><strong>Username:</strong> <span th:text="${user?.username}"></span></p>
                 <p><strong>Email:</strong> <span th:text="${user?.email}"></span></p>
                 <p><strong>Address:</strong> <span th:text="${user?.address}"></span></p>
                 <p><strong>Phone Number:</strong> <span th:text="${user?.phoneNumber}"></span></p>
                 <p><strong>Number of Pets:</strong> <span th:text="${user?.pets.size()}"></span></p>
+                <!-- Edit Button for user info -->
+                <button class="edit-user-button" onclick="location.href='/edit-user';">Edit User Info</button>
             </div>
         </div>
+        
 
         <div class="pets-info">
             <h2>Your Pets</h2>
@@ -48,8 +49,13 @@
                     <p><strong>Type:</strong> <span th:text="${pet.type}"></span></p>
                     <p><strong>Age:</strong> <span th:text="${pet.age}"></span> years</p>
                     <p><strong>Bio:</strong> <span th:text="${pet.bio}"></span></p>
+                    <!-- Edit Button for each pet -->
+                    <button class="edit-pet-button" 
+            th:onclick="'location.href=\'/edit-pet/' + ${pet.id} + '\''">Edit</button>
                 </div>
             </div>
+            <!-- Button to Add a New Pet -->
+            <button class="add-pet-button" onclick="location.href='/add-pet';">Add New Pet</button>
         </div>
     </div>
     <!-- Main Content End -->
