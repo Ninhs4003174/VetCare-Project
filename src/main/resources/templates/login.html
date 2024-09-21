@@ -8,7 +8,6 @@
     <link rel="stylesheet" href="/css/loginstyles.css">
 </head>
 <body>
-    <!-- Header with Navigation -->
     <header>
         <nav>
             <ul class="navbar-menu">
@@ -20,12 +19,17 @@
             </ul>
         </nav>
     </header>
-    <!-- Main Content -->
+
     <main>
         <div class="login-container">
             <h2>Login</h2>
+            
+            <!-- Display error message -->
+            <div th:if="${error}" class="error-message">
+                <p th:text="${error}"></p>
+            </div>
+
             <form action="/login" method="post" th:action="@{/login}" th:object="${loginForm}">
-                <input type="hidden">
                 <div class="form-group">
                     <label for="username">Username:</label>
                     <input type="text" id="username" name="username" required>
@@ -38,11 +42,11 @@
                     <button type="submit">Login</button>
                 </div>
             </form>
+
             <div class="form-footer">
                 <p>Don't have an account? <a href="/signup">Sign up here</a>.</p>
             </div>
         </div>
     </main>
-    <!-- Footer -->
 </body>
 </html>
