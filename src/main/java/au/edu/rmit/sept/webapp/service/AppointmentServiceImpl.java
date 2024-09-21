@@ -154,15 +154,24 @@ public class AppointmentServiceImpl implements AppointmentService {
 
     @Override
     public void updateAppointment(Appointment appointment) {
-        // Validate and check for conflicts similar to saveAppointment
+        // Validate date
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        LocalDate appointmentDate = LocalDate.parse(appointment.getDate(), formatter);
+    
+        // Prevent booking for past dates
+        if (appointmentDate.isBefore(LocalDate.now())) {
+            throw new IllegalArgumentException("Cannot update appointments to past dates.");
+        }
+    
+        // Validate time and check for conflicts
         if (!isValidAppointmentTime(appointment.getTime())) {
             throw new IllegalArgumentException("Appointment time must be between 9 AM and 5 PM, in 15-minute intervals.");
         }
-
+    
         if (isOverlappingAppointment(appointment)) {
             throw new IllegalArgumentException("This time slot is already booked for the selected vet.");
         }
-
+    
         repository.save(appointment); // Saves the edited appointment
     }
 }

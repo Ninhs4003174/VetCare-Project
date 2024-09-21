@@ -127,16 +127,22 @@ return "redirect:/appointments";
 
 @GetMapping("/edit/{id}")
 public String showEditForm(@PathVariable("id") Long id, Model model) {
-Appointment appointment = appointmentService.findAppointmentById(id); // Add a method to get the appointment by ID
-model.addAttribute("appointment", appointment);
-model.addAttribute("vets", vetService.getAllVets()); // Pass the list of vets
-return "appointments/edit"; // Return the edit form
+    Appointment appointment = appointmentService.findAppointmentById(id); // Get the appointment by ID
+    model.addAttribute("appointment", appointment);
+    model.addAttribute("vets", vetService.getAllVets()); // Pass the list of vets
+
+    // Generate time slots and add them to the model
+    List<String> timeSlots = getTimeSlots();
+    model.addAttribute("timeSlots", timeSlots);
+
+    return "appointments/edit"; // Return the edit form
 }
 
 @PostMapping("/edit")
 public String editAppointment(@ModelAttribute Appointment appointment, BindingResult result, Model model) {
     if (result.hasErrors()) {
         model.addAttribute("vets", vetService.getAllVets());
+        model.addAttribute("timeSlots", getTimeSlots()); // Add time slots on error
         return "appointments/edit";
     }
 
@@ -158,6 +164,7 @@ public String editAppointment(@ModelAttribute Appointment appointment, BindingRe
     } catch (IllegalArgumentException e) {
         model.addAttribute("errorMessage", e.getMessage());
         model.addAttribute("vets", vetService.getAllVets());
+        model.addAttribute("timeSlots", getTimeSlots()); // Add time slots on error
         return "appointments/edit";
     }
 
