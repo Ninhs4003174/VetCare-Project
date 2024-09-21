@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Educational Resources</title>
+    <link rel="stylesheet" href="/css/resources.css">
+</head>
+<body>
+    <!-- Header Section -->
+    <header>
+        <nav>
+            <ul class="navbar-menu">
+                <li><a href="/home"><img src="/img/logo.png" alt="Logo" class="logo"></a></li>
+                <li><a href="/about">About</a></li>
+                <li><a href="/resources">Resources</a></li>
+                <li><a href="/contact">Contact</a></li>
+                <li><a href="/profile">Profile</a></li>
+                <li><a href="/logout">Log Out</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Main Content Section -->
+    <main>
+        <section class="resources-section">
+            <h1>Educational Resources</h1>
+
+            <!-- Filter Form (if you want filtering functionality) -->
+            <div class="filter-form">
+                <form method="GET" action="/resources">
+                    <label for="type">Filter by Type:</label>
+                    <select id="type" name="type">
+                        <option value="">All</option>
+                        <option value="article">Article</option>
+                        <option value="video">Video</option>
+                        <option value="tutorial">Tutorial</option>
+                    </select>
+                    <button type="submit">Filter</button>
+                </form>
+            </div>
+
+            <!-- List of Resources -->
+            <div class="resources-list">
+                <div th:each="resource : ${resources}" class="resource-card">
+                    <h2 th:text="${resource.title}">Resource Title</h2>
+                    <p th:text="${resource.description}">Resource Description</p>
+                    <p><strong>Type:</strong> <span th:text="${resource.type}">Resource Type</span></p>
+                    <a th:href="${resource.url}" th:if="${resource.url}" class="btn-primary">View Resource</a>
+                </div>
+            </div>
+
+            <!-- Button to Add New Resource -->
+            <div class="add-resource-btn">
+                <a href="/resources/new" class="btn-secondary">Add New Resource</a>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer Section -->
+    <footer>
+        <p>© 2024 Educational Resources System</p>
+    </footer>
+</body>
+</html>
