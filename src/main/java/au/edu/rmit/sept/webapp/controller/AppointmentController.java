@@ -135,20 +135,33 @@ return "appointments/edit"; // Return the edit form
 
 @PostMapping("/edit")
 public String editAppointment(@ModelAttribute Appointment appointment, BindingResult result, Model model) {
-if (result.hasErrors()) {
-    model.addAttribute("vets", vetService.getAllVets());
-    return "appointments/edit";
-}
+    if (result.hasErrors()) {
+        model.addAttribute("vets", vetService.getAllVets());
+        return "appointments/edit";
+    }
 
-try {
-    appointmentService.updateAppointment(appointment); // Call the update method in your service
-} catch (IllegalArgumentException e) {
-    model.addAttribute("errorMessage", e.getMessage());
-    model.addAttribute("vets", vetService.getAllVets());
-    return "appointments/edit";
-}
+    try {
+        // Retrieve the logged-in user
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String username = auth.getName();
+        User user = userService.findByUsername(username);
 
-return "redirect:/appointments"; // Redirect to the list after successful update
+        if (user == null) {
+            throw new IllegalArgumentException("User not found.");
+        }
+
+        // Set the user in the appointment before updating
+        appointment.setUser(user);
+
+        // Proceed with updating the appointment
+        appointmentService.updateAppointment(appointment);
+    } catch (IllegalArgumentException e) {
+        model.addAttribute("errorMessage", e.getMessage());
+        model.addAttribute("vets", vetService.getAllVets());
+        return "appointments/edit";
+    }
+
+    return "redirect:/appointments"; // Redirect to the list after successful update
 }
 
 
