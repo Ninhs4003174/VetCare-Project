@@ -1,5 +1,5 @@
-CREATE TABLE pet_record (
-    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+CREATE TABLE IF NOT EXISTS pet_record (
+    id BIGSERIAL PRIMARY KEY,
     name VARCHAR(255),
     breed VARCHAR(255),
     date_of_birth VARCHAR(255),

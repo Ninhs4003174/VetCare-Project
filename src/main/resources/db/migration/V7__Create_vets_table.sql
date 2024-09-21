@@ -1,4 +1,4 @@
-CREATE TABLE vet (
+CREATE TABLE IF NOT EXISTS vet (
     vet_id SERIAL PRIMARY KEY,
     clinic_name VARCHAR(100) NOT NULL,
     address VARCHAR(255),
