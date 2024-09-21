@@ -1,5 +1,7 @@
-INSERT INTO VETS (NAME, CLINIC)
+INSERT INTO VETBOOKING (NAME, CLINIC)
 VALUES
-    ('Dr. John Doe', 'City Clinic'),
-    ('Dr. Jane Smith', 'Suburban Clinic');
+    ('Dr. John Doe,City Clinic', 'City Clinic'),
+     ('Dr. Dr. Isabella Wilson,City Clinic', 'City Clinic'),
+    ('Dr. Dr. Emily Thompson,Suburban Clinic', 'Suburban Clinic'),
+    ('Dr. Jane Smith,Suburban Clinic', 'Suburban Clinic');
     

@@ -1,15 +1,15 @@
 package au.edu.rmit.sept.webapp.repository;
 
+import au.edu.rmit.sept.webapp.model.Appointment;
+import au.edu.rmit.sept.webapp.model.User;
 import java.util.List;
 
-import au.edu.rmit.sept.webapp.model.Appointment;
-
 public interface AppointmentRepository {
-    public List<Appointment> findAll();
-
-    public void save(Appointment appointment);
+    void save(Appointment appointment);
+    List<Appointment> findAll();
     List<Appointment> findByVetName(String vetName);
-
-    public void deleteById(Long id);
-    public Appointment findById(Long id);
+    List<Appointment> findByUser(User user);  // Added method to find appointments by user
+   // void save(Appointment appointment);
+    void deleteById(Long id);
+    Appointment findById(Long id);
 }

@@ -1,16 +1,29 @@
 package au.edu.rmit.sept.webapp.model;
 
+import jakarta.persistence.*;
+
+@Entity
+@Table(name = "appointments")
 public class Appointment {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     private String petName;
     private String vetName;
     private String date;
     private String time;
     private String status;
 
-    // Default constructor (required for form binding)
+    @ManyToOne
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
+
+    // Default no-argument constructor (required by Spring)
     public Appointment() {}
 
+    // New constructor to match the controller's call (without the User parameter)
     public Appointment(Long id, String petName, String vetName, String date, String time, String status) {
         this.id = id;
         this.petName = petName;
@@ -20,7 +33,18 @@ public class Appointment {
         this.status = status;
     }
 
-    // Getters and setters
+    // Existing constructor with the User parameter
+    public Appointment(Long id, String petName, String vetName, String date, String time, String status, User user) {
+        this.id = id;
+        this.petName = petName;
+        this.vetName = vetName;
+        this.date = date;
+        this.time = time;
+        this.status = status;
+        this.user = user;
+    }
+
+    // Getters and setters for all fields
     public Long getId() {
         return id;
     }
@@ -69,10 +93,29 @@ public class Appointment {
         this.status = status;
     }
 
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
     public String formattedDetails() {
-        String appointmentDetails = petName == null ? "Unknown Pet" : petName;
-        appointmentDetails += " with " + (vetName == null ? "Unknown Vet" : vetName);
+        // Debugging output
+        System.out.println("Vet Name in formattedDetails: " + vetName);
+
+        // Start with pet name
+        String appointmentDetails = (petName == null) ? "Unknown Pet" : petName;
+
+        // Add vet name
+        appointmentDetails += " with " + ((vetName == null) ? "Unknown Vet" : vetName);
+
+        // Add date and time
         appointmentDetails += " on " + date + " at " + time;
+
+        System.out.println("Formatted Details: " + appointmentDetails);
+
         return appointmentDetails;
     }
 }

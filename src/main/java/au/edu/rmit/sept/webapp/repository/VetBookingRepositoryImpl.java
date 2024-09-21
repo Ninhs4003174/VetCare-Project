@@ -11,32 +11,32 @@ import javax.sql.DataSource;
 
 import org.springframework.stereotype.Repository;
 
-import au.edu.rmit.sept.webapp.model.Vets;
+import au.edu.rmit.sept.webapp.model.VetBooking;
 
 @Repository
-public class VetsRepositoryImpl implements VetsRepository {
+public class VetBookingRepositoryImpl implements VetBookingRepository {
 
     private final DataSource source;
 
-    public VetsRepositoryImpl(DataSource source) {
+    public VetBookingRepositoryImpl(DataSource source) {
         this.source = source;
     }
 
     @Override
-    public List<Vets> findAll() {
+    public List<VetBooking> findAll() {
         try {
             Connection connection = source.getConnection();
-            PreparedStatement stm = connection.prepareStatement("SELECT * FROM vets;");
+            PreparedStatement stm = connection.prepareStatement("SELECT * FROM vetbooking;");
             ResultSet rs = stm.executeQuery();
-            List<Vets> vets = new ArrayList<>();
+            List<VetBooking> vets = new ArrayList<>();
             while (rs.next()) {
-                Vets vet = new Vets(rs.getLong(1), rs.getString(2), rs.getString(3));
+                VetBooking vet = new VetBooking(rs.getLong(1), rs.getString(2), rs.getString(3));
                 vets.add(vet);
             }
             connection.close();
             return vets;
         } catch (SQLException e) {
-            throw new RuntimeException("Error retrieving vets", e);
+            throw new RuntimeException("Error retrieving vetbooking", e);
         }
     }
 }
