@@ -1,39 +1,84 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="en">
 <head>
-    <title>Prescription Management</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prescription Request</title>
+    <link rel="stylesheet" href="/css/styles.css">
 </head>
 <body>
-    <h1>Manage Prescriptions</h1>
-    <h2>My Prescriptions</h2>
-    <table>
-        <thead>
-            <tr>
-                <th>Medication</th>
-                <th>Dosage</th>
-                <th>Instructions</th>
-                <th>Issue Date</th>
-                <th>Expiration Date</th>
-                <th>Refill Status</th>
-                <th>Action</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr th:each="prescription : ${prescriptions}">
-                <td th:text="${prescription.medicationName}"></td>
-                <td th:text="${prescription.dosage}"></td>
-                <td th:text="${prescription.instructions}"></td>
-                <td th:text="${prescription.issueDate}"></td>
-                <td th:text="${prescription.expirationDate}"></td>
-                <td th:text="${prescription.refillStatus}"></td>
-                <td>
-                    <form th:action="@{/requestRefill}" method="post">
-                        <input type="hidden" name="prescriptionId" th:value="${prescription.prescriptionId}" />
-                        <button type="submit">Request Refill</button>
-                    </form>
-                </td>
-            </tr>
-        </tbody>
-    </table>
+    <header>
+        <nav>
+            <!-- Navigation items -->
+        </nav>
+    </header>
+
+    <main>
+        <div class="request-container">
+            <h2>Request Prescription</h2>
+            <form action="/submit-prescription" method="post">
+                <div class="form-group">
+                    <label for="pet-id">Pet ID:</label>
+                    <input type="text" id="pet-id" name="pet_id" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="vet-search">Select Clinic:</label>
+                    <input type="text" id="vet-search" name="vet_id" placeholder="Search for a clinic..." required>
+                    <div id="clinic-results" class="results-dropdown"></div>
+                </div>
+
+                <div class="form-group">
+                    <label for="medication-name">Medication Name:</label>
+                    <input type="text" id="medication-name" name="medication_name" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="dosage">Dosage:</label>
+                    <input type="text" id="dosage" name="dosage">
+                </div>
+
+                <div class="form-group">
+                    <label for="instructions">Instructions:</label>
+                    <textarea id="instructions" name="instructions"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <button type="submit">Submit Request</button>
+                </div>
+            </form>
+        </div>
+
+        <div class="pending-requests">
+            <h2>Pending Prescription Requests</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Pet ID</th>
+                        <th>Clinic</th>
+                        <th>Medication Name</th>
+                        <th>Dosage</th>
+                        <th>Instructions</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Assuming pendingPrescriptions is a list of prescription objects passed to the model -->
+                    <!-- Example of how to loop through pending prescriptions -->
+                    <!-- Assuming you use Thymeleaf or a similar templating engine -->
+                    <tr th:each="prescription : ${pendingPrescriptions}">
+                        <td th:text="${prescription.petId}"></td>
+                        <td th:text="${prescription.vet.clinicName}"></td>
+                        <td th:text="${prescription.medicationName}"></td>
+                        <td th:text="${prescription.dosage}"></td>
+                        <td th:text="${prescription.instructions}"></td>
+                        <td th:text="${prescription.refillStatus}"></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </main>
+
+    <script src="script.js"></script>
 </body>
 </html>

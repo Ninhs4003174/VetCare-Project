@@ -12,15 +12,17 @@
     <header>
         <nav>
             <ul class="navbar-menu">
-                <li><a href="home"><img src="img/logo.png" alt="Logo" class="logo"></a></li>
-                <li><a href="about.html">About</a></li>
-                <li><a href="resources.html">Resources</a></li>
-                <li><a href="contact.html">Contact</a></li>
-                <li><a href="/login">Log In</a></li>
+                <li><a href="index.html"><img th:src="@{/img/logo.png}" alt="Logo" class="logo"></a></li>
+                <li><a href="records">Pet Records</a></li>
+                <li><a href="appointments">Appointments</a></li>
+                <li><a href="resources">Resources</a></li>
+                <li><a href="contact">Contact</a></li>
+                <li><a href="profile">My Profile</a></li>
+                <li><a href="#"><img th:src="@{/img/notif.png}" alt="Notifications" class="notification-icon"></a></li>
+                <li><a href="/logout" class="btn-secondary">Log out</a></li>
             </ul>
         </nav>
     </header>
-
     <!-- Main Content -->
     <main>
         <div class="appointments-container">
@@ -50,12 +52,15 @@
 
     <!-- Footer -->
     <footer>
-        <p>&copy; 2024 Your Company. All Rights Reserved.</p>
         <nav>
-            <ul class="footer-menu">
-                <li><a href="home">Home</a></li>
-                <li><a href="privacy.html">Privacy Policy</a></li>
-                <li><a href="terms.html">Terms of Service</a></li>
+            <ul>
+                <li><a href="index.html"><img th:src="@{/img/logo.png}" alt="Logo"></a></li>
+                <li><a href="resources">Resources</a></li>
+                <li><a href="contact">Contact</a></li>
+                <li><a href="about">About</a></li>
+                <li><a href="#"><img th:src="@{/img/facebook.png}" alt="Facebook"></a></li>
+                <li><a href="#"><img th:src="@{/img/linked.png}" alt="LinkedIn"></a></li>
+                <li><a href="#"><img th:src="@{/img/insta.png}" alt="Instagram"></a></li>
             </ul>
         </nav>
     </footer>

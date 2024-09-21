@@ -38,6 +38,11 @@ public class LoginController {
         return "welcome";
     }
 
+    @GetMapping("/home")
+    public String home() {
+        return "home";
+    }
+
     @GetMapping("/userhome")
     public String userhome() {
         return "userhome";
