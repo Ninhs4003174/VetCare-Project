@@ -21,7 +21,8 @@ public class Appointment {
     private User user;
 
     // Default no-argument constructor (required by Spring)
-    public Appointment() {}
+    public Appointment() {
+    }
 
     // New constructor to match the controller's call (without the User parameter)
     public Appointment(Long id, String petName, String vetName, String date, String time, String status) {
