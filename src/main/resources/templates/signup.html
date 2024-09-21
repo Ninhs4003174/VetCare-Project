@@ -9,20 +9,23 @@
 </head>
 <body>
     <header>
-            <nav>
-                <ul class="navbar-menu">
-                    <li><a href="home"><img src="img/logo.png" alt="Logo" class="logo"></a></li>
-                    <li><a href="about.html">About</a></li>
-                    <li><a href="resources.html">Resources</a></li>
-                    <li><a href="contact.html">Contact</a></li>
-                    <li><a href="login.html">Log In</a></li>
-                </ul>
-            </nav>
+        <nav>
+            <ul class="navbar-menu">
+                <li><a href="home"><img src="img/logo.png" alt="Logo" class="logo"></a></li>
+                <li><a href="about.html">About</a></li>
+                <li><a href="resources.html">Resources</a></li>
+                <li><a href="contact.html">Contact</a></li>
+                <li><a href="login.html">Log In</a></li>
+            </ul>
+        </nav>
     </header>
     <!-- Header End -->
     <main class="container">
         <div class="row">
             <div class="col-md-6 sign-up-form">
+                <!-- Display Error/Success Messages -->
+                <div th:if="${message}" class="alert" th:text="${message}"></div>
+                
                 <!-- Sign Up Form -->
                 <form action="/signup" method="post" th:action="@{/signup}" th:object="${signupForm}">
                     <input type="hidden" />
@@ -48,8 +51,8 @@
                             <option value="reptile">Reptile</option>
                             <option value="other">Other</option>
                         </select>
-                        <label for="pet_age">Pet Age:</label>
-                        <input type="number" id="pet_age" name="petAge" min="0" required>
+                        <label for="pet_age">Pet Age (Max 20 years):</label>
+                        <input type="number" id="pet_age" name="petAge" min="0" max="20" required>
                         <label for="pet_bio">Pet Bio:</label>
                         <textarea id="pet_bio" name="petBio" placeholder="Tell us about your pet" required></textarea>
                     </fieldset>

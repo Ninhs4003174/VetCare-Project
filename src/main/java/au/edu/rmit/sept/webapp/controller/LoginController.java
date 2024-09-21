@@ -1,28 +1,52 @@
 package au.edu.rmit.sept.webapp.controller;
 
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.ui.Model;
 
 @Controller
 public class LoginController {
 
     @GetMapping("/login")
     public String login() {
-        System.out.println("Navigating to login page");
-        return "login";
+        return "login"; // Return the login page
+    }
+
+    @PostMapping("/login")
+    public String handleLogin(@RequestParam String username, @RequestParam String password, Model model) {
+        // Basic error handling for missing or incorrect credentials
+        if (username.isEmpty() || password.isEmpty()) {
+            model.addAttribute("error", "Username and password must be provided");
+            return "login"; // Show the error on the login page
+        }
+
+        // Simulate login logic
+        if (!username.equals("correctUser") || !password.equals("correctPass")) {
+            model.addAttribute("error", "Invalid username or password");
+            return "login";
+        }
+
+        // On successful login, redirect to the home page
+        return "redirect:/userhome";
     }
 
     @GetMapping("/welcome")
     public String welcome() {
-        System.out.println("Navigating to welcome page");
         return "welcome";
     }
 
     @GetMapping("/userhome")
     public String userhome() {
-        System.out.println("Navigating to logged in home page");
         return "userhome";
     }
 
-    // Add mappings for other endpoints as needed
+    // Example of handling exceptions at the controller level
+    @ExceptionHandler(Exception.class)
+    public String handleException(Model model, Exception ex) {
+        model.addAttribute("errorMessage", "An unexpected error occurred: " + ex.getMessage());
+        return "error";
+    }
 }
