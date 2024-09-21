@@ -4,14 +4,15 @@ public class VetBooking {
     private Long id;
     private String name;
     private String clinic;
-
+    private String serviceType; 
     // Constructors, getters, and setters
     public VetBooking() {}
 
-    public VetBooking(Long id, String name, String clinic) {
+    public VetBooking(Long id, String name, String clinic,String serviceType) {
         this.id = id;
         this.name = name;
         this.clinic = clinic;
+        this.serviceType = serviceType;
     }
 
     public Long getId() {
@@ -36,5 +37,12 @@ public class VetBooking {
 
     public void setClinic(String clinic) {
         this.clinic = clinic;
+    }
+    public String getServiceType() {
+        return serviceType;
+    }
+
+    public void setServiceType(String serviceType) {
+        this.serviceType = serviceType;
     }
 }
