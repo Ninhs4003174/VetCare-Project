@@ -1,0 +1,10 @@
+
+CREATE TABLE IF NOT EXISTS resource (
+    id BIGINT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
+    title VARCHAR(255) NOT NULL,
+    description TEXT NOT NULL,
+    url VARCHAR(255) NOT NULL,
+    content TEXT,
+    type VARCHAR(50)
+);
+ 

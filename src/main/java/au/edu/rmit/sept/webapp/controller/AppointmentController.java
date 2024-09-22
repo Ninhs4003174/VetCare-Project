@@ -2,9 +2,11 @@ package au.edu.rmit.sept.webapp.controller;
 
 import au.edu.rmit.sept.webapp.model.Appointment;
 import au.edu.rmit.sept.webapp.model.User;
+import au.edu.rmit.sept.webapp.model.VetBooking;
 import au.edu.rmit.sept.webapp.service.AppointmentService;
 import au.edu.rmit.sept.webapp.service.UserService;
 import au.edu.rmit.sept.webapp.service.VetBookingService;
+import au.edu.rmit.sept.webapp.model.VetBooking;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -127,16 +129,22 @@ return "redirect:/appointments";
 
 @GetMapping("/edit/{id}")
 public String showEditForm(@PathVariable("id") Long id, Model model) {
-Appointment appointment = appointmentService.findAppointmentById(id); // Add a method to get the appointment by ID
-model.addAttribute("appointment", appointment);
-model.addAttribute("vets", vetService.getAllVets()); // Pass the list of vets
-return "appointments/edit"; // Return the edit form
+    Appointment appointment = appointmentService.findAppointmentById(id); // Get the appointment by ID
+    model.addAttribute("appointment", appointment);
+    model.addAttribute("vets", vetService.getAllVets()); // Pass the list of vets
+
+    // Generate time slots and add them to the model
+    List<String> timeSlots = getTimeSlots();
+    model.addAttribute("timeSlots", timeSlots);
+
+    return "appointments/edit"; // Return the edit form
 }
 
 @PostMapping("/edit")
 public String editAppointment(@ModelAttribute Appointment appointment, BindingResult result, Model model) {
     if (result.hasErrors()) {
         model.addAttribute("vets", vetService.getAllVets());
+        model.addAttribute("timeSlots", getTimeSlots()); // Add time slots on error
         return "appointments/edit";
     }
 
@@ -158,11 +166,35 @@ public String editAppointment(@ModelAttribute Appointment appointment, BindingRe
     } catch (IllegalArgumentException e) {
         model.addAttribute("errorMessage", e.getMessage());
         model.addAttribute("vets", vetService.getAllVets());
+        model.addAttribute("timeSlots", getTimeSlots()); // Add time slots on error
         return "appointments/edit";
     }
 
     return "redirect:/appointments"; // Redirect to the list after successful update
 }
+@GetMapping("/compare-providers")
+public String compareProviders(
+    @RequestParam(value = "serviceType", required = false) String serviceType,
+    @RequestParam(value = "location", required = false) String location,
+    Model model) {
+    try {
+        // Fetch the filtered vets based on serviceType and location
+        List<VetBooking> filteredVets = vetService.getFilteredVets(serviceType, location);
+
+        // Add the list of filtered vets to the model
+        model.addAttribute("filteredVets", filteredVets);
+    } catch (Exception e) {
+        // Handle errors (such as database connection issues)
+        model.addAttribute("errorMessage", "Unable to load comparison data due to a server error.");
+    }
+
+    // Pass filter criteria back to the view so the user sees what they selected
+    model.addAttribute("serviceType", serviceType);
+    model.addAttribute("location", location);
+
+    return "appointments/compare-providers";  // New view for comparing providers
+}
+
 
 
 }

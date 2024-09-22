@@ -1,39 +1,94 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Prescription Management</title>
+    <link rel="stylesheet" href="css/styles.css" />
+    <link rel="stylesheet" href="css/prescriptionstyles.css">
 </head>
 <body>
-    <h1>Manage Prescriptions</h1>
-    <h2>My Prescriptions</h2>
-    <table>
-        <thead>
-            <tr>
-                <th>Medication</th>
-                <th>Dosage</th>
-                <th>Instructions</th>
-                <th>Issue Date</th>
-                <th>Expiration Date</th>
-                <th>Refill Status</th>
-                <th>Action</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr th:each="prescription : ${prescriptions}">
-                <td th:text="${prescription.medicationName}"></td>
-                <td th:text="${prescription.dosage}"></td>
-                <td th:text="${prescription.instructions}"></td>
-                <td th:text="${prescription.issueDate}"></td>
-                <td th:text="${prescription.expirationDate}"></td>
-                <td th:text="${prescription.refillStatus}"></td>
-                <td>
-                    <form th:action="@{/requestRefill}" method="post">
-                        <input type="hidden" name="prescriptionId" th:value="${prescription.prescriptionId}" />
-                        <button type="submit">Request Refill</button>
-                    </form>
-                </td>
-            </tr>
-        </tbody>
-    </table>
+    <header>
+        <nav>
+            <ul class="navbar-menu">
+                <li><a href="userhome"><img src="img/logo.png" alt="Logo" class="logo"></a></li>
+                <li><a href="about">About</a></li>
+                <li><a href="resource">Resources</a></li>
+                <li><a href="contact">Contact</a></li>
+                <li><a href="appointments">Appointments</a></li>
+                <li><a href="prescription-management">Prescriptions</a></li>
+                <li><a href="profile">Profile</a></li>
+                <li><a href="/logout">Log Out</a></li>
+            </ul>
+        </nav>
+    </header>
+    <div class="container">
+        <h1 class="mt-5">Request a Prescription</h1>
+        <form id="prescriptionForm" method="POST" action="/prescription-management/request">
+            <div class="form-group">
+                <select class="form-control" id="medication" name="medication" required>
+                    <option value="">--Select Medication--</option>
+                    <option value="Aspirin">Aspirin</option>
+                    <option value="Ibuprofen">Ibuprofen</option>
+                    <option value="Paracetamol">Paracetamol</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="reason">Reason for Request</label>
+                <textarea class="form-control" id="reason" name="reason" required></textarea>
+            </div>
+            <div class="form-group">
+                <label for="petId">Select Pet</label>
+                <select class="form-control" id="petId" name="petId" required>
+                    <option value="">--Select Pet--</option>
+                    <th:block th:each="pet : ${pets}">
+                        <option th:value="${pet.id}" th:text="${pet.name}"></option>
+                    </th:block>
+                </select>
+            </div>
+            <button type="submit" class="btn btn-primary">Submit Request</button>
+        </form>
+
+        <h2 class="mt-5">Your Prescriptions</h2>
+        <div class="prescription-requests">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Medication</th>
+                        <th>Pet Name</th>
+                        <th>Reason</th>
+                        <th>Status</th>
+                        <th>Request Date</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <th:block th:each="request : ${pendingRequests}">
+                        <tr>
+                            <td th:text="${request.medication}"></td>
+                            <td th:text="${request.pet.name}"></td> <!-- Added pet name -->
+                            <td th:text="${request.reason}"></td>
+                            <td th:text="${request.status}">
+                                <span th:class="${request.status == 'Approved' ? 'status-approved' : request.status == 'Pending' ? 'status-pending' : 'status-denied'}"></span>
+                            </td>
+                            <td th:text="${request.requestDate != null ? #temporals.format(request.requestDate, 'yyyy-MM-dd HH:mm:ss') : 'N/A'}"></td>
+                        </tr>
+                    </th:block>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <footer>
+        <nav>
+            <ul>
+                <li><a href="index.html"><img th:src="@{/img/logo.png}" alt="Logo"></a></li>
+                <li><a href="resources">Resources</a></li>
+                <li><a href="contact">Contact</a></li>
+                <li><a href="about">About</a></li>
+                <li><a href="#"><img th:src="@{/img/facebook.png}" alt="Facebook"></a></li>
+                <li><a href="#"><img th:src="@{/img/linked.png}" alt="LinkedIn"></a></li>
+                <li><a href="#"><img th:src="@{/img/insta.png}" alt="Instagram"></a></li>
+            </ul>
+        </nav>
+    </footer>
 </body>
 </html>

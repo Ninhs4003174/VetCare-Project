@@ -9,6 +9,8 @@ body {
     font-family: Arial, sans-serif;
     background-color: var(--background-color);
     color: var(--text-color);
+    line-height: 1.6;
+    padding: 0 20px;
 }
 
 :root {
@@ -20,7 +22,7 @@ body {
     --white-color: #ffffff;
 }
 
-/* Navbar Styles */
+/* Header and Navigation */
 header {
     background-color: var(--white-color);
     padding: 20px 0;
@@ -43,7 +45,7 @@ header {
     height: 40px;
 }
 
-/* Form Section Styling */
+/* Form Section */
 .appointment-form {
     max-width: 800px;
     margin: 40px auto;
@@ -53,7 +55,7 @@ header {
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
 
-.appointment-form h1 {
+.appointment-form h2 {
     color: var(--primary-color);
     margin-bottom: 20px;
     text-align: center;
@@ -66,9 +68,10 @@ header {
 
 .form-container label {
     margin-bottom: 8px;
+    font-weight: bold;
 }
 
-.form-container .input-field, 
+.form-container .input-field,
 .form-container .select-field {
     padding: 10px;
     margin-bottom: 15px;
@@ -77,12 +80,11 @@ header {
     width: 100%;
 }
 
-.form-container .input-field:focus, 
+.form-container .input-field:focus,
 .form-container .select-field:focus {
     outline: none;
     border-color: var(--accent-color);
 }
-
 .alert-danger {
     color: red;
     font-weight: bold;
@@ -104,12 +106,46 @@ header {
     background-color: var(--accent-color);
 }
 
-/* Footer Styles */
+
+/* Table Styling */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+}
+
+table th,
+table td {
+    padding: 12px;
+    border: 1px solid #ccc;
+    text-align: left;
+}
+
+table th {
+    background-color: var(--secondary-color);
+    color: var(--white-color);
+}
+
+table td {
+    background-color: var(--white-color);
+}
+
+a {
+    color: var(--primary-color);
+    text-decoration: none;
+}
+
+a:hover {
+    color: var(--accent-color);
+}
+
+/* Footer */
 footer {
     background-color: var(--primary-color);
     padding: 20px;
     text-align: center;
     color: var(--white-color);
+    margin-top: 40px;
 }
 
 footer ul {

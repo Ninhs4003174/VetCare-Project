@@ -23,20 +23,23 @@ public class VetBookingRepositoryImpl implements VetBookingRepository {
     }
 
     @Override
-    public List<VetBooking> findAll() {
-        try {
-            Connection connection = source.getConnection();
-            PreparedStatement stm = connection.prepareStatement("SELECT * FROM vetbooking;");
-            ResultSet rs = stm.executeQuery();
-            List<VetBooking> vets = new ArrayList<>();
-            while (rs.next()) {
-                VetBooking vet = new VetBooking(rs.getLong(1), rs.getString(2), rs.getString(3));
-                vets.add(vet);
-            }
-            connection.close();
-            return vets;
-        } catch (SQLException e) {
-            throw new RuntimeException("Error retrieving vetbooking", e);
+public List<VetBooking> findAll() {
+    try {
+        Connection connection = source.getConnection();
+        PreparedStatement stm = connection.prepareStatement("SELECT * FROM vetbooking;");
+        ResultSet rs = stm.executeQuery();
+        List<VetBooking> vets = new ArrayList<>();
+        while (rs.next()) {
+            VetBooking vet = new VetBooking(rs.getLong(1), rs.getString(2), rs.getString(3), rs.getString(4));
+            vets.add(vet);
         }
+        connection.close();
+        return vets;
+    } catch (SQLException e) {
+        throw new RuntimeException("Error retrieving vetbooking", e);
     }
+}
+
+    
+
 }

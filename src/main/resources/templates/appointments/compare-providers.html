@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Compare Providers</title>
+    <!-- Link to the CSS file -->
+    <link rel="stylesheet" href="/css/style.css">  <!-- This is the link to your CSS file -->
+</head>
+<body>
+
+    <header>
+        <nav>
+            <ul class="navbar-menu">
+                <li><a href="userhome"><img src="img/logo.png" alt="Logo" class="logo"></a></li>
+                <li><a href="about">About</a></li>
+                <li><a href="resources">Resources</a></li>
+                <li><a href="contact">Contact</a></li>
+                <li><a href="appointments">Appointments</a></li>
+                <li><a href="prescription-management">Prescriptions</a></li>
+                <li><a href="profile">Profile</a></li>
+                <li><a href="/logout">Log Out</a></li>
+            </ul>
+        </nav>
+    </header>
+
+<main class="appointment-form">
+    <h2>Compare Providers</h2>
+
+    <form method="get" action="/appointments/compare-providers">
+        <div class="form-container">
+            <label for="serviceType">Service Type:</label>
+            <select name="serviceType" id="serviceType" class="select-field">
+                <option value="">--Select Service Type--</option>
+                <option value="General" th:selected="${serviceType == 'General'}">General Checkup</option>
+                <option value="Surgery" th:selected="${serviceType == 'Surgery'}">Surgery</option>
+                <!-- Add more service types if required -->
+            </select>
+
+            <label for="location">Location:</label>
+            <select name="location" id="location" class="select-field">
+                <option value="">--Select Location--</option>
+                <option value="City Clinic" th:selected="${location == 'City Clinic'}">City Clinic</option>
+                <option value="Suburban Clinic" th:selected="${location == 'Suburban Clinic'}">Suburban Clinic</option>
+            </select>
+
+            <button type="submit" class="btn-primary">Compare</button>
+        </div>
+    </form>
+
+    <div th:if="${errorMessage}" class="alert-danger">
+        <p th:text="${errorMessage}"></p>
+    </div>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Vet Name</th>
+                <th>Service Type</th>
+                <th>Location</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="vet : ${filteredVets}">
+                <td th:text="${vet.name}">Vet Name</td>
+                <td th:text="${vet.serviceType}">Service Type</td>
+                <td th:text="${vet.clinic}">Clinic</td>
+                <td>
+                    <a th:href="@{/appointments/book(vetName=${vet.name})}" class="btn-primary">Book Appointment</a>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</main>
+
+<footer>
+    <ul>
+        <li><a href="#">Privacy Policy</a></li>
+        <li><a href="#">Terms of Use</a></li>
+    </ul>
+</footer>
+
+</body>
+</html>
+

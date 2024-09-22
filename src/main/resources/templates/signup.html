@@ -9,27 +9,31 @@
 </head>
 <body>
     <header>
-            <nav>
-                <ul class="navbar-menu">
-                    <li><a href="home"><img src="img/logo.png" alt="Logo" class="logo"></a></li>
-                    <li><a href="about.html">About</a></li>
-                    <li><a href="resources.html">Resources</a></li>
-                    <li><a href="contact.html">Contact</a></li>
-                    <li><a href="login.html">Log In</a></li>
-                </ul>
-            </nav>
+        <nav>
+            <ul class="navbar-menu">
+                <li><a href="home"><img src="img/logo.png" alt="Logo" class="logo"></a></li>
+                <li><a href="about">About</a></li>
+                <li><a href="resources">Resources</a></li>
+                <li><a href="contact">Contact</a></li>
+                <li><a href="/login">Log In</a></li>
+            </ul>
+        </nav>
     </header>
-    <!-- Header End -->
     <main class="container">
         <div class="row">
+            <!-- Display flash message -->
+
+
             <div class="col-md-6 sign-up-form">
+                <!-- Display Error/Success Messages -->
+                <div th:if="${message}" class="alert" th:class="${success ? 'alert-success' : 'alert-danger'}" th:text="${message}"></div>
+                
                 <!-- Sign Up Form -->
                 <form action="/signup" method="post" th:action="@{/signup}" th:object="${signupForm}">
-                    <input type="hidden" />
                     <h1>Sign Up Your Pet</h1>
                     <fieldset>
                         <legend><span class="number">1</span> Pet Owner Info</legend>
-                        <label for="owner_name">Owner Name:</label>
+                        <label for="owner_name">Username:</label>
                         <input type="text" id="owner_name" name="username" required>
                         <label for="owner_email">Email:</label>
                         <input type="email" id="owner_email" name="email" required>
@@ -48,8 +52,8 @@
                             <option value="reptile">Reptile</option>
                             <option value="other">Other</option>
                         </select>
-                        <label for="pet_age">Pet Age:</label>
-                        <input type="number" id="pet_age" name="petAge" min="0" required>
+                        <label for="pet_age">Pet Age (Max 20 years):</label>
+                        <input type="number" id="pet_age" name="petAge" min="0" max="20" required>
                         <label for="pet_bio">Pet Bio:</label>
                         <textarea id="pet_bio" name="petBio" placeholder="Tell us about your pet" required></textarea>
                     </fieldset>
@@ -73,6 +77,18 @@
             </div>
         </div>
     </main>
-    <!-- Footer with Social Links -->
+    <footer>
+        <nav>
+            <ul>
+                <li><a href="index.html"><img th:src="@{/img/logo.png}" alt="Logo"></a></li>
+                <li><a href="resources">Resources</a></li>
+                <li><a href="contact">Contact</a></li>
+                <li><a href="about">About</a></li>
+                <li><a href="#"><img th:src="@{/img/facebook.png}" alt="Facebook"></a></li>
+                <li><a href="#"><img th:src="@{/img/linked.png}" alt="LinkedIn"></a></li>
+                <li><a href="#"><img th:src="@{/img/insta.png}" alt="Instagram"></a></li>
+            </ul>
+        </nav>
+    </footer>
 </body>
 </html>

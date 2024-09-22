@@ -10,6 +10,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 public class ProfileController {
@@ -34,7 +35,8 @@ public class ProfileController {
 
         // If user is null, handle gracefully
         if (user == null) {
-            return "error"; // Return an error page or handle the error appropriately
+            model.addAttribute("message", "User not found");
+            return "error"; // Redirect to an error page or handle appropriately
         }
 
         // Add the user to the model to pass to the view
@@ -56,7 +58,8 @@ public class ProfileController {
 
         User user = userService.findByUsername(username);
         if (user == null) {
-            return "error";
+            model.addAttribute("message", "User not found");
+            return "error"; // Redirect to an error page or handle appropriately
         }
 
         model.addAttribute("user", user);
@@ -67,12 +70,13 @@ public class ProfileController {
     public String editUser(@RequestParam Long userId,
             @RequestParam String address,
             @RequestParam String phoneNumber,
-            Model model) {
+            RedirectAttributes redirectAttributes) { // Use RedirectAttributes here
         try {
             User user = userService.findById(userId); // Assume you have this method
             if (user == null) {
-                model.addAttribute("message", "User not found");
-                return "error"; // Handle appropriately
+                redirectAttributes.addFlashAttribute("message", "User not found");
+                redirectAttributes.addFlashAttribute("success", false); // Indicate failure
+                return "redirect:/edit-user"; // Redirect back to edit user form
             }
 
             // Update user details
@@ -81,11 +85,13 @@ public class ProfileController {
 
             userService.updateUser(user); // Ensure this method exists in your service
 
+            redirectAttributes.addFlashAttribute("message", "User details updated successfully!");
+            redirectAttributes.addFlashAttribute("success", true); // Indicate success
             return "redirect:/profile"; // Redirect to profile page after update
         } catch (Exception e) {
-            model.addAttribute("message", "Failed to edit user: " + e.getMessage());
-            return "edit-user"; // Return to the edit user form on error
+            redirectAttributes.addFlashAttribute("message", "Failed to edit user: " + e.getMessage());
+            redirectAttributes.addFlashAttribute("success", false); // Indicate failure
+            return "redirect:/edit-user"; // Redirect back to edit user form on error
         }
     }
-
 }

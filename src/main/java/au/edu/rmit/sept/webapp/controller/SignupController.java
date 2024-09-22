@@ -10,10 +10,11 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import java.util.HashSet;
 
+import java.util.HashSet;
 import java.util.regex.Pattern;
 
 @Controller
@@ -21,10 +22,12 @@ public class SignupController {
 
     @Autowired
     private UserService userService;
+
     @Autowired
     private PetService petService;
 
     private static final Pattern EMAIL_PATTERN = Pattern.compile("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$");
+    private static final Pattern PASSWORD_PATTERN = Pattern.compile("^(?=.*[0-9]).{8,}$");
     private static final Logger logger = LoggerFactory.getLogger(SignupController.class);
 
     @GetMapping("/signup")
@@ -32,71 +35,95 @@ public class SignupController {
         return "signup";
     }
 
-    @GetMapping("/home")
-    public String showHomePage() {
-        return "home"; // This corresponds to home.html
-    }
-
     @PostMapping("/signup")
-    public String registerUser(@RequestParam String username,
+    public String registerUser(
+            @RequestParam String username,
             @RequestParam String email,
             @RequestParam String password,
             @RequestParam String petName,
             @RequestParam String petType,
             @RequestParam int petAge,
             @RequestParam String petBio,
-            Model model) {
+            RedirectAttributes redirectAttributes) { // Use RedirectAttributes here
         try {
             // Validate email structure
             if (!EMAIL_PATTERN.matcher(email).matches()) {
-                model.addAttribute("message", "Invalid email format");
-                return "signup";
+                redirectAttributes.addFlashAttribute("message", "Invalid email format");
+                redirectAttributes.addFlashAttribute("success", false); // Indicate failure
+                return "redirect:/signup";
             }
+
+            // Ensure username length does not exceed 20 characters
+            if (username.length() > 20) {
+                redirectAttributes.addFlashAttribute("message", "Username must not exceed 20 characters");
+                redirectAttributes.addFlashAttribute("success", false); // Indicate failure
+                return "redirect:/signup";
+            }
+
+            // Check if username is taken
             if (userService.isUsernameTaken(username)) {
-                model.addAttribute("message", "Username is already taken");
-                return "signup";
+                redirectAttributes.addFlashAttribute("message", "Username is already taken");
+                redirectAttributes.addFlashAttribute("success", false); // Indicate failure
+                return "redirect:/signup";
             }
+
+            // Check if email is taken
             if (userService.isEmailTaken(email)) {
-                model.addAttribute("message", "Email is already taken");
-                return "signup";
+                redirectAttributes.addFlashAttribute("message", "Email is already taken");
+                redirectAttributes.addFlashAttribute("success", false); // Indicate failure
+                return "redirect:/signup";
             }
 
             // Validate password strength
-            if (password.length() < 8) {
-                model.addAttribute("message", "Password must be at least 8 characters long");
-                return "signup";
+            if (!PASSWORD_PATTERN.matcher(password).matches()) {
+                redirectAttributes.addFlashAttribute("message",
+                        "Password must be at least 8 characters long and contain at least one number");
+                redirectAttributes.addFlashAttribute("success", false); // Indicate failure
+                return "redirect:/signup";
             }
 
-            // Register user through UserService
+            // Validate pet age
+            if (petAge < 0 || petAge > 20) {
+                redirectAttributes.addFlashAttribute("message", "Pet age must be between 0 and 20 years");
+                redirectAttributes.addFlashAttribute("success", false); // Indicate failure
+                return "redirect:/signup";
+            }
+
+            // Register the user
             userService.registerUser(username, email, password);
 
-            // Register pet through UserService
+            // Find the newly registered user by email
             User user = userService.findUserByEmail(email);
             if (user == null) {
-                model.addAttribute("message", "User not found");
-                return "signup";
+                redirectAttributes.addFlashAttribute("message", "User not found");
+                redirectAttributes.addFlashAttribute("success", false); // Indicate failure
+                return "redirect:/signup";
             }
 
             logger.info("User found: {}", user);
 
-            // Ensure the user's pets set is initialized
+            // Initialize user's pets set if null
             if (user.getPets() == null) {
-                user.setPets(new HashSet<>()); // Initialize if null
+                user.setPets(new HashSet<>());
             }
 
+            // Create and register new pet
             Pet newPet = new Pet(petName, petType, petAge, petBio, user);
             logger.info("Creating new pet: {}", newPet);
 
-            user.getPets().add(newPet); // Add pet to user's list
-            petService.addPet(newPet); // Save pet to database
+            user.getPets().add(newPet);
+            petService.addPet(newPet);
 
-            model.addAttribute("message", "User and pet registered successfully!");
+            // Add confirmation message before redirecting to the login page
+            redirectAttributes.addFlashAttribute("message", "User and pet registered successfully!");
+            redirectAttributes.addFlashAttribute("success", true); // Indicate success
+            return "redirect:/login";
 
         } catch (Exception e) {
             logger.error("Registration failed", e);
-            model.addAttribute("message", "Registration failed: " + e.getMessage());
+            redirectAttributes.addFlashAttribute("message", "Registration failed: " + e.getMessage());
+            redirectAttributes.addFlashAttribute("success", false); // Indicate failure
+            return "redirect:/signup";
         }
-
-        return "signup";
     }
 }
