@@ -2,9 +2,11 @@ package au.edu.rmit.sept.webapp.controller;
 
 import au.edu.rmit.sept.webapp.model.Appointment;
 import au.edu.rmit.sept.webapp.model.User;
+import au.edu.rmit.sept.webapp.model.VetBooking;
 import au.edu.rmit.sept.webapp.service.AppointmentService;
 import au.edu.rmit.sept.webapp.service.UserService;
 import au.edu.rmit.sept.webapp.service.VetBookingService;
+import au.edu.rmit.sept.webapp.model.VetBooking;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -170,6 +172,29 @@ public String editAppointment(@ModelAttribute Appointment appointment, BindingRe
 
     return "redirect:/appointments"; // Redirect to the list after successful update
 }
+@GetMapping("/compare-providers")
+public String compareProviders(
+    @RequestParam(value = "serviceType", required = false) String serviceType,
+    @RequestParam(value = "location", required = false) String location,
+    Model model) {
+    try {
+        // Fetch the filtered vets based on serviceType and location
+        List<VetBooking> filteredVets = vetService.getFilteredVets(serviceType, location);
+
+        // Add the list of filtered vets to the model
+        model.addAttribute("filteredVets", filteredVets);
+    } catch (Exception e) {
+        // Handle errors (such as database connection issues)
+        model.addAttribute("errorMessage", "Unable to load comparison data due to a server error.");
+    }
+
+    // Pass filter criteria back to the view so the user sees what they selected
+    model.addAttribute("serviceType", serviceType);
+    model.addAttribute("location", location);
+
+    return "appointments/compare-providers";  // New view for comparing providers
+}
+
 
 
 }

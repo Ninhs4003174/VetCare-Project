@@ -1,0 +1,109 @@
+/* Global Styles */
+body {
+    font-family: 'Nunito', sans-serif;
+    background-color: #f4f4f4;
+    color: #333;
+}
+
+/* Resources Section */
+.resources-section {
+    max-width: 1000px;
+    margin: 40px auto;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.resources-section h1 {
+    text-align: center;
+    margin-bottom: 30px;
+    color: #35424a;
+}
+
+/* Filter Form */
+.filter-form {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 20px;
+}
+
+.filter-form label {
+    margin-right: 10px;
+}
+
+.filter-form select, .filter-form button {
+    padding: 8px 12px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+}
+
+/* Resource Cards */
+.resources-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.resource-card {
+    flex: 1 1 calc(33.333% - 20px);
+    background-color: #f9f9f9;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.resource-card h2 {
+    margin-bottom: 10px;
+    color: #2a75bb;
+}
+
+.resource-card p {
+    margin-bottom: 10px;
+    color: #555;
+}
+
+.resource-card .btn-primary {
+    display: inline-block;
+    padding: 10px 15px;
+    background-color: #2a75bb;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    text-align: center;
+    text-decoration: none;
+    margin-top: auto;
+}
+
+.resource-card .btn-primary:hover {
+    background-color: #1e5f9e;
+}
+
+/* Add Resource Button */
+.add-resource-btn {
+    text-align: center;
+    margin-top: 30px;
+}
+
+.add-resource-btn .btn-secondary {
+    padding: 12px 20px;
+    background-color: #35424a;
+    color: #fff;
+    border-radius: 5px;
+    text-decoration: none;
+}
+
+.add-resource-btn .btn-secondary:hover {
+    background-color: #2a2f36;
+}
+
+/* Footer */
+footer {
+    background-color: #35424a;
+    padding: 20px;
+    text-align: center;
+    color: white;
+}

@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Educational Resources</title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+    <header>
+        <nav>
+            <ul class="navbar-menu">
+                <li><a href="/home"><img src="/img/logo.png" alt="Logo" class="logo"></a></li>
+                <li><a href="/about">About</a></li>
+                <li><a href="/resources">Resources</a></li>
+                <li><a href="/contact">Contact</a></li>
+                <li><a href="/profile">Profile</a></li>
+            </ul>
+        </nav>
+    </header>
+    
+    <main>
+        <section class="resources-section">
+            <h1>Educational Resources</h1>
+            <div class="add-resource">
+                <a href="/resources/new" class="btn-primary">Add New Resource</a>
+            </div>
+
+            <div class="articles-list">
+                <div class="resource-card" th:each="resource : ${resources}">
+                    <div class="resource-content">
+                        <h2><a th:href="@{'/resources/' + ${resource.id}}" th:text="${resource.title}"></a></h2>
+                        <p th:text="${resource.description}" class="resource-description"></p>
+                        <a th:href="${resource.url}" class="btn-secondary" target="_blank">Read More</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Display message if there are no resources -->
+            <div th:if="${#lists.isEmpty(resources)}" class="no-resources-message">
+                <p>No resources available. Please add a new resource.</p>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 Pet Management System</p>
+    </footer>
+
+    <style>
+        /* Styling for the educational resource cards */
+        body {
+            font-family: Arial, sans-serif;
+        }
+
+        h1 {
+            text-align: center;
+            color: #4CAF50;
+        }
+
+        .articles-list {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .resource-card {
+            background-color: #f9f9f9;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            margin: 20px;
+            padding: 20px;
+            width: 300px;
+        }
+
+        .resource-title {
+            font-size: 1.5em;
+            color: #333;
+        }
+
+        .resource-description {
+            margin: 10px 0;
+            color: #666;
+        }
+
+        .btn-primary, .btn-secondary {
+            display: inline-block;
+            margin-top: 10px;
+            padding: 10px 15px;
+            border-radius: 4px;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .btn-primary {
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        .btn-secondary {
+            background-color: #2196F3;
+            color: white;
+        }
+
+        .add-resource {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+    </style>
+</body>
+</html>

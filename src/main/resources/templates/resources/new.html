@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add New Resource</title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+    <header>
+        <nav>
+            <ul class="navbar-menu">
+                <li><a href="/home"><img src="/img/logo.png" alt="Logo" class="logo"></a></li>
+                <li><a href="/about">About</a></li>
+                <li><a href="/resources">Resources</a></li>
+                <li><a href="/contact">Contact</a></li>
+                <li><a href="/profile">Profile</a></li>
+            </ul>
+        </nav>
+    </header>
+    
+    <main>
+        <h1>Add New Educational Resource</h1>
+
+        <form action="/resources/save" method="post" class="form-container">
+            <label for="title">Title:</label>
+            <input type="text" id="title" name="title" required>
+
+            <label for="description">Description:</label>
+            <textarea id="description" name="description" required></textarea>
+
+            <label for="url">URL:</label>
+            <input type="url" id="url" name="url" required>
+
+            <button type="submit" class="btn-primary">Save Resource</button>
+        </form>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 Pet Management System</p>
+    </footer>
+</body>
+</html>
