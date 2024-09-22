@@ -10,7 +10,7 @@
     <header>
         <nav>
             <ul class="navbar-menu">
-                <li><a href="userhome"><img src="img/logo.png" alt="Logo" class="logo"></a></li>
+                <li><a th:href="@{/userhome}"><img th:src="@{/img/logo.png}" alt="Logo" class="logo"></a></li>
                 <li><a th:href="@{/resources}">Resources</a></li>
                 <li><a th:href="@{/appointments}">Appointments</a></li>
                 <li><a th:href="@{/appointments/compare-providers}">compare-providers</a></li>
@@ -67,9 +67,9 @@
         <nav>
             <ul>
                 <li><a href="index.html"><img th:src="@{/img/logo.png}" alt="Logo"></a></li>
-                <li><a href="resources">Resources</a></li>
+                <li><a th:href="@{/resources}">Resources</a></li>
                 <li><a href="contact">Contact</a></li>
-                <li><a href="about">About</a></li>
+            
                 <li><a href="#"><img th:src="@{/img/facebook.png}" alt="Facebook"></a></li>
                 <li><a href="#"><img th:src="@{/img/linked.png}" alt="LinkedIn"></a></li>
                 <li><a href="#"><img th:src="@{/img/insta.png}" alt="Instagram"></a></li>

@@ -12,7 +12,8 @@
     <header>
         <nav>
             <ul class="navbar-menu">
-                <li><a href="home"><img src="img/logo.png" alt="Logo" class="logo"></a></li>
+                <li><a th:href="@{/userhome}"><img th:src="@{/img/logo.png}" alt="Logo" class="logo"></a></li>
+
                 <li><a th:href="@{/resources}">Resources</a></li>
                 <li><a th:href="@{/appointments}">Appointments</a></li>
                 <li><a th:href="@{/appointments/compare-providers}">compare-providers</a></li>
