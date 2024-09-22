@@ -3,6 +3,43 @@
 <head>
     <title>Edit Pet Record</title>
     <link rel="stylesheet" th:href="@{/css/styles.css}">
+
+    <script>
+        function validateEditForm() {
+            const name = document.forms["petRecordForm"]["name"].value;
+            const breed = document.forms["petRecordForm"]["breed"].value;
+            const dateOfBirth = document.forms["petRecordForm"]["dateOfBirth"].value;
+            const veterinarian = document.forms["petRecordForm"]["veterinarian"].value;
+
+            let isValid = true;
+
+            // Validate Pet Name
+            if (name === "" || name.length < 2 || name.length > 50) {
+                alert("Pet name must be between 2 and 50 characters.");
+                isValid = false;
+            }
+
+            // Validate Breed
+            if (breed === "" || breed.length < 3 || breed.length > 50) {
+                alert("Breed must be between 3 and 50 characters.");
+                isValid = false;
+            }
+
+            // Validate Date of Birth
+            if (dateOfBirth === "") {
+                alert("Date of birth is required.");
+                isValid = false;
+            }
+
+            // Validate Veterinarian
+            if (veterinarian === "" || veterinarian.length < 3 || veterinarian.length > 100) {
+                alert("Veterinarian name must be between 3 and 100 characters.");
+                isValid = false;
+            }
+
+            return isValid;
+        }
+    </script>
 </head>
 <body>
     <header>
@@ -23,45 +60,45 @@
     <main>
         <section class="pet-record-form">
             <h1>Edit Pet Record</h1>
-            <form th:action="@{'/records/update/' + ${petRecord.id}}" method="post" th:object="${petRecord}" class="form-container">
+            <form name="petRecordForm" th:action="@{'/records/update/' + ${petRecord.id}}" method="post" th:object="${petRecord}" class="form-container" onsubmit="return validateEditForm()">
                 <input type="hidden" th:field="*{id}" />
             
                 <label for="name">Pet Name:</label>
                 <input type="text" id="name" th:field="*{name}" required>
-            
+
                 <label for="breed">Breed:</label>
                 <input type="text" id="breed" th:field="*{breed}" required>
-            
+
                 <label for="dateOfBirth">Date of Birth:</label>
                 <input type="date" id="dateOfBirth" th:field="*{dateOfBirth}" required>
-            
+
                 <label for="veterinarian">Veterinarian:</label>
                 <input type="text" id="veterinarian" th:field="*{veterinarian}" required>
-            
+
                 <label for="lastVisit">Last Visit:</label>
                 <input type="date" id="lastVisit" th:field="*{lastVisit}">
-            
+
                 <label for="allergies">Allergies:</label>
                 <input type="text" id="allergies" th:field="*{allergies}">
-            
+
                 <label for="prescriptions">Prescriptions:</label>
                 <input type="text" id="prescriptions" th:field="*{prescriptions}">
-            
+
                 <label for="vaccinationHistory">Vaccination History:</label>
                 <textarea id="vaccinationHistory" th:field="*{vaccinationHistory}"></textarea>
-            
+
                 <label for="recentTests">Recent Tests:</label>
                 <input type="text" id="recentTests" th:field="*{recentTests}">
-            
+
                 <label for="recentSurgeries">Recent Surgeries:</label>
                 <input type="text" id="recentSurgeries" th:field="*{recentSurgeries}">
-            
+
                 <label for="dietaryRecommendations">Dietary Recommendations:</label>
                 <input type="text" id="dietaryRecommendations" th:field="*{dietaryRecommendations}">
-            
+
                 <label for="notes">Notes:</label>
                 <textarea id="notes" th:field="*{notes}"></textarea>
-            
+
                 <button type="submit" class="btn-primary">Update Record</button>
             </form>
         </section>
