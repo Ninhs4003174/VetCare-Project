@@ -5,19 +5,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Compare Providers</title>
     <!-- Link to the CSS file -->
-    <link rel="stylesheet" href="/css/style.css">  <!-- This is the link to your CSS file -->
+    <link rel="stylesheet" href="/css/styles.css">  <!-- This is the link to your CSS file -->
 </head>
 <body>
 
     <header>
         <nav>
             <ul class="navbar-menu">
-                <li><a href="userhome"><img src="img/logo.png" alt="Logo" class="logo"></a></li>
-                <li><a href="about">About</a></li>
-                <li><a href="resources">Resources</a></li>
-                <li><a href="contact">Contact</a></li>
-                <li><a href="appointments">Appointments</a></li>
-                <li><a href="prescription-management">Prescriptions</a></li>
+                <li><a href="home"><img src="img/logo.png" alt="Logo" class="logo"></a></li>
+                <li><a th:href="@{/resources}">Resources</a></li>
+                <li><a th:href="@{/appointments}">Appointments</a></li>
+                <li><a th:href="@{/appointments/compare-providers}">compare-providers</a></li>
                 <li><a href="profile">Profile</a></li>
                 <li><a href="/logout">Log Out</a></li>
             </ul>

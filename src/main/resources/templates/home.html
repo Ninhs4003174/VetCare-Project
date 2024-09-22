@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Home</title>
-    <link href='https://fonts.googleapis.com/css?family=Nunito:400,300' rel='stylesheet' type='text/css'>
+    <title>Home - Pet Management System</title>
     <link rel="stylesheet" href="css/styles.css" />
+    <link rel="stylesheet" href="css/homestyles.css">
 </head>
 <body>
     <!-- Header Start -->
@@ -25,19 +25,62 @@
     <!-- Main Content Start -->
     <div class="main-content">
         <h1>Welcome to the Pet Management System</h1>
-        <p>Manage your pet records, schedule appointments, and more!</p>
+        <p>Your one-stop solution for managing your pet's health and wellness. Our platform allows you to easily keep track of appointments, medical records, and more, ensuring that your furry friends receive the best care possible!</p>
+
+        <section class="features">
+            <h2>Key Features</h2>
+            <ul>
+                <li><strong>Appointment Scheduling:</strong> Effortlessly book, reschedule, or cancel appointments with your veterinarian.</li>
+                <li><strong>Medical Records Access:</strong> View and manage your pet's complete medical history securely from anywhere.</li>
+                <li><strong>Prescription Management:</strong> Request medication refills and receive reminders when it's time to restock.</li>
+                <li><strong>Health Reminders:</strong> Set reminders for vaccinations, check-ups, and medication schedules.</li>
+                <li><strong>Community Support:</strong> Join our community forum to connect with other pet owners.</li>
+            </ul>
+        </section>
+
+        <section class="pet-care-tips">
+            <h2>Pet Care Tips</h2>
+            <p>Keeping your pet healthy and happy is our priority. Here are some essential pet care tips:</p>
+            <ul>
+                <li><strong>Regular Vet Visits:</strong> Schedule annual check-ups to catch any health issues early.</li>
+                <li><strong>Balanced Diet:</strong> Ensure your pet gets a balanced diet tailored to their specific needs, including proper portions and nutrition.</li>
+                <li><strong>Exercise and Play:</strong> Engage your pet in regular exercise and playtime to maintain a healthy weight and mental stimulation.</li>
+                <li><strong>Grooming:</strong> Regular grooming not only keeps your pet looking good but also helps in identifying skin issues or parasites.</li>
+                <li><strong>Training and Socialization:</strong> Invest time in training and socializing your pet to promote good behavior and reduce anxiety.</li>
+                <li><strong>Hydration:</strong> Always provide fresh water to keep your pet hydrated, especially during hot weather.</li>
+            </ul>
+        </section>
+
+        <section class="call-to-action">
+            <h2>Get Started</h2>
+            <p>Create an account to unlock all features of the Pet Management System and begin managing your pet's health and wellness today!</p>
+            <a href="/signup" class="cta-button">Sign Up Now</a>
+        </section>
+
+        <section class="testimonials">
+            <h2>What Our Users Say</h2>
+            <blockquote>
+                <p>"This system has made it so easy for me to manage my dog's health records. I love the appointment reminders!" - Sarah L.</p>
+            </blockquote>
+            <blockquote>
+                <p>"A fantastic resource for pet owners! The educational articles helped me understand my cat's needs better." - Tom R.</p>
+            </blockquote>
+        </section>
     </div>
+    
     <footer>
         <nav>
             <ul>
-                <li><a href="index.html"><img th:src="@{/img/logo.png}" alt="Logo"></a></li>
+                <li><a href="index.html"><img src="img/logo.png" alt="Logo"></a></li>
                 <li><a href="resources">Resources</a></li>
                 <li><a href="contact">Contact</a></li>
                 <li><a href="about">About</a></li>
-                <li><a href="#"><img th:src="@{/img/facebook.png}" alt="Facebook"></a></li>
-                <li><a href="#"><img th:src="@{/img/linked.png}" alt="LinkedIn"></a></li>
-                <li><a href="#"><img th:src="@{/img/insta.png}" alt="Instagram"></a></li>
+                <li><a href="#"><img src="img/facebook.png" alt="Facebook"></a></li>
+                <li><a href="#"><img src="img/linked.png" alt="LinkedIn"></a></li>
+                <li><a href="#"><img src="img/insta.png" alt="Instagram"></a></li>
             </ul>
         </nav>
     </footer>
     <!-- Main Content End -->
+</body>
+</html>
