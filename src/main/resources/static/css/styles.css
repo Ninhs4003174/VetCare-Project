@@ -1,119 +1,240 @@
-/* Global Styling */
-* {
-    margin: 0;
-    padding: 0;
+/* General Box Sizing */
+*, *:before, *:after {
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
     box-sizing: border-box;
 }
 
+/* Body Style */
 body {
-    font-family: Arial, sans-serif;
-    background-color: var(--background-color);
-    color: var(--text-color);
+    font-family: 'Nunito', sans-serif;
+    color: #384047;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f7f8;
 }
 
-:root {
-    --primary-color: #35424a;
-    --secondary-color: #5b9bd5;
-    --accent-color: #2a75bb;
-    --text-color: #333;
-    --background-color: #f4f4f4;
-    --white-color: #ffffff;
-}
-
-/* Navbar Styles */
+/* Header and Navbar */
 header {
     background-color: #4bc970;
     padding: 20px 0;
 }
 
 .navbar-menu {
-    list-style: none;
     display: flex;
     justify-content: space-around;
-    align-items: center;
+    list-style: none;
+    margin: 0;
+    padding: 0;
 }
 
-.navbar-menu li a {
-    color: var(--text-color);
+.navbar-menu li {
+    display: inline-block;
+    padding: 10px;
+}
+
+.navbar-menu a {
+    color: white;
     text-decoration: none;
-    font-weight: bold;
+    font-weight: 600;
+    transition: color 0.3s ease;
 }
 
-/* Adjusting image sizes */
-.logo {
-    width: 100px; /* Adjust the width of the logo */
-    height: auto; /* Keep aspect ratio */
+.navbar-menu a:hover {
+    color: #2e8b57;
+}
+
+.navbar-menu .logo {
+    width: 120px;
+    height: auto;
 }
 
 .notification-icon {
-    width: 30px; /* Adjust the size of notification icons */
-    height: auto; /* Keep aspect ratio */
+    width: 30px;
+    height: auto;
 }
 
-footer ul li img {
-    width: 40px; /* Adjust social media icon sizes in the footer */
-    height: auto; /* Keep aspect ratio */
+.btn-secondary {
+    background-color: white;
+    color: #4bc970;
+    border: 2px solid #4bc970;
+    padding: 10px 20px;
+    border-radius: 5px;
+    text-decoration: none;
+    transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-/* Form Section Styling */
-.appointment-form {
-    max-width: 800px;
-    margin: 40px auto;
-    background-color: var(--white-color);
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+.btn-secondary:hover {
+    background-color: #4bc970;
+    color: white;
 }
 
-.appointment-form h1 {
-    color: var(--primary-color);
+/* Main Content Styling */
+.main-content {
+    text-align: center;
+    padding: 50px 20px;
+    background-color: white;
+}
+
+.main-content h1 {
+    font-size: 2.5em;
     margin-bottom: 20px;
+    color: #4bc970;
+}
+
+.main-content p {
+    font-size: 1.2em;
+    color: #8a97a0;
+    margin-bottom: 40px;
+}
+
+/* Footer */
+footer {
+    background-color: #384047;
+    color: white;
+    text-align: center;
+    padding: 20px;
+}
+
+footer a {
+    color: white;
+    text-decoration: none;
+    padding: 0 15px;
+    transition: color 0.3s ease;
+}
+
+footer a:hover {
+    color: #4bc970;
+}
+
+/* Form Styles (Example Profile Form Styling) */
+form {
+    max-width: 300px;
+    margin: 20px auto;
+    padding: 10px 20px;
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+h1 {
+    margin: 0 0 30px 0;
+    text-align: center;
+    font-size: 24px;
+    color: #4bc970;
+}
+
+input[type="text"],
+input[type="password"],
+input[type="date"],
+input[type="email"],
+textarea {
+    background: #e8eeef;
+    border: none;
+    font-size: 16px;
+    padding: 15px;
+    width: 100%;
+    margin-bottom: 20px;
+    border-radius: 5px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    outline: none;
+}
+
+button {
+    padding: 15px 20px;
+    color: #FFF;
+    background-color: #4bc970;
+    font-size: 18px;
+    text-align: center;
+    border-radius: 5px;
+    width: 100%;
+    border: none;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #3ac162;
+}
+
+/* Responsive Styling */
+@media screen and (min-width: 768px) {
+    .navbar-menu {
+        justify-content: flex-start;
+        gap: 20px;
+    }
+
+    form {
+        max-width: 480px;
+    }
+}
+.logo {
+    width: 100px; /* Adjust the width as per your need */
+    height: auto; /* This keeps the aspect ratio */
+}
+
+
+
+/* Contact Page Styling */
+
+/* Card Layout */
+.contact-section {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 20px;
+    max-width: 1200px;
+    margin: 50px auto;
+}
+
+@media screen and (min-width: 768px) {
+    .contact-section {
+        grid-template-columns: 1fr 1fr 1fr;
+    }
+}
+
+.card {
+    background-color: white;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 1px 5px rgba(0, 0, 0, 0.1);
     text-align: center;
 }
 
-.form-container {
-    display: flex;
-    flex-direction: column;
-}
-
-.form-container label {
-    margin-bottom: 8px;
-}
-
-.form-container .input-field, 
-.form-container .select-field {
-    padding: 10px;
-    margin-bottom: 15px;
-    border-radius: 5px;
-    border: 1px solid #ccc;
-    width: 100%;
-}
-
-.form-container .input-field:focus, 
-.form-container .select-field:focus {
-    outline: none;
-    border-color: var(--accent-color);
-}
-
-.alert-danger {
-    color: red;
-    font-weight: bold;
+.card h2 {
     margin-bottom: 10px;
+    font-size: 1.8em;
+    color: #4bc970;
 }
 
-.btn-primary {
-    padding: 10px 20px;
-    background-color: var(--primary-color);
-    color: var(--white-color);
-    text-decoration: none;
+.card p {
+    margin-bottom: 15px;
+    font-size: 1em;
+    color: #8a97a0;
+}
+
+/* Form Styles */
+.form-container input,
+.form-container textarea {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #ddd;
     border-radius: 5px;
+    background-color: #e8eeef;
+}
+
+.form-container button {
+    background-color: #4bc970;
+    color: white;
+    padding: 10px;
     border: none;
+    border-radius: 5px;
     cursor: pointer;
     width: 100%;
 }
 
-.btn-primary:hover {
-    background-color: var(--accent-color);
+.form-container button:hover {
+    background-color: #3ac162;
 }
 /* Table Styling */
 table {
@@ -147,35 +268,53 @@ a:hover {
     color: var(--accent-color);
 }
 
-/* Footer Styles */
-footer {
-    background-color: var(--primary-color);
-    padding: 20px;
-    text-align: center;
-    color: var(--white-color);
-}
-
-footer ul {
+/* Social Media Icons */
+.social-media {
     list-style: none;
     display: flex;
     justify-content: center;
-    align-items: center;
+    gap: 10px;
     padding: 0;
 }
 
-footer ul li {
-    margin: 0 10px;
+.social-media li img {
+    width: 40px;
+    height: 40px;
 }
 
-footer ul li a {
-    color: var(--white-color);
-    text-decoration: none;
+/* Contact Details Styling */
+.contact-details {
+    font-size: 1.1em;
+    text-align: left;
+    margin: 0 auto;
+    max-width: 300px;
 }
-.alert {
-    background-color: #f8d7da; /* Light red background */
-    color: #721c24; /* Dark red text */
-    padding: 10px;
-    margin: 15px 0;
-    border: 1px solid #f5c6cb; /* Darker red border */
-    border-radius: 5px;
+
+.contact-details p {
+    margin: 10px 0;
+}
+
+/* Additional Styling */
+@media screen and (min-width: 1024px) {
+    .contact-details {
+        font-size: 1.2em;
+    }
+
+    .social-media li img {
+        width: 50px;
+        height: 50px;
+    }
+}
+
+
+/* Footer Social Media Icon Size Fix */
+footer img {
+    width: 40px; /* Adjust this value as needed for smaller size */
+    height: auto; /* Maintain aspect ratio */
+}
+
+@media screen and (min-width: 768px) {
+    footer img {
+        width: 30px; /* Reduce size on larger screens if needed */
+    }
 }
