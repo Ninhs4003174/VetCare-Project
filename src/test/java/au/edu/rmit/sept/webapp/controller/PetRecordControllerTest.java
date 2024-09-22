@@ -1,8 +1,8 @@
 package au.edu.rmit.sept.webapp.controller;
 
 import static org.hamcrest.Matchers.containsString;
-import static org.mockito.Mockito.when;
 import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -15,9 +15,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
-import static org.mockito.Mockito.*;
-import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.any;
 
 import au.edu.rmit.sept.webapp.model.PetRecord;
 import au.edu.rmit.sept.webapp.service.PetRecordService;
@@ -35,6 +35,7 @@ public class PetRecordControllerTest {
         private PetRecordService petRecordService;
 
         @Test
+        @WithMockUser(username = "testUser", roles = { "USER" })
         void shouldDisplayPetRecordsTitle() throws Exception {
                 mvc.perform(get(URL))
                                 .andExpect(status().isOk())
@@ -42,6 +43,7 @@ public class PetRecordControllerTest {
         }
 
         @Test
+        @WithMockUser(username = "testUser", roles = { "USER" })
         void shouldListPetRecords() throws Exception {
 
                 // Mock data as List
@@ -61,6 +63,7 @@ public class PetRecordControllerTest {
         }
 
         @Test
+        @WithMockUser(username = "testUser", roles = { "USER" })
         void shouldDisplayNoPetRecordsAvailable() throws Exception {
 
                 // Mock an empty list
@@ -72,6 +75,7 @@ public class PetRecordControllerTest {
         }
 
         @Test
+        @WithMockUser(username = "testUser", roles = { "USER" })
         void shouldAddNewPetRecord() throws Exception {
 
                 // Mock the save method for void methods
