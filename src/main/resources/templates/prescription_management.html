@@ -3,16 +3,35 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Request a Prescription</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/4.5.2/css/bootstrap.min.css">
+    <title>Prescription Management</title>
+    <link rel="stylesheet" href="css/styles.css" />
+    <link rel="stylesheet" href="css/prescriptionstyles.css">
 </head>
 <body>
+    <header>
+        <nav>
+            <ul class="navbar-menu">
+                <li><a href="userhome"><img src="img/logo.png" alt="Logo" class="logo"></a></li>
+                <li><a href="about">About</a></li>
+                <li><a href="resources">Resources</a></li>
+                <li><a href="contact">Contact</a></li>
+                <li><a href="appointments">Appointments</a></li>
+                <li><a href="prescription-management">Prescriptions</a></li>
+                <li><a href="profile">Profile</a></li>
+                <li><a href="/logout">Log Out</a></li>
+            </ul>
+        </nav>
+    </header>
     <div class="container">
         <h1 class="mt-5">Request a Prescription</h1>
         <form id="prescriptionForm" method="POST" action="/prescription-management/request">
             <div class="form-group">
-                <label for="medication">Medication</label>
-                <input type="text" class="form-control" id="medication" name="medication" required>
+                <select class="form-control" id="medication" name="medication" required>
+                    <option value="">--Select Medication--</option>
+                    <option value="Aspirin">Aspirin</option>
+                    <option value="Ibuprofen">Ibuprofen</option>
+                    <option value="Paracetamol">Paracetamol</option>
+                </select>
             </div>
             <div class="form-group">
                 <label for="reason">Reason for Request</label>
@@ -22,7 +41,6 @@
                 <label for="petId">Select Pet</label>
                 <select class="form-control" id="petId" name="petId" required>
                     <option value="">--Select Pet--</option>
-                    <!-- Iterate through pets -->
                     <th:block th:each="pet : ${pets}">
                         <option th:value="${pet.id}" th:text="${pet.name}"></option>
                     </th:block>
@@ -31,31 +49,46 @@
             <button type="submit" class="btn btn-primary">Submit Request</button>
         </form>
 
-        <h2 class="mt-5">View Prescriptions</h2>
+        <h2 class="mt-5">Your Prescriptions</h2>
         <div class="prescription-requests">
-            <table class="table table-bordered">
+            <table>
                 <thead>
                     <tr>
                         <th>Medication</th>
-                        <th>Reason for Request</th>
                         <th>Pet Name</th>
+                        <th>Reason</th>
                         <th>Status</th>
-                        <th>Date Requested</th>
+                        <th>Request Date</th>
                     </tr>
                 </thead>
                 <tbody>
                     <th:block th:each="request : ${pendingRequests}">
                         <tr>
                             <td th:text="${request.medication}"></td>
+                            <td th:text="${request.pet.name}"></td> <!-- Added pet name -->
                             <td th:text="${request.reason}"></td>
-                            <td th:text="${request.pet.name}"></td>
-                            <td th:text="${request.status}"></td>
-                            <td th:text="${#dates.format(request.requestDate, 'yyyy-MM-dd')}"></td>
+                            <td th:text="${request.status}">
+                                <span th:class="${request.status == 'Approved' ? 'status-approved' : request.status == 'Pending' ? 'status-pending' : 'status-denied'}"></span>
+                            </td>
+                            <td th:text="${request.requestDate != null ? #temporals.format(request.requestDate, 'yyyy-MM-dd HH:mm:ss') : 'N/A'}"></td>
                         </tr>
                     </th:block>
                 </tbody>
             </table>
         </div>
     </div>
+    <footer>
+        <nav>
+            <ul>
+                <li><a href="index.html"><img th:src="@{/img/logo.png}" alt="Logo"></a></li>
+                <li><a href="resources">Resources</a></li>
+                <li><a href="contact">Contact</a></li>
+                <li><a href="about">About</a></li>
+                <li><a href="#"><img th:src="@{/img/facebook.png}" alt="Facebook"></a></li>
+                <li><a href="#"><img th:src="@{/img/linked.png}" alt="LinkedIn"></a></li>
+                <li><a href="#"><img th:src="@{/img/insta.png}" alt="Instagram"></a></li>
+            </ul>
+        </nav>
+    </footer>
 </body>
 </html>

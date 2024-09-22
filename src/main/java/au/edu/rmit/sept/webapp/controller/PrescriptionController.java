@@ -32,7 +32,7 @@ public class PrescriptionController {
     private PetService petService;
 
     @GetMapping("/prescription-management")
-    public String showRequestForm(Model model) {
+    public String showRequestFormAndPrescriptions(Model model) {
         // Get the logged-in user's username
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         String username;
@@ -45,13 +45,20 @@ public class PrescriptionController {
 
         // Fetch the current user and their pets
         User currentUser = userService.findByUsername(username);
-        List<Pet> pets = petService.findPetsByUser(currentUser); // Ensure this method exists
+        List<Pet> pets = petService.findPetsByUser(currentUser); // Get user's pets
 
-        model.addAttribute("pets", pets); // Add pets to the model
-        return "prescription_management"; // Render the prescription management form
+        // Fetch prescription requests for the current user
+        List<PrescriptionRequest> pendingRequests = prescriptionRequestService.findByUserId(currentUser.getId());
+
+        // Add pets and pending requests to the model
+        model.addAttribute("pets", pets);
+        model.addAttribute("pendingRequests", pendingRequests);
+        System.out.println("Pending Requests: " + pendingRequests);
+
+        return "prescription_management"; // Renders the HTML page
     }
 
-    @PostMapping("/prescription-management/request")
+    @PostMapping("/prescription-management/request") // Specify the URL for POST request
     public String requestPrescription(@RequestParam String medication,
             @RequestParam String reason,
             @RequestParam Long petId) {
@@ -83,32 +90,4 @@ public class PrescriptionController {
 
         return "redirect:/prescription-management"; // Redirect to the request form
     }
-
-    @GetMapping("/view-prescriptions")
-    public String viewPrescriptions(Model model) {
-        // Get the logged-in user's username
-        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        String username;
-
-        if (principal instanceof UserDetails) {
-            username = ((UserDetails) principal).getUsername();
-        } else {
-            username = principal.toString();
-        }
-
-        // Fetch the current user
-        User currentUser = userService.findByUsername(username);
-
-        // Check if currentUser is null
-        if (currentUser == null) {
-            return "error"; // Handle the error appropriately
-        }
-
-        // Fetch all prescription requests for the user
-        List<PrescriptionRequest> requests = prescriptionRequestService.findRequestsByUser(currentUser);
-
-        model.addAttribute("pendingRequests", requests); // Add requests to the model
-        return "view_prescriptions"; // Render the view prescriptions page
-    }
-
 }
