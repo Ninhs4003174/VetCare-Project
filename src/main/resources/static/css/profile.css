@@ -1,0 +1,132 @@
+/* Universal Styling for Both Pages */
+*, *:before, *:after {
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Nunito', sans-serif;
+    color: #384047;
+    background-color: #f4f7f8;
+}
+
+/* Common Form Styling */
+form {
+    max-width: 300px;
+    margin: 10px auto;
+    padding: 10px 20px;
+    background: #ffffff; /* More neutral background for profile sections */
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+input[type="text"],
+input[type="password"],
+input[type="email"],
+textarea,
+select {
+    background-color: #e8eeef;
+    border: none;
+    font-size: 16px;
+    padding: 15px;
+    width: 100%;
+    margin-bottom: 20px;
+    color: #8a97a0;
+    box-shadow: 0 1px 0 rgba(0,0,0,0.03) inset;
+}
+
+button {
+    padding: 19px 39px 18px 39px;
+    color: #FFF;
+    background-color: #4bc970;
+    font-size: 18px;
+    text-align: center;
+    font-style: normal;
+    border-radius: 5px;
+    width: 100%;
+    border: 1px solid #3ac162;
+    margin-bottom: 10px;
+    box-shadow: 0 -1px 0 rgba(255,255,255,0.1) inset;
+}
+
+label {
+    display: block;
+    margin-bottom: 8px;
+    color: #333;
+}
+
+/* Profile-specific Styling */
+.profile-content {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 30px; 
+    margin-top: 50px;
+    width: 80%;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.profile-info, .pets-info {
+    background-color: #fff;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    width: 45%; 
+    min-height: 300px;
+}
+
+h1, h2 {
+    color: #3f51b5;
+    text-align: center;
+}
+
+.info-box, .pet-container {
+    margin-top: 10px;
+}
+
+.pet-box {
+    margin-bottom: 15px;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+}
+
+/* Footer Styling */
+footer {
+    text-align: center;
+    padding: 20px 0;
+    background-color: #3f51b5;
+    color: white;
+    width: 100%;
+    position: relative;
+    bottom: 0;
+}
+
+/* Responsive Design for Larger Screens */
+@media screen and (min-width: 480px) {
+    form {
+        max-width: 480px;
+    }
+
+    .profile-info, .pets-info {
+        width: 45%; 
+    }
+}
+.add-pet-button {
+    padding: 10px 20px;
+    color: #FFF;
+    background-color: #4bc970;
+    font-size: 16px;
+    border-radius: 5px;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    margin-top: 20px; /* Space above the button */
+}
+
+.add-pet-button:hover {
+    background-color: #3ac162; /* Darker shade on hover */
+}

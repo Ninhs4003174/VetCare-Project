@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${resource.title}">Article</title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+    <header>
+        <nav>
+            <ul class="navbar-menu">
+                <li><a href="userhome"><img src="img/logo.png" alt="Logo" class="logo"></a></li>
+                <li><a href="about">About</a></li>
+                <li><a href="resources">Resources</a></li>
+                <li><a href="contact">Contact</a></li>
+                <li><a href="appointments">Appointments</a></li>
+                <li><a href="prescription-management">Prescriptions</a></li>
+                <li><a href="profile">Profile</a></li>
+                <li><a href="/logout">Log Out</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <h1 th:text="${resource.title}"></h1>
+        <p><strong>Description:</strong> <span th:text="${resource.description}"></span></p>
+        <div>
+            <p th:utext="${resource.content}"></p> <!-- Render the article content -->
+        </div>
+        <div>
+            <a href="/resources" class="btn-secondary">Back to Resources</a>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 Pet Management System</p>
+    </footer>
+</body>
+</html>

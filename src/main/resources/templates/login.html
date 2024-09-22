@@ -4,22 +4,63 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login</title>
+    <link rel="stylesheet" href="/css/styles.css" />
+    <link rel="stylesheet" href="/css/loginstyles.css">
 </head>
 <body>
-    <h2>Login</h2>
-    <form action="/login" method="post" th:action="@{/login}" th:object="${loginForm}">
-        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
-        <div>
-            <label for="username">Username:</label>
-            <input type="text" id="username" name="username" required>
+    <header>
+        <nav>
+            <ul class="navbar-menu">
+                <li><a href="home"><img src="img/logo.png" alt="Logo" class="logo"></a></li>
+                <li><a href="about">About</a></li>
+                <li><a href="resources">Resources</a></li>
+                <li><a href="contact">Contact</a></li>
+                <li><a href="/login">Log In</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <div class="login-container">
+            <h2>Login</h2>
+            
+            <!-- Display error message -->
+            <div th:if="${error}" class="error-message">
+                <p th:text="${error}"></p>
+            </div>
+
+            <form action="/login" method="post" th:action="@{/login}">
+                <div class="form-group">
+                    <label for="username">Username:</label>
+                    <input type="text" id="username" name="username" required>
+                </div>
+                <div class="form-group">
+                    <label for="password">Password:</label>
+                    <input type="password" id="password" name="password" required>
+                </div>
+                <div class="form-group">
+                    <button type="submit">Login</button>
+                </div>
+            </form>
+
+            <div class="form-footer">
+                <p>Don't have an account? <a href="/signup">Sign up here</a>.</p>
+            </div>
         </div>
-        <div>
-            <label for="password">Password:</label>
-            <input type="password" id="password" name="password" required>
-        </div>
-        <div>
-            <button type="submit">Login</button>
-        </div>
-    </form>
+    </main>
+    
+    <footer>
+        <nav>
+            <ul>
+                <li><a href="index.html"><img th:src="@{/img/logo.png}" alt="Logo"></a></li>
+                <li><a href="resources">Resources</a></li>
+                <li><a href="contact">Contact</a></li>
+                <li><a href="about">About</a></li>
+                <li><a href="#"><img th:src="@{/img/facebook.png}" alt="Facebook"></a></li>
+                <li><a href="#"><img th:src="@{/img/linked.png}" alt="LinkedIn"></a></li>
+                <li><a href="#"><img th:src="@{/img/insta.png}" alt="Instagram"></a></li>
+            </ul>
+        </nav>
+    </footer>
 </body>
 </html>

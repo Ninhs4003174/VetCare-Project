@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href='https://fonts.googleapis.com/css?family=Nunito:400,300' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" href="css/styles.css" />
+    <link rel="stylesheet" href="/css/profile.css">
+</head>
+<body>
+    <!-- Header Start -->
+    <header>
+        <nav>
+            <ul class="navbar-menu">
+                <li><a href="userhome"><img src="img/logo.png" alt="Logo" class="logo"></a></li>
+                <li><a href="about">About</a></li>
+                <li><a href="resources">Resources</a></li>
+                <li><a href="contact">Contact</a></li>
+                <li><a href="appointments">Appointments</a></li>
+                <li><a href="prescription-management">Prescriptions</a></li>
+                <li><a href="profile">Profile</a></li>
+                <li><a href="/logout">Log Out</a></li>
+            </ul>
+        </nav>
+    </header>
+    
+    <!-- Main Content Start -->
+    <div class="profile-content">
+        <div class="profile-info">
+            <h2>Profile</h2>
+            
+            <!-- Display messages -->
+            <!-- Display messages -->
+<div th:if="${message}" class="alert" th:class="${success ? 'alert-success' : 'alert-danger'}">
+    <p th:text="${message}"></p>
+</div>
+
+            <div class="info-box">
+                <p><strong>Username:</strong> <span th:text="${user?.username}"></span></p>
+                <p><strong>Email:</strong> <span th:text="${user?.email}"></span></p>
+                <p><strong>Address:</strong> <span th:text="${user?.address}"></span></p>
+                <p><strong>Phone Number:</strong> <span th:text="${user?.phoneNumber}"></span></p>
+                <p><strong>Number of Pets:</strong> <span th:text="${user?.pets.size()}"></span></p>
+                <!-- Edit Button for user info -->
+                <button class="edit-user-button" onclick="location.href='/edit-user';">Edit User Info</button>
+            </div>
+        </div>
+        
+        <div class="pets-info">
+            <h2>Your Pets</h2>
+            <div class="pet-container">
+                <!-- Populate pet information dynamically -->
+                <div class="pet-box" th:each="pet : ${user.pets}">
+                    <p><strong>Pet Name:</strong> <span th:text="${pet.name}"></span></p>
+                    <p><strong>Type:</strong> <span th:text="${pet.type}"></span></p>
+                    <p><strong>Age:</strong> <span th:text="${pet.age}"></span> years</p>
+                    <p><strong>Bio:</strong> <span th:text="${pet.bio}"></span></p>
+                    <!-- Edit Button for each pet -->
+                    <button class="edit-pet-button" th:onclick="'location.href=\'/edit-pet/' + ${pet.id} + '\''">Edit</button>
+                </div>
+            </div>
+            <!-- Button to Add a New Pet -->
+            <button class="add-pet-button" onclick="location.href='/add-pet';">Add New Pet</button>
+        </div>
+    </div>
+    <!-- Main Content End -->
+
+    <!-- Footer -->
+    <footer>
+        <nav>
+            <ul>
+                <li><a href="index.html"><img th:src="@{/img/logo.png}" alt="Logo"></a></li>
+                <li><a href="resources">Resources</a></li>
+                <li><a href="contact">Contact</a></li>
+                <li><a href="about">About</a></li>
+                <li><a href="#"><img th:src="@{/img/facebook.png}" alt="Facebook"></a></li>
+                <li><a href="#"><img th:src="@{/img/linked.png}" alt="LinkedIn"></a></li>
+                <li><a href="#"><img th:src="@{/img/insta.png}" alt="Instagram"></a></li>
+            </ul>
+        </nav>
+    </footer>
+</body>
+</html>

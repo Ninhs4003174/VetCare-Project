@@ -15,7 +15,6 @@ public class PetRecordController {
     @Autowired
     private PetRecordService petRecordService;
 
-    // Serve the list of all pet records
     @GetMapping
     public String getAllRecords(Model model) {
         model.addAttribute("records", petRecordService.getAllPetRecords());

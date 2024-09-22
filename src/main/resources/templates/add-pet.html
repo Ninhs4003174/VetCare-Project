@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Your Pet</title>
+    <link rel="stylesheet" href="/css/styles.css" />
+    <link rel="stylesheet" href="/css/signupstyles.css">
+</head>
+<body>
+    <header>
+        <nav>
+            <ul class="navbar-menu">
+                <li><a href="userhome"><img src="img/logo.png" alt="Logo" class="logo"></a></li>
+                <li><a href="about">About</a></li>
+                <li><a href="resources">Resources</a></li>
+                <li><a href="contact">Contact</a></li>
+                <li><a href="appointments">Appointments</a></li>
+                <li><a href="prescription-management">Prescriptions</a></li>
+                <li><a href="profile">Profile</a></li>
+                <li><a href="/logout">Log Out</a></li>
+            </ul>
+        </nav>
+    </header>
+    
+    <main class="container">
+        <div class="row">
+            <div class="col-md-6 sign-up-form">
+                <!-- Add Pet Form -->
+                <form action="/add-pet" method="post" th:action="@{/add-pet}">
+                    <h1>Add Your Pet</h1>
+                    <fieldset>
+                        <legend><span class="number">2</span> Pet Info</legend>
+                        <label for="pet_name">Pet Name:</label>
+                        <input type="text" id="pet_name" name="petName" required>
+                        <label for="pet_type">Pet Type:</label>
+                        <select id="pet_type" name="petType" required>
+                            <option value="">Select Type</option>
+                            <option value="dog">Dog</option>
+                            <option value="cat">Cat</option>
+                            <option value="bird">Bird</option>
+                            <option value="reptile">Reptile</option>
+                            <option value="other">Other</option>
+                        </select>
+                        <label for="pet_age">Pet Age:</label>
+                        <input type="number" id="pet_age" name="petAge" min="0" required>
+                        <label for="pet_bio">Pet Bio:</label>
+                        <textarea id="pet_bio" name="petBio" placeholder="Tell us about your pet" required></textarea>
+                    </fieldset>
+                    <input type="hidden" name="username" th:value="${user.username}"/> <!-- Add hidden field for username -->
+                    <button type="submit">Add Pet</button>
+                </form>
+            </div>
+        </div>
+    </main>
+    
+    <footer>
+        <nav>
+            <ul>
+                <li><a href="index.html"><img th:src="@{/img/logo.png}" alt="Logo"></a></li>
+                <li><a href="resources">Resources</a></li>
+                <li><a href="contact">Contact</a></li>
+                <li><a href="about">About</a></li>
+                <li><a href="#"><img th:src="@{/img/facebook.png}" alt="Facebook"></a></li>
+                <li><a href="#"><img th:src="@{/img/linked.png}" alt="LinkedIn"></a></li>
+                <li><a href="#"><img th:src="@{/img/insta.png}" alt="Instagram"></a></li>
+            </ul>
+        </nav>
+    </footer>
+</body>
+</html>

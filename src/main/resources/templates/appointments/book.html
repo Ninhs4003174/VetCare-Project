@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Book an Appointment</title>
+    <!-- Link to external stylesheet -->
+    <link rel="stylesheet" th:href="@{/css/appointmentstyle.css}">
+</head>
+<body>
+    <!-- Header section with navigation -->
+    <header>
+        <nav>
+            <ul class="navbar-menu">
+                <li><a href="userhome"><img src="img/logo.png" alt="Logo" class="logo"></a></li>
+                <li><a href="about">About</a></li>
+                <li><a href="resources">Resources</a></li>
+                <li><a href="contact">Contact</a></li>
+                <li><a href="appointments">Appointments</a></li>
+                <li><a href="prescription-management">Prescriptions</a></li>
+                <li><a href="profile">Profile</a></li>
+                <li><a href="/logout">Log Out</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Main section where the form is located -->
+    <main>
+        <section class="appointment-form">
+            <h1>Book an Appointment</h1>
+            <form th:action="@{/appointments/book}" method="post" th:object="${appointment}" class="form-container">
+                <label for="petName">Pet Name:</label>
+                <input type="text" id="petName" th:field="*{petName}" required class="input-field">
+
+                <label for="vetName">Vet Name:</label>
+                <select id="vetName" th:field="*{vetName}" class="select-field">
+                    <option value="" disabled selected>Select a vet</option>
+                    <option th:each="vet : ${vets}" th:value="${vet.name}" th:text="${vet.name}"></option>
+                </select>
+
+                <label for="date">Date:</label>
+                <input type="date" id="date" th:field="*{date}" required 
+                       min="${#dates.format(today, 'yyyy-MM-dd')}" 
+                       max="${#dates.format(fiveDaysLater, 'yyyy-MM-dd')}" 
+                       class="input-field">
+
+                <label for="time">Time:</label>
+                <select id="time" th:field="*{time}" class="select-field">
+                    <option value="" disabled selected>Select a time</option>
+                    <!-- Loop through time slots to display available ones -->
+                    <option th:each="time : ${timeSlots}" th:value="${time}" th:text="${time}"></option>
+                </select>
+
+                <label for="status">Status:</label>
+                <input type="text" id="status" th:field="*{status}" required class="input-field">
+
+                <!-- Error message display -->
+                <div th:if="${errorMessage}" class="alert alert-danger">
+                    <p th:text="${errorMessage}"></p>
+                </div>
+
+                <!-- Submit button -->
+                <button type="submit" class="btn-primary">Book Appointment</button>
+            </form>
+        </section>
+    </main>
+
+    <!-- Footer section with links and logos -->
+    <footer>
+        <nav>
+            <ul>
+                <li><a href="index.html"><img th:src="@{/img/logo.png}" alt="Logo"></a></li>
+                <li><a href="resources">Resources</a></li>
+                <li><a href="contact">Contact</a></li>
+                <li><a href="about">About</a></li>
+                <li><a href="#"><img th:src="@{/img/facebook.png}" alt="Facebook"></a></li>
+                <li><a href="#"><img th:src="@{/img/linked.png}" alt="LinkedIn"></a></li>
+                <li><a href="#"><img th:src="@{/img/insta.png}" alt="Instagram"></a></li>
+            </ul>
+        </nav>
+    </footer>
+</body>
+</html>
