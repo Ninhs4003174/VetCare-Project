@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Us</title>
+    <link href='https://fonts.googleapis.com/css?family=Nunito:400,300' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" href="css/styles.css" />
+    <style>
+        /* Inline CSS for quick preview (move to styles.css in production) */
+        ul {
+            list-style-type: none; /* Removes the default bullet points */
+            padding: 0; /* Removes the default padding */
+            margin: 0; /* Removes the default margin */
+        }
+ 
+        .image-container {
+            text-align: center; /* Centers the image */
+            margin: 0; /* Removes default margin */
+        }
+ 
+        .vet-image {
+            width: 100%; /* Expands the image to full width of the container */
+            max-height: 3500px; /* Further limits the height of the image */
+            height: auto; /* Maintains aspect ratio */
+            display: block; /* Removes the gap below the image */
+            margin: 0; /* Removes default margin */
+            padding: 0; /* Removes default padding */
+            object-fit: cover; /* Ensures the image covers the area without distorting */
+        }
+ 
+        .main-content {
+            margin-top: 20px; /* Adds space between image and main content */
+            padding: 0 20px; /* Optional: Adds padding to the main content */
+        }
+    </style>
+</head>
+<body>
+    <!-- Header Start
+    <header>
+        <nav>
+            <ul class="navbar-menu">
+                <li><a href="home.html"><img src="img/logo.png" alt="Logo" class="logo"></a></li>
+                <li><a href="about.html">About</a></li>
+                <li><a href="resources.html">Resources</a></li>
+                <li><a href="contact.html">Contact</a></li>
+                <li><a href="/login">Log in</a></li>
+            </ul>
+        </nav>
+    </header> -->
+    <header>
+        <nav>
+            <ul class="navbar-menu">
+                <li><a href="/home"><img src="img/logo.png" alt="Logo" class="logo"></a></li>
+                <li><a href="/about">About</a></li> <!-- Link to /about, which maps to about.html -->
+                <li><a href="/resources">Resources</a></li>
+                <li><a href="/contact">Contact</a></li>
+                <li><a href="/login">Log In</a></li>
+            </ul>
+        </nav>
+    </header>
+    <!-- Header End -->
+ 
+    <!-- Image Below Header Start -->
+    <div class="image-container">
+        <img src="img/vet.png" alt="Veterinarian Image" class="vet-image">
+    </div>
+    <!-- Image Below Header End -->
+ 
+    <!-- Main Content Start -->
+    <div class="main-content">
+        <!-- <h1>About the Pet Management System</h1>
+        <p>The Pet Management System is a comprehensive tool designed to help pet owners keep track of their pet's health, manage appointments, and store important information about their pets. Our mission is to provide an easy-to-use platform that allows pet owners to take better care of their furry friends.</p> -->
+ 
+        <h2>About Us</h2>
+        <ul>
+            <li>We know the importance of providing our clients with a good</li>
+            <li>understanding of health care issues and treatment options. With </li>
+            <li>expert advice and professional recommendations, you’ll be well </li>
+            <li>equipped to make the best ongoing health care decisions for </li>
+            <li>your furry family members.</li>
+        </ul>
+ 
+        <h2>Our Mission</h2>
+        <p>We believe that pets are an integral part of the family, and their well-being is essential. Our goal is to provide a platform that supports pet owners in managing their pets' health and happiness efficiently and effectively.</p>
+ 
+        <h2>Contact Us</h2>
+        <p>If you have any questions or feedback, please feel free to <a href="/contact">contact us</a>. We are always here to help you and your pets.</p>
+    </div>
+    
+    <footer>
+        <p>&copy; 2024 Pet Management System. All rights reserved.</p>
+    </footer>
+    <!-- Footer End -->
+</body>
+</html>
