@@ -19,16 +19,17 @@
             </ul>
         </nav>
     </header>
-    <!-- Header End -->
     <main class="container">
         <div class="row">
+            <!-- Display flash message -->
+
+
             <div class="col-md-6 sign-up-form">
                 <!-- Display Error/Success Messages -->
-                <div th:if="${message}" class="alert" th:text="${message}"></div>
+                <div th:if="${message}" class="alert" th:class="${success ? 'alert-success' : 'alert-danger'}" th:text="${message}"></div>
                 
                 <!-- Sign Up Form -->
                 <form action="/signup" method="post" th:action="@{/signup}" th:object="${signupForm}">
-                    <input type="hidden" />
                     <h1>Sign Up Your Pet</h1>
                     <fieldset>
                         <legend><span class="number">1</span> Pet Owner Info</legend>
@@ -76,7 +77,6 @@
             </div>
         </div>
     </main>
-    <!-- Footer with Social Links -->
     <footer>
         <nav>
             <ul>

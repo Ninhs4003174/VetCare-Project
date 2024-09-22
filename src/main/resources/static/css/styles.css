@@ -140,3 +140,11 @@ footer ul li a {
     color: var(--white-color);
     text-decoration: none;
 }
+.alert {
+    background-color: #f8d7da; /* Light red background */
+    color: #721c24; /* Dark red text */
+    padding: 10px;
+    margin: 15px 0;
+    border: 1px solid #f5c6cb; /* Darker red border */
+    border-radius: 5px;
+}

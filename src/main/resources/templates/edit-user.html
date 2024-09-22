@@ -23,6 +23,12 @@
     </header>
     <main>
         <h1>Edit User Information</h1>
+        
+        <!-- Display messages -->
+        <div th:if="${message}" class="alert">
+            <p th:text="${message}"></p>
+        </div>
+        
         <form action="/edit-user" method="post">
             <input type="hidden" name="userId" th:value="${user.id}" />
             <label for="address">Address:</label>

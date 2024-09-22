@@ -23,24 +23,14 @@ public class LoginController {
             return "login"; // Show the error on the login page
         }
 
-        // Simulate login logic
+        // Simulate login logic (replace with real authentication)
         if (!username.equals("correctUser") || !password.equals("correctPass")) {
             model.addAttribute("error", "Invalid username or password");
             return "login";
         }
 
-        // On successful login, redirect to the home page
+        // On successful login, redirect to the user home page
         return "redirect:/userhome";
-    }
-
-    @GetMapping("/welcome")
-    public String welcome() {
-        return "welcome";
-    }
-
-    @GetMapping("/home")
-    public String home() {
-        return "home";
     }
 
     @GetMapping("/userhome")
@@ -52,6 +42,6 @@ public class LoginController {
     @ExceptionHandler(Exception.class)
     public String handleException(Model model, Exception ex) {
         model.addAttribute("errorMessage", "An unexpected error occurred: " + ex.getMessage());
-        return "error";
+        return "error"; // Return error page
     }
 }

@@ -28,6 +28,13 @@
     <div class="profile-content">
         <div class="profile-info">
             <h2>Profile</h2>
+            
+            <!-- Display messages -->
+            <!-- Display messages -->
+<div th:if="${message}" class="alert" th:class="${success ? 'alert-success' : 'alert-danger'}">
+    <p th:text="${message}"></p>
+</div>
+
             <div class="info-box">
                 <p><strong>Username:</strong> <span th:text="${user?.username}"></span></p>
                 <p><strong>Email:</strong> <span th:text="${user?.email}"></span></p>
@@ -39,7 +46,6 @@
             </div>
         </div>
         
-
         <div class="pets-info">
             <h2>Your Pets</h2>
             <div class="pet-container">
@@ -50,8 +56,7 @@
                     <p><strong>Age:</strong> <span th:text="${pet.age}"></span> years</p>
                     <p><strong>Bio:</strong> <span th:text="${pet.bio}"></span></p>
                     <!-- Edit Button for each pet -->
-                    <button class="edit-pet-button" 
-            th:onclick="'location.href=\'/edit-pet/' + ${pet.id} + '\''">Edit</button>
+                    <button class="edit-pet-button" th:onclick="'location.href=\'/edit-pet/' + ${pet.id} + '\''">Edit</button>
                 </div>
             </div>
             <!-- Button to Add a New Pet -->
