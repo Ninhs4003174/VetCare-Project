@@ -1,59 +1,3 @@
-<!-- <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
-<head>
-    <title>Compare Providers</title>
-</head>
-<body>
-
-<h2>Compare Providers</h2>
-
-<form method="get" action="/appointments/compare-providers">
-    <label for="serviceType">Service Type:</label>
-    <select name="serviceType" id="serviceType">
-        <option value="">--Select Service Type--</option>
-        <option value="General" th:selected="${serviceType == 'General'}">General Checkup</option>
-        <option value="Surgery" th:selected="${serviceType == 'Surgery'}">Surgery</option>
-        <!Add more service types if required -->
-    <!-- </select>
-
-    <label for="location">Location:</label>
-    <select name="location" id="location">
-        <option value="">--Select Location--</option>
-        <option value="City Clinic" th:selected="${location == 'City Clinic'}">City Clinic</option>
-        <option value="Suburban Clinic" th:selected="${location == 'Suburban Clinic'}">Suburban Clinic</option>
-    </select>
-
-    <button type="submit">Compare</button>
-</form>
-
-<div th:if="${errorMessage}" class="error">
-    <p th:text="${errorMessage}"></p>
-</div>
-
-<table>
-    <thead>
-        <tr>
-            <th>Vet Name</th>
-            <th>Service Type</th>
-            <th>Location</th>
-            <th>Action</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr th:each="vet : ${filteredVets}">
-            <td th:text="${vet.name}">Vet Name</td>
-            <td th:text="${vet.serviceType}">Service Type</td>
-            <td th:text="${vet.clinic}">Clinic</td>
-            <td>
-                <a th:href="@{/appointments/book(vetName=${vet.name})}">Book Appointment</a>
-            </td>
-        </tr>
-    </tbody>
-</table>
-
-</body>
-</html> --> 
-
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
@@ -68,10 +12,11 @@
 <header>
     <nav>
         <ul class="navbar-menu">
-            <li><a href="home"><img src="img/logo.png" alt="Logo" class="logo"></a></li>
-            <li><a href="about.html">About</a></li>
-            <li><a href="resources.html">Resources</a></li>
-            <li><a href="contact.html">Contact</a></li>
+            <li><a href="index.html"><img th:src="@{/img/logo.png}" alt="Logo" class="logo"></a></li>
+           <li><a th:href="@{/userhome}">Home</a></li>
+             <li><a th:href="@{/appointments}">Appointments</a></li>
+               <li><a th:href="@{/resources}">Resources</a></li>
+                  <li><a th:href="@{/profile}">My Profile</a></li>
             <li><a href="/login">Log In</a></li>
         </ul>
     </nav>

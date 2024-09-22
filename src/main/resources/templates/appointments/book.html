@@ -11,11 +11,11 @@
         <nav>
             <ul class="navbar-menu">
                 <li><a href="index"><img th:src="@{/img/logo.png}" alt="Logo" class="logo"></a></li>
-                <li><a href="records">Pet Records</a></li>
-                <li><a href="appointments">Appointments</a></li>
-                <li><a href="resources">Resources</a></li>
-                <li><a href="contact">Contact</a></li>
-                <li><a href="profile">My Profile</a></li>
+                <li><a th:href="@{/records}">Pet Records</a></li>
+                   <li><a th:href="@{/appointments}">Appointments</a></li>
+                   <li><a th:href="@{/resources}">Resources</a></li>
+                  <li><a th:href="@{/appointments/compare-providers}">compare-providers</a></li>
+                  <li><a th:href="@{/profile}">My Profile</a></li>
                 <li><a href="#"><img th:src="@{/img/notif.png}" alt="Notifications" class="notification-icon"></a></li>
                 <li><a href="/logout" class="btn-secondary">Log out</a></li>
             </ul>

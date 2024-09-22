@@ -17,15 +17,18 @@ public class AppointmentRepositoryImpl implements AppointmentRepository {
     public AppointmentRepositoryImpl(DataSource source) {
         this.source = source;
     }
-
+    // Method to retrieve all appointments from the database
     @Override
     public List<Appointment> findAll() {
         try {
+            // Get a connection to the database
             Connection connection = source.getConnection();
+             // Prepare the SQL query to retrieve all appointments
             PreparedStatement stm = connection.prepareStatement("SELECT * FROM appointments;");
             List<Appointment> appointments = new ArrayList<>();
             ResultSet rs = stm.executeQuery();
             while (rs.next()) {
+                // Create an Appointment object and add it to the list
                 Appointment appt = new Appointment(rs.getLong(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5), rs.getString(6), null);
                 appointments.add(appt);
             }
@@ -35,7 +38,7 @@ public class AppointmentRepositoryImpl implements AppointmentRepository {
             throw new RuntimeException("Error retrieving appointments", e);
         }
     }
-
+ // finding appointments by vet's name
     @Override
     public List<Appointment> findByVetName(String vetName) {
         try {
@@ -54,7 +57,7 @@ public class AppointmentRepositoryImpl implements AppointmentRepository {
             throw new RuntimeException("Error retrieving vet appointments", e);
         }
     }
-
+    // Method to retrieve appointments by user
     @Override
     public List<Appointment> findByUser(User user) {
         try {
@@ -74,7 +77,7 @@ public class AppointmentRepositoryImpl implements AppointmentRepository {
         }
     }
 
-    // Here is the updated save method you need to add
+    //  save method 
     @Override
     public void save(Appointment appointment) {
         try {
@@ -112,7 +115,7 @@ public class AppointmentRepositoryImpl implements AppointmentRepository {
             throw new RuntimeException("Error saving appointment", e);
         }
     }
-
+    // Method to delete an appointment by its ID
     @Override
     public void deleteById(Long id) {
         try {
@@ -125,7 +128,7 @@ public class AppointmentRepositoryImpl implements AppointmentRepository {
             throw new RuntimeException("Error canceling appointment", e);
         }
     }
-
+   // Method to find an appointment by its ID(for editing)
     @Override
     public Appointment findById(Long id) {
         try {

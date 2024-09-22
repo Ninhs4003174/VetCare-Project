@@ -109,35 +109,8 @@ public class AppointmentServiceImpl implements AppointmentService {
         return false; // No overlap found
     }
     
-    
-    // // Check for overlapping appointments for the same vet
-    // private boolean isOverlappingAppointment(Appointment newAppointment) {
-    //     String newAppointmentTime = newAppointment.getTime();
-    //     if (newAppointmentTime == null || newAppointmentTime.isEmpty()) {
-    //         throw new IllegalArgumentException("Appointment time cannot be null or empty.");
-    //     }
 
-    //     LocalTime newTime = LocalTime.parse(newAppointmentTime);
-    //     Collection<Appointment> existingAppointments = repository.findByVetName(newAppointment.getVetName());
-
-    //     for (Appointment appointment : existingAppointments) {
-    //         String existingAppointmentTime = appointment.getTime();
-    //         if (existingAppointmentTime == null || existingAppointmentTime.isEmpty()) {
-    //             continue; // Skip invalid appointment times
-    //         }
-
-    //         LocalTime existingTime = LocalTime.parse(existingAppointmentTime);
-
-    //         // Compare appointment times (assuming 15-minute slots)
-    //         if (newTime.equals(existingTime)) {
-    //             return true; // Overlapping appointment found
-    //         }
-    //     }
-    //     return false;
-    // }
-    
-
-
+    //appointment cancelling
     @Override
     public void cancelAppointment(Long id) {
         repository.deleteById(id);
