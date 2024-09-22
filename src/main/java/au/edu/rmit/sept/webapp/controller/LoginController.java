@@ -38,6 +38,11 @@ public class LoginController {
         return "userhome";
     }
 
+    @GetMapping("/home")
+    public String home() {
+        return "home";
+    }
+
     // Example of handling exceptions at the controller level
     @ExceptionHandler(Exception.class)
     public String handleException(Model model, Exception ex) {
