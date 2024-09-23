@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Us</title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+    <header>
+        <nav>
+            <ul class="navbar-menu">
+                <li><a href="home"><img src="img/logo.png" alt="Logo" class="logo"></a></li>
+                <li><a href="about">About</a></li>
+                <li><a href="contacts">Contact</a></li>
+                <li><a href="/login">Log In</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section class="contact-section">
+            <!-- Contact Us Card -->
+            <div class="card">
+                <h2>Contact Us</h2>
+                <p>We would love to hear from you! Reach out to us using the form below.</p>
+                <form th:action="@{'/contact/send-message'}" method="post" class="form-container">
+                    <label for="name">Name:</label>
+                    <input type="text" id="name" name="name" required>
+
+                    <label for="email">Email:</label>
+                    <input type="email" id="email" name="email" required>
+
+                    <label for="message">Message:</label>
+                    <textarea id="message" name="message" required></textarea>
+
+                    <button type="submit" class="btn-primary">Send Message</button>
+                </form>
+            </div>
+
+            <!-- Follow Us Card -->
+            <div class="card">
+                <h2>Follow Us</h2>
+                <p>Stay connected with us on social media:</p>
+                <ul class="social-media">
+                    <li><a href="#"><img src="img/facebook.png" alt="Facebook"></a></li>
+                    <li><a href="#"><img src="img/insta.png" alt="Instagram"></a></li>
+                    <li><a href="#"><img src="img/linked.png" alt="LinkedIn"></a></li>
+                </ul>
+            </div>
+
+            <!-- Contact Information Card -->
+            <div class="card">
+                <h2>Contact Information</h2>
+                <p>You can also reach us at:</p>
+                <div class="contact-details">
+                    <p><strong>Email:</strong> support@petmanagement.com</p>
+                    <p><strong>Phone:</strong> +123 456 7890</p>
+                    <p><strong>Address:</strong> 123 Pet Care Ave, Melbourne, VIC, Australia</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>© 2024 VetCare</p>
+    </footer>
+</body>
+</html>

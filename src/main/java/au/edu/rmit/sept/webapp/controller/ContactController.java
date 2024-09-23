@@ -34,4 +34,23 @@ public class ContactController {
         model.addAttribute("message", "Thank you for reaching out! We will get back to you soon.");
         return "contact";
     }
+
+    @GetMapping("/contacts")
+    public String showContactPages(Model model) {
+        return "contact2";
+    }
+
+    @PostMapping("/contacts/submit")
+    public String submitContactForms(
+            @RequestParam("name") String name,
+            @RequestParam("email") String email,
+            @RequestParam("message") String message,
+            Model model) {
+
+        Contact contact = new Contact(name, email, message);
+        contactService.saveContact(contact);
+
+        model.addAttribute("message", "Thank you for reaching out! We will get back to you soon.");
+        return "contact2";
+    }
 }
