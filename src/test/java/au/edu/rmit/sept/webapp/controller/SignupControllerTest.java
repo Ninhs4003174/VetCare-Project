@@ -2,6 +2,7 @@ package au.edu.rmit.sept.webapp.controller;
 
 import au.edu.rmit.sept.webapp.model.Pet;
 import au.edu.rmit.sept.webapp.model.User;
+import au.edu.rmit.sept.webapp.model.enums.UserRole;
 import au.edu.rmit.sept.webapp.service.UserService;
 import au.edu.rmit.sept.webapp.service.PetService;
 import org.junit.jupiter.api.BeforeEach;
@@ -53,12 +54,13 @@ public class SignupControllerTest {
         String petType = "Dog";
         int petAge = 5;
         String petBio = "Loves to play";
+        UserRole role = UserRole.CLIENT;
 
         when(userService.isUsernameTaken(username)).thenReturn(false);
         when(userService.isEmailTaken(email)).thenReturn(false);
         when(userService.findUserByEmail(email)).thenReturn(new User());
 
-        String result = signupController.registerUser(username, email, password, petName, petType, petAge, petBio,
+        String result = signupController.registerUser(username, email, password, petName, petType, petAge, petBio, role,
                 redirectAttributes);
 
         assertEquals("redirect:/login", result);
@@ -70,7 +72,7 @@ public class SignupControllerTest {
     @Test
     public void testRegisterUser_InvalidEmail() {
         String result = signupController.registerUser("testuser", "invalid-email", "Password1", "Fluffy", "Dog", 5,
-                "Loves to play", redirectAttributes);
+                "Loves to play", UserRole.CLIENT, redirectAttributes);
 
         assertEquals("redirect:/signup", result);
         verify(redirectAttributes).addFlashAttribute("message", "Invalid email format");
@@ -86,7 +88,7 @@ public class SignupControllerTest {
         when(userService.isUsernameTaken(username)).thenReturn(true);
 
         String result = signupController.registerUser(username, email, password, "Fluffy", "Dog", 5, "Loves to play",
-                redirectAttributes);
+                UserRole.CLIENT,redirectAttributes);
 
         assertEquals("redirect:/signup", result);
         verify(redirectAttributes).addFlashAttribute("message", "Username is already taken");
@@ -103,7 +105,7 @@ public class SignupControllerTest {
         when(userService.isEmailTaken(email)).thenReturn(true);
 
         String result = signupController.registerUser(username, email, password, "Fluffy", "Dog", 5, "Loves to play",
-                redirectAttributes);
+                UserRole.CLIENT,redirectAttributes);
 
         assertEquals("redirect:/signup", result);
         verify(redirectAttributes).addFlashAttribute("message", "Email is already taken");
@@ -113,7 +115,7 @@ public class SignupControllerTest {
     @Test
     public void testRegisterUser_InvalidPassword() {
         String result = signupController.registerUser("testuser", "test@example.com", "short", "Fluffy", "Dog", 5,
-                "Loves to play", redirectAttributes);
+                "Loves to play", UserRole.CLIENT, redirectAttributes);
 
         assertEquals("redirect:/signup", result);
         verify(redirectAttributes).addFlashAttribute("message",
@@ -124,7 +126,7 @@ public class SignupControllerTest {
     @Test
     public void testRegisterUser_InvalidPetAge() {
         String result = signupController.registerUser("testuser", "test@example.com", "Password1", "Fluffy", "Dog", -1,
-                "Loves to play", redirectAttributes);
+                 "Loves to play", UserRole.CLIENT, redirectAttributes);
 
         assertEquals("redirect:/signup", result);
         verify(redirectAttributes).addFlashAttribute("message", "Pet age must be between 0 and 20 years");

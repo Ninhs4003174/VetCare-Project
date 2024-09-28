@@ -1,6 +1,7 @@
 package au.edu.rmit.sept.webapp.service;
 
 import java.util.List;
+import au.edu.rmit.sept.webapp.model.enums.UserRole;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -32,11 +33,12 @@ public class UserService implements UserDetailsService {
         return userRepository.findAll();
     }
 
-    public void registerUser(String username, String email, String password) {
+    public void registerUser(String username, String email, String password, UserRole role) {
         User user = new User();
         user.setUsername(username);
         user.setEmail(email);
         user.setPassword(passwordEncoder.encode(password)); // Encode the password
+        user.setRole(role); // Set the role
         userRepository.save(user);
     }
 

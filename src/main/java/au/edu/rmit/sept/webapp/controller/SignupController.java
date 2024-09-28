@@ -17,6 +17,8 @@ import org.slf4j.LoggerFactory;
 import java.util.HashSet;
 import java.util.regex.Pattern;
 
+import au.edu.rmit.sept.webapp.model.enums.UserRole;
+
 @Controller
 public class SignupController {
 
@@ -32,6 +34,7 @@ public class SignupController {
 
     @GetMapping("/signup")
     public String showSignupForm(Model model) {
+        model.addAttribute("roles", UserRole.values()); // Pass available roles to the view
         return "signup";
     }
 
@@ -44,7 +47,9 @@ public class SignupController {
             @RequestParam String petType,
             @RequestParam int petAge,
             @RequestParam String petBio,
-            RedirectAttributes redirectAttributes) { // Use RedirectAttributes here
+            @RequestParam UserRole role, // Accept the role as a parameter
+            RedirectAttributes redirectAttributes) {
+
         try {
             // Validate email structure
             if (!EMAIL_PATTERN.matcher(email).matches()) {
@@ -89,8 +94,8 @@ public class SignupController {
                 return "redirect:/signup";
             }
 
-            // Register the user
-            userService.registerUser(username, email, password);
+            // Register the user with the specified role
+            userService.registerUser(username, email, password, role); // Pass role to registerUser method
 
             // Find the newly registered user by email
             User user = userService.findUserByEmail(email);

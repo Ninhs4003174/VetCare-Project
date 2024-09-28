@@ -13,7 +13,6 @@
             <ul class="navbar-menu">
                 <li><a href="home"><img src="img/logo.png" alt="Logo" class="logo"></a></li>
                 <li><a href="about">About</a></li>
-               
                 <li><a href="contacts">Contact</a></li>
                 <li><a href="/login">Log In</a></li>
             </ul>
@@ -22,8 +21,6 @@
     <main class="container">
         <div class="row">
             <!-- Display flash message -->
-
-
             <div class="col-md-6 sign-up-form">
                 <!-- Display Error/Success Messages -->
                 <div th:if="${message}" class="alert" th:class="${success ? 'alert-success' : 'alert-danger'}" th:text="${message}"></div>
@@ -39,6 +36,12 @@
                         <input type="email" id="owner_email" name="email" required>
                         <label for="password">Password:</label>
                         <input type="password" id="password" name="password" required>
+                        <label for="role">Select Role:</label>
+                        <select id="role" name="role" required>
+                            <c:forEach items="${roles}" var="role">
+                                <option value="${role}">${role}</option>
+                            </c:forEach>
+                        </select>
                     </fieldset>
                     <fieldset>
                         <legend><span class="number">2</span> Pet Info</legend>
