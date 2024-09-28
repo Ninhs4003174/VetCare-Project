@@ -42,24 +42,25 @@ public class SecurityConfig {
     }
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
-        return httpSecurity
-                .csrf(AbstractHttpConfigurer::disable)
-                .formLogin(httpForm -> {
-                    httpForm.loginPage("/login").permitAll();
-                    httpForm.defaultSuccessUrl("/userhome", true);
-
-                })
-                .authorizeHttpRequests(registry -> {
-                    registry.requestMatchers("/signup", "contacts", "/home", "/about", "/resources", "/profile",
-                            "/css/**",
-                            "/img/**")
-                            .permitAll(); // Ensure
-                    // static
-                    // resources are
-                    // accessible
-                    registry.anyRequest().authenticated();
-                })
-                .build();
-    }
+public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
+    return httpSecurity
+            .csrf(AbstractHttpConfigurer::disable)
+            .formLogin(httpForm -> {
+                httpForm.loginPage("/login").permitAll();
+                httpForm.defaultSuccessUrl("/userhome", true);
+            })
+            .authorizeHttpRequests(registry -> {
+                // Open access for public resources
+                registry.requestMatchers("/signup", "/home", "/about", "/resources", "/css/**", "/img/**").permitAll();
+                
+                // Define access control for different roles
+                registry.requestMatchers("/receptionist/**").hasRole("RECEPTIONIST");
+                registry.requestMatchers("/vet/**").hasRole("VET");
+                registry.requestMatchers("/client/**").hasRole("CLIENT");
+                
+                // All other requests need authentication
+                registry.anyRequest().authenticated();
+            })
+            .build();
+}
 }

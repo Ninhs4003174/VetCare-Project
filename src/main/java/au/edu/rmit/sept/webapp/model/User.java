@@ -1,4 +1,7 @@
 package au.edu.rmit.sept.webapp.model;
+import au.edu.rmit.sept.webapp.model.enums.UserRole;
+
+
 
 import jakarta.persistence.*;
 
@@ -18,6 +21,9 @@ public class User {
     private String email;
     private String address; // New field
     private String phoneNumber; // New field
+    
+    @Enumerated(EnumType.STRING) // Store the role as a string in the database
+    private UserRole role; // Change this to UserRole enum
 
     @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Pet> pets = new HashSet<>(); // Initialize the set
@@ -26,9 +32,10 @@ public class User {
     public User() {
     }
 
-    public User(String username, String password) {
+    public User(String username, String password, UserRole role) { // Updated constructor to include role
         this.username = username;
         this.password = password;
+        this.role = role; // Set the role
     }
 
     public Long getId() {
@@ -77,6 +84,14 @@ public class User {
 
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
+    }
+
+    public UserRole getRole() { // Getter for role
+        return role;
+    }
+
+    public void setRole(UserRole role) { // Setter for role
+        this.role = role;
     }
 
     public Set<Pet> getPets() {
