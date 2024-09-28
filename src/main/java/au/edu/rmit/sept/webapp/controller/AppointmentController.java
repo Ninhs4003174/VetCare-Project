@@ -63,24 +63,6 @@ public class AppointmentController {
         return "appointments/book";
     }
 
-    // @PostMapping("/book")
-    // public String bookAppointment(@ModelAttribute Appointment appointment, Model model) {
-    //     try {
-    //         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-    //         String username = auth.getName();
-    //         User user = userService.findByUsername(username);
-    //         appointment.setUser(user);
-
-    //         appointmentService.saveAppointment(appointment);
-    //     } catch (IllegalArgumentException e) {
-    //         model.addAttribute("errorMessage", e.getMessage());
-    //         model.addAttribute("vets", vetService.getAllVets());
-    //         model.addAttribute("timeSlots", getTimeSlots());
-    //         return "appointments/book";
-    //     }
-
-    //     return "redirect:/appointments";
-    // }
     @PostMapping("/book")
 public String bookAppointment(@ModelAttribute Appointment appointment,BindingResult result, Model model) {
     try {

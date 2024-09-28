@@ -20,4 +20,4 @@ public interface AppointmentService {
 }
 
 
-//after editing appointment - new changes must be displayed on the appointments page (list.html), it shows only the old details
+
