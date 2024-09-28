@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Vet Clinic Reviews</title>
+</head>
+<body>
+    <h1>Reviews for Clinic</h1>
+    
+    <!-- Button to create a new review -->
+    <a href="/reviews/create" style="text-decoration: none;">
+        <button>Create a Review</button>
+    </a>
+
+    <!-- List of Reviews -->
+    <ul th:if="${reviews != null}" th:each="review : ${reviews}">
+        <li>
+            <strong th:text="${review.rating}">4</strong> stars - 
+            <span th:text="${review.content}">Great service!</span>
+            <br>
+            <small th:text="${#dates.format(review.createdAt, 'dd-MM-yyyy HH:mm')}">2024-09-29</small>
+        </li>
+    </ul>
+
+    <!-- If there are no reviews -->
+    <p th:if="${reviews == null || reviews.size() == 0}">No reviews yet for this clinic.</p>
+
+</body>
+</html>
