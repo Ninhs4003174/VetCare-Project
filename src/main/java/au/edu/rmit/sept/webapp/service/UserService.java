@@ -35,6 +35,18 @@ public class UserService implements UserDetailsService {
         return userRepository.findAll();
     }
 
+    // Actual authentication logic
+    public User authenticate(String username, String password) {
+        // Fetch the user by username
+        User user = userRepository.findByUsername(username);
+
+        // Check if user exists and password matches
+        if (user != null && user.getPassword().equals(password)) {
+            return user;
+        }
+        return null; // Return null if authentication fails
+    }
+
     public void registerUser(String username, String email, String password, UserRole role) {
         User user = new User();
         user.setUsername(username);

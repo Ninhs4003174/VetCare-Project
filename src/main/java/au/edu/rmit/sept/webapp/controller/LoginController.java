@@ -1,57 +1,72 @@
 package au.edu.rmit.sept.webapp.controller;
 
+import au.edu.rmit.sept.webapp.model.enums.UserRole; // Import your UserRole enum
+import au.edu.rmit.sept.webapp.model.User; // Assuming you have a User model
+import au.edu.rmit.sept.webapp.service.UserService; // Import your UserService
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.ui.Model;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 public class LoginController {
 
-    @GetMapping("/login")
-    public String login() {
-        return "login"; // Return the login page
+    @Autowired
+    private UserService userService;
+
+    // Separate login pages for each role (optional)
+    @GetMapping("/login-client")
+    public String loginClient() {
+        return "login-client"; // Return the client login page
     }
 
-    @PostMapping("/login")
-    public String handleLogin(@RequestParam String username, @RequestParam String password, Model model) {
-        // Basic error handling for missing or incorrect credentials
-        if (username.isEmpty() || password.isEmpty()) {
-            model.addAttribute("error", "Username and password must be provided");
-            return "login"; // Show the error on the login page
-        }
+    @GetMapping("/login-receptionist")
+    public String loginReceptionist() {
+        return "login-receptionist"; // Return the receptionist login page
+    }
 
-        // Simulate login logic (replace with real authentication)
-        if (!username.equals("correctUser") || !password.equals("correctPass")) {
+    @GetMapping("/login-veterinarian")
+    public String loginVeterinarian() {
+        return "login-veterinarian"; // Return the veterinarian login page
+    }
+
+    // General login handling (for all roles)
+    @PostMapping("/login-client")
+    public String handleClientLogin(
+            @RequestParam String username,
+            @RequestParam String password,
+            Model model,
+            RedirectAttributes redirectAttributes) {
+
+        User user = userService.authenticate(username, password); // Actual authentication logic
+        if (user == null) {
             model.addAttribute("error", "Invalid username or password");
-            return "login";
+            return "login-client"; // Redirect to general login page on error
         }
 
-        // On successful login, redirect to the user home page
-        return "redirect:/userhome";
+        // Fetch user role and redirect based on the role
+        UserRole userRole = user.getRole();
+        System.out.println("Authenticated User Role: " + userRole); // Log the user role
+        switch (userRole) {
+            case CLIENT:
+                return "redirect:/userhome";
+            case RECEPTIONIST:
+                return "redirect:/receptionisthome";
+            case VET:
+                return "redirect:/vethome";
+            default:
+                model.addAttribute("error", "Unknown role");
+                return "login"; // Return general login page if role is unknown
+        }
     }
 
     @GetMapping("/userhome")
-    public String userhome() {
-        return "userhome";
-    }
-
-    @GetMapping("/home")
-    public String home() {
-        return "home";
-    }
-
-    @GetMapping("/about")
-    public String about() {
-        return "about";
-    }
-
-    // Example of handling exceptions at the controller level
-    @ExceptionHandler(Exception.class)
-    public String handleException(Model model, Exception ex) {
-        model.addAttribute("errorMessage", "An unexpected error occurred: " + ex.getMessage());
-        return "error"; // Return error page
-    }
+public String userHome(Model model) {
+    // You can add any attributes you need to the model here
+    return "userhome"; // This should match the name of your userhome.html
 }
+}
+

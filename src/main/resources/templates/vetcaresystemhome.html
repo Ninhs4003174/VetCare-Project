@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VetCare System - Choose Your Role</title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+    <header>
+        <nav>
+            <ul class="navbar-menu">
+                <li><a href="/home"><img src="/img/logo.png" alt="Logo" class="logo"></a></li>
+                <li><a href="/about">About</a></li>
+                <li><a href="/contacts">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <div class="role-selection-container">
+            <h2>Welcome to VetCare System</h2>
+            <p>Please select your role to proceed:</p>
+
+            <form action="/vetcaresystemhome/selectrole" method="POST">
+                <label for="role">Select your role:</label>
+                <select name="role" id="role">
+                    <option value="CLIENT">Client</option>
+                    <option value="RECEPTIONIST">Receptionist</option>
+                    <option value="VETERINARIAN">Veterinarian</option>
+                </select>
+                <button type="submit">Submit</button>
+            </form>
+        </div>
+    </main>
+
+    <footer>
+        <p>© 2024 VetCare</p>
+    </footer>
+</body>
+</html>
