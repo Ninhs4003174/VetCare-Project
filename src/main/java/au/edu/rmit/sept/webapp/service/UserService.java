@@ -1,7 +1,9 @@
 package au.edu.rmit.sept.webapp.service;
 
 import java.util.List;
+import java.util.Collections;
 import au.edu.rmit.sept.webapp.model.enums.UserRole;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -82,6 +84,7 @@ public class UserService implements UserDetailsService {
             return org.springframework.security.core.userdetails.User.builder()
                     .username(user.getUsername())
                     .password(user.getPassword())
+                    .authorities(Collections.singletonList(new SimpleGrantedAuthority(user.getRole().name())))
                     .build();
         } else {
             throw new UsernameNotFoundException("User not found with username: " + username);

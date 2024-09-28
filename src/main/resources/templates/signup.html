@@ -38,9 +38,7 @@
                         <input type="password" id="password" name="password" required>
                         <label for="role">Select Role:</label>
                         <select id="role" name="role" required>
-                            <c:forEach items="${roles}" var="role">
-                                <option value="${role}">${role}</option>
-                            </c:forEach>
+                            <option th:each="role : ${roles}" th:value="${role}" th:text="${role.name()}"></option>
                         </select>
                     </fieldset>
                     <fieldset>
