@@ -52,12 +52,13 @@ public class SecurityConfig {
             .csrf(AbstractHttpConfigurer::disable) // Disable CSRF for simplicity; consider re-enabling in production
             .authorizeHttpRequests(registry -> {
                 // Open access for public resources and role selection page
-                registry.requestMatchers("/vetcaresystemhome", "/vetcaresystemhome/selectrole", "/signup", "/home", "/about", "/resources", "/css/**", "/img/**").permitAll();
+                registry.requestMatchers("/vetcaresystemhome", "/vetcaresystemhome/selectrole", "/signup-client", "/home", "/about", "/resources", "/css/**", "/img/**").permitAll();
 
                 // Define access control for different roles after login
                 registry.requestMatchers("/receptionisthome/").hasRole("RECEPTIONIST");
                 registry.requestMatchers("/vethome/").hasRole("VET");
                 registry.requestMatchers("/userhome/").hasRole("CLIENT");
+               
 
                 // All other requests need authentication
                 registry.anyRequest().authenticated(); // Ensure all other requests require authentication

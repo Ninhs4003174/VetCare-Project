@@ -34,7 +34,7 @@ public class SignupController {
     // Display the signup form (no role selection required, defaults to CLIENT)
     @GetMapping("/signup-client")
     public String showSignupForm(Model model) {
-        return "signup"; // Return the client-specific signup view
+        return "signup-client"; // Return the client-specific signup view
     }
 
     // Handle the client signup form submission
