@@ -4,4 +4,5 @@ CREATE TABLE IF NOT EXISTS vetbooking (
     clinic_id BIGINT NOT NULL,                 -- Clinic where the vet works, must not be null
     service_type VARCHAR(100),                 -- Type of service being booked
     FOREIGN KEY (vet_user_id) REFERENCES vet_users(id) -- Link to the user who made the booking
+    FOREIGN KEY (clinic_id) REFERENCES vet(id) 
 );

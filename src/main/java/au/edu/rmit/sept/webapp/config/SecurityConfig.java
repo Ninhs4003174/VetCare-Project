@@ -19,7 +19,6 @@ import org.springframework.security.web.authentication.AuthenticationSuccessHand
 
 import java.util.Collection;
 
-
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
@@ -49,54 +48,57 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
         httpSecurity
-            .csrf(AbstractHttpConfigurer::disable) // Disable CSRF for simplicity; consider re-enabling in production
-            .authorizeHttpRequests(registry -> {
-                // Open access for public resources and role selection page
-                registry.requestMatchers("/vetcaresystemhome", "/vetcaresystemhome/selectrole", "/signup-client", "/home", "/about", "/resources", "/css/**", "/img/**").permitAll();
+                .csrf(AbstractHttpConfigurer::disable) // Disable CSRF for simplicity; consider re-enabling in
+                                                       // production
+                .authorizeHttpRequests(registry -> {
+                    // Open access for public resources and role selection page
+                    registry.requestMatchers("/vetcaresystemhome", "/vetcaresystemhome/selectrole", "/signup-client",
+                            "/home", "/about", "/resources", "/css/**", "/img/**").permitAll();
 
-                // Define access control for different roles after login
-                registry.requestMatchers("/receptionisthome/").hasRole("RECEPTIONIST");
-                registry.requestMatchers("/vethome/").hasRole("VET");
-                registry.requestMatchers("/userhome/").hasRole("CLIENT");
-               
+                    // Define access control for different roles after login
+                    registry.requestMatchers("/receptionisthome/").hasRole("RECEPTIONIST");
+                    registry.requestMatchers("/vethome/").hasRole("VET");
+                    registry.requestMatchers("/userhome/").hasRole("CLIENT");
 
-                // All other requests need authentication
-                registry.anyRequest().authenticated(); // Ensure all other requests require authentication
-            })
-            .formLogin(httpForm -> {
-                // Define custom login pages for different roles
-                httpForm.loginPage("/login-client").permitAll(); // Allow all users to access the login page
-                httpForm.successHandler(customSuccessHandler()); // Use the custom success handler
-            });
+                    registry.requestMatchers("/vethome/").denyAll();
+                    registry.requestMatchers("/userhome/").denyAll();
+                    // All other requests need authentication
+                    registry.anyRequest().authenticated(); // Ensure all other requests require authentication
+                })
+                .formLogin(httpForm -> {
+                    // Define custom login pages for different roles
+                    httpForm.loginPage("/login-client").permitAll(); // Allow all users to access the login page
+                    httpForm.successHandler(customSuccessHandler()); // Use the custom success handler
+                });
 
         return httpSecurity.build(); // Finalize the SecurityFilterChain
     }
 
- // Custom authentication success handler
- @Bean
- public AuthenticationSuccessHandler customSuccessHandler() {
-     return (request, response, authentication) -> {
-         // Get the user's roles
-         Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
-         System.out.println("Granted Authorities: " + authorities);
-         
-         // Determine the redirect URL based on roles
-         String redirectUrl = "/vetcaresystemhome"; // Default if no role matched
-         for (GrantedAuthority authority : authorities) {
-             if (authority.getAuthority().equals("CLIENT")) {
-                 redirectUrl = "/userhome"; // Redirect to user home for CLIENT role
-                 break;
-             } else if (authority.getAuthority().equals("RECEPTIONIST")) {
-                 redirectUrl = "/receptionisthome"; // Redirect to receptionist home for RECEPTIONIST role
-                 break;
-             } else if (authority.getAuthority().equals("VET")) {
-                 redirectUrl = "/vethome"; // Redirect to vet home for VET role
-                 break;
-             }
-         }
+    // Custom authentication success handler
+    @Bean
+    public AuthenticationSuccessHandler customSuccessHandler() {
+        return (request, response, authentication) -> {
+            // Get the user's roles
+            Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
+            System.out.println("Granted Authorities: " + authorities);
 
-         // Redirect to the determined URL
-         response.sendRedirect(redirectUrl);
-     };
- }
+            // Determine the redirect URL based on roles
+            String redirectUrl = "/vetcaresystemhome"; // Default if no role matched
+            for (GrantedAuthority authority : authorities) {
+                if (authority.getAuthority().equals("CLIENT")) {
+                    redirectUrl = "/userhome"; // Redirect to user home for CLIENT role
+                    break;
+                } else if (authority.getAuthority().equals("RECEPTIONIST")) {
+                    redirectUrl = "/receptionisthome"; // Redirect to receptionist home for RECEPTIONIST role
+                    break;
+                } else if (authority.getAuthority().equals("VET")) {
+                    redirectUrl = "/vethome"; // Redirect to vet home for VET role
+                    break;
+                }
+            }
+
+            // Redirect to the determined URL
+            response.sendRedirect(redirectUrl);
+        };
+    }
 }
