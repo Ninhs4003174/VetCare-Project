@@ -1,7 +1,7 @@
 CREATE TABLE IF NOT EXISTS prescriptions (
     prescription_id SERIAL PRIMARY KEY,
     pet_id INT REFERENCES pets(id),
-    vet_id INT REFERENCES vet(vet_id),
+    vet_id INT REFERENCES vet_users(id),
     medication_name VARCHAR(100) NOT NULL,
     dosage VARCHAR(50),
     instructions TEXT,

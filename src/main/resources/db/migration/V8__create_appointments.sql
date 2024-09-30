@@ -1,3 +1,4 @@
+
 CREATE TABLE appointments (
     id BIGSERIAL PRIMARY KEY,   
   pet_name VARCHAR(255), 
