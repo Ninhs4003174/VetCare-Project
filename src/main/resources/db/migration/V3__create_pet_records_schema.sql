@@ -1,4 +1,4 @@
-CREATE TABLE pet_record (
+CREATE TABLE IF NOT EXISTS pet_record (
     id BIGSERIAL PRIMARY KEY,
     name VARCHAR(255),
     breed VARCHAR(255),
