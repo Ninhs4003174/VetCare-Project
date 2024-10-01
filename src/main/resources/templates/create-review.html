@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Create a Review for Vet</title>
+</head>
+<body>
+    <h1>Create a Review for <span th:text="${appointment.vetName}">Dr. Smith</span></h1>
+    
+    <!-- Review Form -->
+    <form th:action="@{/reviews}" method="post">
+        <textarea name="content" placeholder="Write your review..." required></textarea>
+        <br>
+        <label for="rating">Rating:</label>
+        <select name="rating" id="rating" required>
+            <option value="1">1 Star</option>
+            <option value="2">2 Stars</option>
+            <option value="3">3 Stars</option>
+            <option value="4">4 Stars</option>
+            <option value="5">5 Stars</option>
+        </select>
+        <input type="hidden" name="appointmentId" th:value="${appointment.id}" />
+        <br>
+        <button type="submit">Submit Review</button>
+    </form>
+
+    <!-- Back to Reviews List -->
+    <a href="/reviews/vet/{vetId}">Back to Reviews</a>
+</body>
+</html>

@@ -1,13 +1,13 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Vet Clinic Reviews</title>
+    <title>Vet Reviews</title>
 </head>
 <body>
-    <h1>Reviews for Clinic</h1>
-    
+    <h1>Reviews for Vet</h1>
+
     <!-- Button to create a new review -->
-    <a href="/reviews/create" style="text-decoration: none;">
+    <a href="/reviews/create/{appointmentId}" style="text-decoration: none;">
         <button>Create a Review</button>
     </a>
 
@@ -22,7 +22,6 @@
     </ul>
 
     <!-- If there are no reviews -->
-    <p th:if="${reviews == null || reviews.size() == 0}">No reviews yet for this clinic.</p>
-
+    <p th:if="${reviews == null || reviews.size() == 0}">No reviews yet for this vet.</p>
 </body>
 </html>

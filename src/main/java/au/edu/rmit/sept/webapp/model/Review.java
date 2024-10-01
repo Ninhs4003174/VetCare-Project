@@ -15,15 +15,12 @@ public class Review {
     private User user;
 
     @ManyToOne
-    @JoinColumn(name = "vet_clinic_id", nullable = false)
-    private VetClinic vetClinic;
+    @JoinColumn(name = "vet_id", nullable = false)
+    private Appointment appointment; // This links the review to an appointment and indirectly to the vet
 
     private String content;
     private int rating;
     private LocalDateTime createdAt;
-
-    public Review() {
-    }
 
     // Getters and Setters
     public Long getId() {
@@ -42,12 +39,12 @@ public class Review {
         this.user = user;
     }
 
-    public VetClinic getVetClinic() {
-        return vetClinic;
+    public Appointment getAppointment() {
+        return appointment;
     }
 
-    public void setVetClinic(VetClinic vetClinic) {
-        this.vetClinic = vetClinic;
+    public void setAppointment(Appointment appointment) {
+        this.appointment = appointment;
     }
 
     public String getContent() {
