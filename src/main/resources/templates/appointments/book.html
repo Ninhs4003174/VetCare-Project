@@ -29,11 +29,21 @@
                 <label for="petName">Pet Name:</label>
                 <input type="text" id="petName" th:field="*{petName}" required class="input-field">
 
-                <label for="vetName">Vet Name:</label>
+                <!-- <label for="vetName">Vet Name:</label>
                 <select id="vetName" th:field="*{vetName}" class="select-field">
                     <option value="" disabled selected>Select a vet</option>
                     <option th:each="vet : ${vets}" th:value="${vet.name}" th:text="${vet.name}"></option>
-                </select>
+                </select> -->
+                <!-- <select id="vetName" th:field="*{vetName}" class="select-field">
+                    <option value="" disabled selected>Select a vet</option>
+                    <option th:each="vet : ${vets}" th:value="${vet.vetUserId}" th:text="${vet.vetName}"></option>
+                </select> -->
+
+                <label for="vetName">Vet Name:</label>
+<select id="vetName" th:field="*{vetId}" class="select-field">
+    <option value="" disabled selected>Select a vet</option>
+    <option th:each="vet : ${vets}" th:value="${vet.vetUserId}" th:text="${vet.vetName}"></option>
+</select>
 
                 <label for="date">Date:</label>
                 <input type="date" id="date" th:field="*{date}" required 

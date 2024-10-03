@@ -35,11 +35,18 @@
                 </div>
 
                 <div>
-                    <label for="vetName">Vet:</label>
+                    <!-- <label for="vetName">Vet:</label>
                     <select id="vetName" th:field="*{vetName}" class="select-field">
                         <option th:each="vet : ${vets}" th:value="${vet.name}" th:text="${vet.name}"
                                 th:selected="${vet.name == appointment.vetName}">Vet</option>
-                    </select>
+                    </select> -->
+
+                    <label for="vetId">Vet:</label>
+<select id="vetId" th:field="*{vetId}" class="select-field">
+    <option th:each="vet : ${vets}" th:value="${vet.vetUserId}" th:text="${vet.vetName}"
+            th:selected="${vet.vetUserId == appointment.vetId}">Vet</option>
+</select>
+
                 </div>
 
                 <div>

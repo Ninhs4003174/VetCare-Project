@@ -86,7 +86,7 @@ public class AppointmentServiceImpl implements AppointmentService {
         LocalDate newDate = LocalDate.parse(newAppointmentDate); // Parse the date
     
         // Retrieve all appointments for the selected vet
-        Collection<Appointment> existingAppointments = repository.findByVetName(newAppointment.getVetName());
+        Collection<Appointment> existingAppointments = repository.findByVetId(newAppointment.getVetId());
     
         // Iterate through the existing appointments and check for overlaps
         for (Appointment appointment : existingAppointments) {
