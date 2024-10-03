@@ -76,6 +76,14 @@ public class LoginController {
         return new ModelAndView("receptionisthome");
     }
 
+    @GetMapping("/adminhome")
+    public ModelAndView adminHome() {
+        if (!hasRole("ADMIN")) {
+            return new ModelAndView("403"); // Redirect to access denied page if not RECEPTIONIST
+        }
+        return new ModelAndView("adminhome");
+    }
+
     // Method to check role of the logged-in user
     private boolean hasRole(String role) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();

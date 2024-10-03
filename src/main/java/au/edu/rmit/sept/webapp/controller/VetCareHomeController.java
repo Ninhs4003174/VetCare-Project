@@ -14,11 +14,6 @@ public class VetCareHomeController {
         return "vetcaresystemhome"; // Serve the role selection view
     }
 
-    @GetMapping("/receptionisthome")
-    public String showclinic() {
-        return "receptionisthome"; // Serve the role selection view
-    }
-
     @PostMapping("/vetcaresystemhome/selectrole")
     public String handleRoleSelection(@RequestParam("role") String role) {
         System.out.println("Selected role: " + role); // Add this line for debugging

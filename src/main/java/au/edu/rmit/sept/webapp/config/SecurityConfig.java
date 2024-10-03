@@ -59,6 +59,7 @@ public class SecurityConfig {
                     registry.requestMatchers("/receptionisthome/").hasRole("RECEPTIONIST");
                     registry.requestMatchers("/vethome/").hasRole("VET");
                     registry.requestMatchers("/userhome/").hasRole("CLIENT");
+                    registry.requestMatchers("/adminhome/").hasRole("ADMIN");
 
                     // All other requests need authentication
                     registry.anyRequest().authenticated(); // Ensure all other requests require authentication
@@ -95,6 +96,9 @@ public class SecurityConfig {
                     break;
                 } else if (authority.getAuthority().equals("VET")) {
                     redirectUrl = "/vethome"; // Redirect to vet home for VET role
+                    break;
+                } else if (authority.getAuthority().equals("ADMIN")) {
+                    redirectUrl = "/adminhome"; // Redirect to vet home for VET role
                     break;
                 }
             }
