@@ -11,7 +11,7 @@ public class Appointment {
     private Long id;
 
     private String petName;
-    private String vetName;
+    private Long vetId; // Changed from vetName to vetId
     private String date;
     private String time;
     private String status;
@@ -25,20 +25,20 @@ public class Appointment {
     }
 
     // New constructor to match the controller's call (without the User parameter)
-    public Appointment(Long id, String petName, String vetName, String date, String time, String status) {
+    public Appointment(Long id, String petName, Long vetId, String date, String time, String status) {
         this.id = id;
         this.petName = petName;
-        this.vetName = vetName;
+        this.vetId = vetId;
         this.date = date;
         this.time = time;
         this.status = status;
     }
 
     // Existing constructor with the User parameter
-    public Appointment(Long id, String petName, String vetName, String date, String time, String status, User user) {
+    public Appointment(Long id, String petName, Long vetId, String date, String time, String status, User user) {
         this.id = id;
         this.petName = petName;
-        this.vetName = vetName;
+        this.vetId = vetId;
         this.date = date;
         this.time = time;
         this.status = status;
@@ -62,12 +62,12 @@ public class Appointment {
         this.petName = petName;
     }
 
-    public String getVetName() {
-        return vetName;
+    public Long getVetId() {
+        return vetId;
     }
 
-    public void setVetName(String vetName) {
-        this.vetName = vetName;
+    public void setVetId(Long vetId) {
+        this.vetId = vetId;
     }
 
     public String getDate() {
@@ -104,13 +104,13 @@ public class Appointment {
 
     public String formattedDetails() {
         // Debugging output
-        System.out.println("Vet Name in formattedDetails: " + vetName);
+        System.out.println("Vet ID in formattedDetails: " + vetId);
 
         // Start with pet name
         String appointmentDetails = (petName == null) ? "Unknown Pet" : petName;
 
-        // Add vet name
-        appointmentDetails += " with " + ((vetName == null) ? "Unknown Vet" : vetName);
+        // Add vet ID
+        appointmentDetails += " with Vet ID " + ((vetId == null) ? "Unknown Vet" : vetId);
 
         // Add date and time
         appointmentDetails += " on " + date + " at " + time;

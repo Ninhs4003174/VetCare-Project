@@ -19,7 +19,9 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequestMapping("/appointments")
@@ -37,19 +39,43 @@ public class AppointmentController {
     }
 
     @GetMapping
-    public String all(Model model) {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        String username = auth.getName();
-        User user = userService.findByUsername(username);
+public String all(Model model) {
+    Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+    String username = auth.getName();
+    User user = userService.findByUsername(username);
 
-        List<Appointment> appointments = appointmentService.getAppointmentsByUser(user);
-        model.addAttribute("appointments", appointments);
-        return "appointments/list";
+    List<Appointment> appointments = appointmentService.getAppointmentsByUser(user);
+
+    // Create a list to hold appointment details along with vet name
+    List<Map<String, Object>> appointmentDetailsList = new ArrayList<>();
+
+    for (Appointment appointment : appointments) {
+        Map<String, Object> appointmentDetails = new HashMap<>();
+        appointmentDetails.put("appointment", appointment);
+
+        // Fetch the vet details using vetId from the appointment
+        VetBooking vet = vetService.getAllVets().stream()
+            .filter(v -> v.getId().equals(appointment.getVetId()))  // Match based on vetId
+            .findFirst()
+            .orElse(null);
+
+        if (vet != null) {
+            System.out.println("Vet Name: " + vet.getVetName());  // Debugging line
+            appointmentDetails.put("vetName", vet.getVetName());  // Add vet name to the details
+        } else {
+            System.out.println("Vet not found for Vet ID: " + appointment.getVetId());
+        }
+
+        appointmentDetailsList.add(appointmentDetails);
     }
+
+    model.addAttribute("appointmentDetailsList", appointmentDetailsList);
+    return "appointments/list";
+}
 
     @GetMapping("/book")
     public String showBookingForm(Model model) {
-        model.addAttribute("appointment", new Appointment(1L, "Bella", "Dr. Smith", "2024-09-15", "10:00 AM", "Scheduled"));
+        model.addAttribute("appointment", new Appointment(1L, "Bella", 1L, "2024-09-15", "10:00 AM", "Scheduled"));
         model.addAttribute("vets", vetService.getAllVets());// Pass list of vets to the form
         // Generate time slots and add them to the model
         List<String> timeSlots = getTimeSlots();
@@ -69,7 +95,7 @@ public String bookAppointment(@ModelAttribute Appointment appointment,BindingRes
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String username = auth.getName();
         User user = userService.findByUsername(username);
-        System.out.println("Selected Vet: " + appointment.getVetName());  // Debugging line
+        System.out.println("Selected Vet: " + appointment.getVetId());  // Debugging line
 
         if (user == null) {
             throw new IllegalArgumentException("User not found.");
@@ -79,7 +105,7 @@ public String bookAppointment(@ModelAttribute Appointment appointment,BindingRes
                          model.addAttribute("timeSlots", getTimeSlots());  // Add time slots on error
                         return "appointments/book";
                     }
-                    System.out.println("Selected Vet: " + appointment.getVetName());
+                    System.out.println("Selected Vet: " + appointment.getVetId());
         appointment.setUser(user);  // Make sure user is set in the appointment
         appointmentService.saveAppointment(appointment);
     } catch (IllegalArgumentException e) {

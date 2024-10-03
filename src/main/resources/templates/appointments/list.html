@@ -33,20 +33,22 @@
                 <a href="/appointments/book" class="book-button">Book a New Appointment</a>
             </div>
 
-            <ul th:each="a : ${appointments}">
+            <ul th:each="appointmentDetails : ${appointmentDetailsList}">
                 <li>
-                    <span th:text="${a.formattedDetails()}">Appointment details</span>
-
+                    <span th:text="${appointmentDetails.get('appointment').formattedDetails()}">Appointment details</span>
+                    <span> - Vet: <span th:text="${appointmentDetails.get('vetName')}">Vet Name</span></span>
+                    
                     <!-- Cancel button -->
                     <form th:action="@{/appointments/cancel}" method="post" style="display:inline;">
-                        <input type="hidden" th:value="${a.id}" name="id"/>
+                        <input type="hidden" th:value="${appointmentDetails.get('appointment').id}" name="id"/>
                         <button class="cancel" type="submit">Cancel</button>
                     </form>
-
+            
                     <!-- Edit button that links to the edit page -->
-                    <a th:href="@{/appointments/edit/{id}(id=${a.id})}">Edit</a>
+                    <a th:href="@{/appointments/edit/{id}(id=${appointmentDetails.get('appointment').id})}">Edit</a>
                 </li>
             </ul>
+            
         </div>
     </main>
 
