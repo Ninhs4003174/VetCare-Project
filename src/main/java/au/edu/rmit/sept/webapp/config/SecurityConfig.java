@@ -53,15 +53,13 @@ public class SecurityConfig {
                 .authorizeHttpRequests(registry -> {
                     // Open access for public resources and role selection page
                     registry.requestMatchers("/vetcaresystemhome", "/vetcaresystemhome/selectrole", "/signup-client",
-                            "/home", "/about", "/resources", "/css/**", "/img/**").permitAll();
+                            "/signup-admin", "/home", "/about", "/resources", "/css/**", "/img/**").permitAll();
 
                     // Define access control for different roles after login
                     registry.requestMatchers("/receptionisthome/").hasRole("RECEPTIONIST");
                     registry.requestMatchers("/vethome/").hasRole("VET");
                     registry.requestMatchers("/userhome/").hasRole("CLIENT");
 
-                    registry.requestMatchers("/vethome/").denyAll();
-                    registry.requestMatchers("/userhome/").denyAll();
                     // All other requests need authentication
                     registry.anyRequest().authenticated(); // Ensure all other requests require authentication
                 })
@@ -69,6 +67,10 @@ public class SecurityConfig {
                     // Define custom login pages for different roles
                     httpForm.loginPage("/login-client").permitAll(); // Allow all users to access the login page
                     httpForm.successHandler(customSuccessHandler()); // Use the custom success handler
+                })
+                .exceptionHandling(exceptionHandling -> {
+                    exceptionHandling.accessDeniedPage("/403"); // Redirect to access denied page for unauthorized
+                                                                // access
                 });
 
         return httpSecurity.build(); // Finalize the SecurityFilterChain
