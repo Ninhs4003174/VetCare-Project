@@ -35,6 +35,10 @@ public class UserService implements UserDetailsService {
         return userRepository.findAll();
     }
 
+    public List<User> getUsersByRole(UserRole role) {
+        return userRepository.findByRole(role);
+    }
+
     // Actual authentication logic
     public User authenticate(String username, String password) {
         // Fetch the user by username
