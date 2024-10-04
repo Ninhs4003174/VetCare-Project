@@ -60,6 +60,11 @@ public class UserService implements UserDetailsService {
         userRepository.save(user);
     }
 
+    public void saveUser(User user) {
+        user.setPassword(passwordEncoder.encode(user.getPassword())); // Encode the password
+        userRepository.save(user);
+    }
+
     public List<Pet> findPetsByUser(User user) {
         return petRepository.findByOwner(user); // You need to implement this in PetRepository
     }

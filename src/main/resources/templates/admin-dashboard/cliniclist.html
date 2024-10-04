@@ -5,6 +5,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Clinic List</title>
     <link rel="stylesheet" href="/css/styles.css">
+    <script>
+        function toggleForm(formId) {
+            var form = document.getElementById(formId);
+            if (form.style.display === "none") {
+                form.style.display = "block";
+            } else {
+                form.style.display = "none";
+            }
+        }
+    </script>
 </head>
 <body>
     <header>
@@ -28,24 +38,42 @@
                     <tr>
                         <th>ID</th>
                         <th>Name</th>
-                        <th>Location</th>
+                        <th>Email</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <!-- Clinic list items will be dynamically inserted here -->
+                    <tr th:each="user : ${users}">
+                        <td th:text="${user.id}"></td>
+                        <td th:text="${user.username}"></td>
+                        <td th:text="${user.email}"></td>
+                        <td>
+                            <a th:href="@{/edit-clinic/{id}(id=${user.id})}">Edit</a>
+                            <a th:href="@{/delete-clinic/{id}(id=${user.id})}">Delete</a>
+                        </td>
+                    </tr>
                 </tbody>
             </table>
+            <button onclick="toggleForm('add-clinic-form')">Add New Clinic</button>
         </section>
         
-        <section id="add-clinic">
+        <section id="add-clinic-form" style="display:none;">
             <h2>Add New Clinic</h2>
             <form action="/add-clinic" method="post">
                 <label for="clinic-name">Name:</label>
-                <input type="text" id="clinic-name" name="clinic-name" required>
+                <input type="text" id="clinic-name" name="username" required>
                 
-                <label for="clinic-location">Location:</label>
-                <input type="text" id="clinic-location" name="clinic-location" required>
+                <label for="clinic-email">Email:</label>
+                <input type="email" id="clinic-email" name="email" required>
+                
+                <label for="clinic-password">Password:</label>
+                <input type="password" id="clinic-password" name="password" required>
+                
+                <label for="clinic-address">Address:</label>
+                <input type="text" id="clinic-address" name="address">
+                
+                <label for="clinic-phone">Phone Number:</label>
+                <input type="text" id="clinic-phone" name="phoneNumber">
                 
                 <button type="submit">Add Clinic</button>
             </form>
