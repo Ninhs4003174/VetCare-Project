@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clinic List</title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+    <header>
+        <nav>
+            <ul class="navbar-menu">
+                <li><a href="adminhome"><img src="img/logo.png" alt="Logo" class="logo"></a></li>
+                <li><a href="userlist">Users</a></li>
+                <li><a href="cliniclist">Clinics</a></li>
+                <li><a href="vetlist">Vets</a></li>
+                <li><a href="adminlist">Admins</a></li>
+                <li><a href="/logout">Log Out</a></li>
+            </ul>
+        </nav>
+    </header>
+    
+    <main class="container">
+        <section id="clinic-list">
+            <h2>Clinic List</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Location</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Clinic list items will be dynamically inserted here -->
+                </tbody>
+            </table>
+        </section>
+        
+        <section id="add-clinic">
+            <h2>Add New Clinic</h2>
+            <form action="/add-clinic" method="post">
+                <label for="clinic-name">Name:</label>
+                <input type="text" id="clinic-name" name="clinic-name" required>
+                
+                <label for="clinic-location">Location:</label>
+                <input type="text" id="clinic-location" name="clinic-location" required>
+                
+                <button type="submit">Add Clinic</button>
+            </form>
+        </section>
+    </main>
+    
+    <footer>
+        <p>© 2024 VetCare</p>
+    </footer>
+</body>
+</html>

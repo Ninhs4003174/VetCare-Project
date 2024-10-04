@@ -81,7 +81,7 @@ public class LoginController {
         if (!hasRole("ADMIN")) {
             return new ModelAndView("403"); // Redirect to access denied page if not RECEPTIONIST
         }
-        return new ModelAndView("adminhome");
+        return new ModelAndView("admin-dashboard/adminhome");
     }
 
     // Method to check role of the logged-in user

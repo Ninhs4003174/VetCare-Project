@@ -1,2 +1,0 @@
-INSERT INTO vet_users (username, password, role, email, clinic_id, address, phone_number)
-VALUES ('admin', '$2a$10$7QJ8K5j5Q5Q5Q5Q5Q5Q5QO', 'ADMIN', 'admin@gmail.com', NULL, '123 Admin Street', '123456789');
