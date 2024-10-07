@@ -46,7 +46,7 @@ public class LoginController {
             case CLIENT:
                 return "redirect:/userhome";
             case RECEPTIONIST:
-                return "redirect:/receptionisthome";
+                return "redirect:/clinichome";
             case VET:
                 return "redirect:/vethome";
             case ADMIN:
@@ -59,7 +59,7 @@ public class LoginController {
 
     @GetMapping("/userhome")
     public ModelAndView userHome() {
-        if (!hasRole("ROLE_CLIENT")) {
+        if (!hasRole("CLIENT")) {
             return new ModelAndView("403");
         }
         return new ModelAndView("userhome");
@@ -67,15 +67,15 @@ public class LoginController {
 
     @GetMapping("/receptionisthome")
     public ModelAndView receptionistHome() {
-        if (!hasRole("ROLE_RECEPTIONIST")) {
+        if (!hasRole("RECEPTIONIST")) {
             return new ModelAndView("403");
         }
-        return new ModelAndView("receptionisthome");
+        return new ModelAndView("clinichome");
     }
 
     @GetMapping("/adminhome")
     public ModelAndView adminHome() {
-        if (!hasRole("ROLE_ADMIN")) {
+        if (!hasRole("ADMIN")) {
             return new ModelAndView("403");
         }
         return new ModelAndView("admin-dashboard/adminhome");

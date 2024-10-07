@@ -23,9 +23,9 @@ public class AdminUserInitializer implements CommandLineRunner {
 
         String adminEncodedPassword = "admin123";
         // Receptionist user details
-        String receptionistUsername = "receptionist1";
-        String receptionistEmail = "receptionist@example.com";
-        String receptionistEncodedPassword = "receptionist123";
+        String receptionistUsername = "clinic";
+        String receptionistEmail = "clinic@example.com";
+        String receptionistEncodedPassword = "clinic123";
 
         // Check if admin user already exists
         if (!userService.isUsernameTaken(adminUsername)) {
