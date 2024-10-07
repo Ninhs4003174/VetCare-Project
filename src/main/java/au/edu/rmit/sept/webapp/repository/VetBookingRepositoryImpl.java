@@ -26,7 +26,7 @@ public class VetBookingRepositoryImpl implements VetBookingRepository {
         try {
             Connection connection = source.getConnection();
             PreparedStatement stm = connection.prepareStatement(
-                    "SELECT vu.id AS vet_user_id, vu.clinic_id " +
+                    "SELECT vu.id AS vet_user_id, vu.clinic_id, vu.username AS vet_name " +
                             "FROM vet_users vu " +
                             "WHERE vu.role = 'VET';");
             ResultSet rs = stm.executeQuery();
@@ -35,6 +35,7 @@ public class VetBookingRepositoryImpl implements VetBookingRepository {
                 VetBooking vet = new VetBooking();
                 vet.setVetUserId(rs.getLong("vet_user_id"));
                 vet.setClinicId(rs.getLong("clinic_id"));
+                vet.setVetName(rs.getString("vet_name"));
                 vets.add(vet);
             }
             connection.close();
