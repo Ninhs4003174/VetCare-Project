@@ -55,12 +55,13 @@ public class UserService implements UserDetailsService {
         return null; // Return null if authentication fails
     }
 
-    public void registerUser(String username, String email, String password, UserRole role) {
+    public void registerUser(String username, String email, String password, UserRole role, Long clinicId) {
         User user = new User();
         user.setUsername(username);
         user.setEmail(email);
         user.setPassword(passwordEncoder.encode(password)); // Encode the password
         user.setRole(role); // Set the role
+        user.setClinicId(clinicId); // Set the clinic ID
         userRepository.save(user);
     }
 
@@ -114,5 +115,9 @@ public class UserService implements UserDetailsService {
         } else {
             throw new UsernameNotFoundException("User not found with username: " + username);
         }
+    }
+
+    public List<User> searchReceptionists(String query) {
+        return userRepository.findByRoleAndUsernameContaining(UserRole.RECEPTIONIST, query);
     }
 }
