@@ -25,20 +25,42 @@ public class VetBookingRepositoryImpl implements VetBookingRepository {
     public List<VetBooking> findAll() {
         try {
             Connection connection = source.getConnection();
-            PreparedStatement stm = connection.prepareStatement("SELECT vb.id, vu.id AS vet_user_id, vu.username AS vet_name, vb.clinic_id, vb.service_type " +
-            "FROM vetbooking vb " +
-            "INNER JOIN vet_users vu ON vb.vet_user_id = vu.id " +
-            "WHERE vu.role = 'VET';");
+            PreparedStatement stm = connection.prepareStatement(
+                    "SELECT vu.id AS vet_user_id, vu.clinic_id " +
+                            "FROM vet_users vu " +
+                            "WHERE vu.role = 'VET';");
             ResultSet rs = stm.executeQuery();
             List<VetBooking> vets = new ArrayList<>();
             while (rs.next()) {
-                VetBooking vet = new VetBooking(rs.getLong(1), rs.getLong(2), rs.getString(3), rs.getString(4), rs.getString(5));
+                VetBooking vet = new VetBooking();
+                vet.setVetUserId(rs.getLong("vet_user_id"));
+                vet.setClinicId(rs.getLong("clinic_id"));
                 vets.add(vet);
             }
             connection.close();
             return vets;
         } catch (SQLException e) {
-            throw new RuntimeException("Error retrieving vetbooking", e);
+            throw new RuntimeException("Error retrieving vet users", e);
+        }
+    }
+
+    @Override
+    public void save(VetBooking vetBooking) {
+        try {
+            Connection connection = source.getConnection();
+            PreparedStatement stm = connection.prepareStatement(
+                    "INSERT INTO vetbooking (vet_user_id, clinic_id, service_type, address, phone_number, email) " +
+                            "VALUES (?, ?, ?, ?, ?, ?)");
+            stm.setLong(1, vetBooking.getVetUserId());
+            stm.setLong(2, vetBooking.getClinicId());
+            stm.setString(3, vetBooking.getServiceType());
+            stm.setString(4, vetBooking.getClinicAddress());
+            stm.setString(5, vetBooking.getPhoneNumber());
+            stm.setString(6, vetBooking.getEmail());
+            stm.executeUpdate();
+            connection.close();
+        } catch (SQLException e) {
+            throw new RuntimeException("Error saving vetbooking", e);
         }
     }
 }

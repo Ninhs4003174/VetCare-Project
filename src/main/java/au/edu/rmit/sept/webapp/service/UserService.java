@@ -15,9 +15,11 @@ import org.springframework.stereotype.Service;
 import au.edu.rmit.sept.webapp.repository.PetRepository;
 import au.edu.rmit.sept.webapp.repository.UserRepository;
 import au.edu.rmit.sept.webapp.repository.PrescriptionRequestRepository;
+import au.edu.rmit.sept.webapp.repository.VetBookingRepository;
 import au.edu.rmit.sept.webapp.model.Pet;
 import au.edu.rmit.sept.webapp.model.PrescriptionRequest;
 import au.edu.rmit.sept.webapp.model.User;
+import au.edu.rmit.sept.webapp.model.VetBooking;
 
 @Service
 public class UserService implements UserDetailsService {
@@ -27,6 +29,8 @@ public class UserService implements UserDetailsService {
     private PetRepository petRepository;
     @Autowired
     private PrescriptionRequestRepository prescriptionRequestRepository;
+    @Autowired
+    private VetBookingRepository vetBookingRepository;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -67,6 +71,16 @@ public class UserService implements UserDetailsService {
     public void saveUser(User user) {
         user.setPassword(passwordEncoder.encode(user.getPassword())); // Encode the password
         userRepository.save(user);
+        if (user.getRole() == UserRole.VET) {
+            VetBooking vetBooking = new VetBooking();
+            vetBooking.setVetUserId(user.getId());
+            vetBooking.setClinicId(user.getClinicId());
+            vetBooking.setServiceType("Default Service"); // Set default or specific service type
+            vetBooking.setClinicAddress(user.getAddress()); // Assuming user's address is the clinic address
+            vetBooking.setPhoneNumber(user.getPhoneNumber()); // Assuming user's phone number is the clinic phone number
+            vetBooking.setEmail(user.getEmail()); // Assuming user's email is the clinic email
+            vetBookingRepository.save(vetBooking);
+        }
     }
 
     public List<Pet> findPetsByUser(User user) {
