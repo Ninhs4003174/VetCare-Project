@@ -213,6 +213,7 @@ public String vetHome(Model model) {
     if (vetUser != null && vetUser.getRole() == UserRole.VET) {
         List<Appointment> vetAppointments = appointmentService.getAppointmentsByVet(vetUser.getId());
         model.addAttribute("appointments", vetAppointments);
+        model.addAttribute("username", username);
     } else {
         return "403"; // Handle unauthorized access
     }

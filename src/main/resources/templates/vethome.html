@@ -6,7 +6,7 @@
     <title>Vet Home</title>
 </head>
 <body>
-    <h1>Welcome, {{username}}</h1>
+    <h1>Welcome, <span th:text="${username}"></span></h1> <!-- Display the logged-in user's username -->
     <h2>Your Appointments</h2>
     
     <table>
