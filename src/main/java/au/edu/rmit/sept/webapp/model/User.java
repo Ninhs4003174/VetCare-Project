@@ -108,4 +108,5 @@ public class User {
     public void setClinicId(Long clinicId) {
         this.clinicId = clinicId;
     }
+
 }

@@ -1,13 +1,14 @@
 package au.edu.rmit.sept.webapp.controller;
 
 import au.edu.rmit.sept.webapp.model.Appointment;
+import au.edu.rmit.sept.webapp.model.Pet;
 import au.edu.rmit.sept.webapp.model.User;
 import au.edu.rmit.sept.webapp.model.VetBooking;
 import au.edu.rmit.sept.webapp.model.enums.UserRole;
 import au.edu.rmit.sept.webapp.service.AppointmentService;
+import au.edu.rmit.sept.webapp.service.PetService;
 import au.edu.rmit.sept.webapp.service.UserService;
 import au.edu.rmit.sept.webapp.service.VetBookingService;
-import au.edu.rmit.sept.webapp.model.VetBooking;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -18,7 +19,6 @@ import org.springframework.validation.BindingResult;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -31,13 +31,15 @@ public class AppointmentController {
     private final AppointmentService appointmentService;
     private final VetBookingService vetService;
     private final UserService userService;
+    private final PetService petService;
 
     @Autowired
     public AppointmentController(AppointmentService appointmentService, VetBookingService vetService,
-            UserService userService) {
+            UserService userService, PetService petService) { // Inject PetService
         this.appointmentService = appointmentService;
         this.vetService = vetService;
         this.userService = userService;
+        this.petService = petService; // Initialize PetService
     }
 
     @GetMapping
@@ -112,8 +114,18 @@ public class AppointmentController {
                 model.addAttribute("timeSlots", getTimeSlots()); // Add time slots on error
                 return "appointments/book";
             }
+
+            // Fetch the pet name based on the selected pet ID
+            Pet pet = petService.findById(appointment.getPetId());
+            if (pet != null) {
+                appointment.setPetName(pet.getName());
+            } else {
+                throw new IllegalArgumentException("Pet not found.");
+            }
+
             System.out.println("Selected Vet: " + appointment.getVetId());
             appointment.setUser(user); // Make sure user is set in the appointment
+            appointment.setStatus("Scheduled");
             appointmentService.saveAppointment(appointment);
         } catch (IllegalArgumentException e) {
             model.addAttribute("errorMessage", e.getMessage());

@@ -10,34 +10,26 @@ public class Appointment {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    private Long petId;
     private String petName;
-    private Long vetId; // Changed from vetName to vetId
+    private Long vetId;
     private String date;
     private String time;
     private String status;
 
     @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false)
+    @JoinColumn(name = "user_id")
     private User user;
-    private Long petId;
 
-    // Default no-argument constructor (required by Spring)
+    // Constructors, getters, setters
+
     public Appointment() {
     }
 
-    // New constructor to match the controller's call (without the User parameter)
-    public Appointment(Long id, String petName, Long vetId, String date, String time, String status) {
+    public Appointment(Long id, Long petId, String petName, Long vetId, String date, String time, String status,
+            User user) {
         this.id = id;
-        this.petName = petName;
-        this.vetId = vetId;
-        this.date = date;
-        this.time = time;
-        this.status = status;
-    }
-
-    // Existing constructor with the User parameter
-    public Appointment(Long id, String petName, Long vetId, String date, String time, String status, User user) {
-        this.id = id;
+        this.petId = petId;
         this.petName = petName;
         this.vetId = vetId;
         this.date = date;
@@ -46,13 +38,22 @@ public class Appointment {
         this.user = user;
     }
 
-    // Getters and setters for all fields
+    // Getters and setters for all properties
+
     public Long getId() {
         return id;
     }
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public Long getPetId() {
+        return petId;
+    }
+
+    public void setPetId(Long petId) {
+        this.petId = petId;
     }
 
     public String getPetName() {
@@ -121,11 +122,4 @@ public class Appointment {
         return appointmentDetails;
     }
 
-    public Long getPetId() {
-        return petId;
-    }
-
-    public void setPetId(Long petId) {
-        this.petId = petId;
-    }
 }
