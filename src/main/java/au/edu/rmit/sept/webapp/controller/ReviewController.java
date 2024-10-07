@@ -24,19 +24,10 @@ public class ReviewController {
     @Autowired
     private UserService userService;
 
-    // Method to display all reviews for a specific clinic
-    @GetMapping("/clinic/{clinicName}")
-    public String getReviewsByClinic(@PathVariable String clinicName, Model model) {
-        List<Review> reviews = reviewService.getReviewsByClinicName(clinicName);
-        model.addAttribute("reviews", reviews);
-        model.addAttribute("clinicName", clinicName);
-        return "reviews"; // Assuming you have a reviews.html page to display clinic reviews
-    }
-
-    // Method to display the review creation form for a specific clinic
-    @GetMapping("/create/{clinicName}")
-    public String createReviewPage(@PathVariable String clinicName, Model model) {
-        model.addAttribute("clinicName", clinicName);
+    // Display the page to create a new review (no clinic name passed)
+    @GetMapping("/create")
+    public String createReviewPage(Model model) {
+        model.addAttribute("review", new Review()); // Prepare a new empty review object
         return "create-review"; // Refers to create-review.html template
     }
 
@@ -48,7 +39,7 @@ public class ReviewController {
         review.setReviewDate(LocalDate.now()); // Set the review date to today
         review.setCreatedAt(LocalDateTime.now()); // Set the timestamp when the review was created
         reviewService.saveReview(review); // Save the review to the database
-        return "redirect:/reviews/clinic/" + review.getClinicName(); // Redirect to the clinic's reviews page
+        return "redirect:/reviews"; // Redirect to the main reviews page
     }
 
     // Method to display all reviews by the logged-in user

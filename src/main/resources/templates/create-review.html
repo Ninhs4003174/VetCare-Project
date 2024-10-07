@@ -4,13 +4,13 @@
     <title>Create a Review</title>
 </head>
 <body>
-    <h1>Create a Review for <span th:text="${clinicName}">Vet Clinic</span></h1>
+    <h1>Create a Review</h1>
     
     <!-- Review Form -->
     <form th:action="@{/reviews}" method="post">
         <div>
             <label for="clinicName">Clinic Name:</label>
-            <input type="text" id="clinicName" name="clinicName" th:value="${clinicName}" readonly />
+            <input type="text" id="clinicName" name="clinicName" placeholder="Enter the clinic name" required />
         </div>
 
         <div>
@@ -35,6 +35,6 @@
 
     <!-- Back to Reviews List -->
     <br>
-    <a href="/reviews/clinic/{clinicName}">Back to Reviews</a>
+    <a href="/reviews">Back to Your Reviews</a>
 </body>
 </html>

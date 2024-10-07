@@ -4,31 +4,29 @@
     <title>Your Reviews</title>
 </head>
 <body>
-    <h1>Reviews</h1>
+
+    <h1>Your Reviews</h1>
     
-    <!-- Buttons to create and find reviews -->
-    <div>
-        <a href="/reviews/create" style="text-decoration: none;">
-            <button>Create Review</button>
-        </a>
-        <a href="/reviews/find" style="text-decoration: none;">
-            <button>Find Review</button>
-        </a>
+    <div class="button-container">
+        <a href="/reviews/create" class="button">Create Review</a>
+        <a href="/reviews" class="button">Find Reviews</a>
     </div>
-
-    <!-- Section to display the user's reviews -->
-    <h2>Your Reviews</h2>
-    <ul th:if="${userReviews != null}" th:each="review : ${userReviews}">
-        <li>
-            <strong>Clinic:</strong> <span th:text="${review.clinicName}">Clinic Name</span><br>
-            <strong>Rating:</strong> <span th:text="${review.rating}">5</span> stars<br>
-            <strong>Content:</strong> <span th:text="${review.content}">Great service!</span><br>
-            <strong>Date:</strong> <span th:text="${#dates.format(review.reviewDate, 'dd-MM-yyyy')}">2024-10-07</span>
-        </li>
-        <br>
-    </ul>
-
-    <!-- If the user has no reviews -->
-    <p th:if="${userReviews == null || userReviews.size() == 0}">You have not written any reviews yet.</p>
-</body>
+    
+    <div class="reviews-list">
+        <h2>Your Submitted Reviews</h2>
+        <ul>
+            <li th:each="review : ${userReviews}" class="review-item">
+                <p>Clinic Name: <span th:text="${review.clinicName}"></span></p>
+                <p>Review Date: <span th:text="${#temporals.format(review.reviewDate, 'dd-MM-yyyy')}"></span></p>
+                <p>Rating: <span th:text="${review.rating}"></span> / 5</p>
+                <p>Content: <span th:text="${review.content}"></span></p>
+            </li>
+        </ul>
+    
+        <!-- Show a message if there are no reviews -->
+        <p th:if="${#lists.isEmpty(userReviews)}">You haven't submitted any reviews yet.</p>
+    </div>
+    
+    </body>
+    </html>
 </html>
