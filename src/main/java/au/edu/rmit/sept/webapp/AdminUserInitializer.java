@@ -16,19 +16,34 @@ public class AdminUserInitializer implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        String username = "admin3";
-        String email = "admin@example.com";
-        String rawPassword = "admin123";
-        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-        String encodedPassword = "admin123";
+        // Admin user details
+        String adminUsername = "admin3";
+        String adminEmail = "admin@example.com";
+        String adminRawPassword = "admin123";
+
+        String adminEncodedPassword = "admin123";
+        // Receptionist user details
+        String receptionistUsername = "receptionist1";
+        String receptionistEmail = "receptionist@example.com";
+        String receptionistEncodedPassword = "receptionist123";
 
         // Check if admin user already exists
-        if (!userService.isUsernameTaken(username)) {
-            UserRole adminRole = UserRole.ADMIN; // Fixed role for admin signup
-            userService.registerUser(username, email, encodedPassword, adminRole);
+        if (!userService.isUsernameTaken(adminUsername)) {
+            UserRole adminRole = UserRole.ADMIN;
+            userService.registerUser(adminUsername, adminEmail, adminEncodedPassword, adminRole);
             System.out.println("Admin user inserted successfully!");
         } else {
             System.out.println("Admin user already exists.");
+        }
+
+        // Check if receptionist user already exists
+        if (!userService.isUsernameTaken(receptionistUsername)) {
+            UserRole receptionistRole = UserRole.RECEPTIONIST;
+            userService.registerUser(receptionistUsername, receptionistEmail, receptionistEncodedPassword,
+                    receptionistRole);
+            System.out.println("Receptionist user inserted successfully!");
+        } else {
+            System.out.println("Receptionist user already exists.");
         }
     }
 }

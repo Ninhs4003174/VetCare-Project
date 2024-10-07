@@ -1,8 +1,6 @@
 package au.edu.rmit.sept.webapp.model;
+
 import au.edu.rmit.sept.webapp.model.enums.UserRole;
-
-
-
 import jakarta.persistence.*;
 
 import java.util.HashSet;
@@ -21,7 +19,8 @@ public class User {
     private String email;
     private String address; // New field
     private String phoneNumber; // New field
-    
+    private Long clinicId; // New field
+
     @Enumerated(EnumType.STRING) // Store the role as a string in the database
     private UserRole role; // Change this to UserRole enum
 
@@ -100,5 +99,13 @@ public class User {
 
     public void setPets(Set<Pet> pets) {
         this.pets = pets;
+    }
+
+    public Long getClinicId() {
+        return clinicId;
+    }
+
+    public void setClinicId(Long clinicId) {
+        this.clinicId = clinicId;
     }
 }

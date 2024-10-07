@@ -56,7 +56,7 @@ public class SecurityConfig {
                             "/signup-admin", "/home", "/about", "/resources", "/css/**", "/img/**").permitAll();
 
                     // Define access control for different roles after login
-                    registry.requestMatchers("/receptionisthome/").hasRole("RECEPTIONIST");
+                    registry.requestMatchers("/clinichome/").hasRole("RECEPTIONIST");
                     registry.requestMatchers("/vethome/").hasRole("VET");
                     registry.requestMatchers("/userhome/").hasRole("CLIENT");
                     registry.requestMatchers("/adminhome/").hasRole("ADMIN");
@@ -92,7 +92,7 @@ public class SecurityConfig {
                     redirectUrl = "/userhome"; // Redirect to user home for CLIENT role
                     break;
                 } else if (authority.getAuthority().equals("RECEPTIONIST")) {
-                    redirectUrl = "/receptionisthome"; // Redirect to receptionist home for RECEPTIONIST role
+                    redirectUrl = "/clinichome"; // Redirect to receptionist home for RECEPTIONIST role
                     break;
                 } else if (authority.getAuthority().equals("VET")) {
                     redirectUrl = "/vethome"; // Redirect to vet home for VET role

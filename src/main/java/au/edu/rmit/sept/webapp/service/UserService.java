@@ -39,6 +39,10 @@ public class UserService implements UserDetailsService {
         return userRepository.findByRole(role);
     }
 
+    public List<User> getVetsByClinicId(Long clinicId) {
+        return userRepository.findByClinicIdAndRole(clinicId, UserRole.VET);
+    }
+
     // Actual authentication logic
     public User authenticate(String username, String password) {
         // Fetch the user by username
