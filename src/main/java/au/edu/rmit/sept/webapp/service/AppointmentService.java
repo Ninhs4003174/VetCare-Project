@@ -17,6 +17,7 @@ public interface AppointmentService {
     //finding apointment byid to update it
     Appointment findAppointmentById(Long id);
     void updateAppointment(Appointment appointment);
+    List<Appointment> getAppointmentsByVet(Long vetId);
 }
 
 

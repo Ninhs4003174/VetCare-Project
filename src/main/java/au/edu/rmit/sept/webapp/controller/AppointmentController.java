@@ -3,6 +3,7 @@ package au.edu.rmit.sept.webapp.controller;
 import au.edu.rmit.sept.webapp.model.Appointment;
 import au.edu.rmit.sept.webapp.model.User;
 import au.edu.rmit.sept.webapp.model.VetBooking;
+import au.edu.rmit.sept.webapp.model.enums.UserRole;
 import au.edu.rmit.sept.webapp.service.AppointmentService;
 import au.edu.rmit.sept.webapp.service.UserService;
 import au.edu.rmit.sept.webapp.service.VetBookingService;
@@ -55,9 +56,10 @@ public String all(Model model) {
 
         // Fetch the vet details using vetId from the appointment
         VetBooking vet = vetService.getAllVets().stream()
-            .filter(v -> v.getId().equals(appointment.getVetId()))  // Match based on vetId
-            .findFirst()
-            .orElse(null);
+    .filter(v -> v.getVetUserId().equals(appointment.getVetId()))  // Match based on vet_user_id
+    .findFirst()
+    .orElse(null);
+
 
         if (vet != null) {
             System.out.println("Vet Name: " + vet.getVetName());  // Debugging line
@@ -201,6 +203,21 @@ public String compareProviders(
     model.addAttribute("location", location);
 
     return "appointments/compare-providers";  // New view for comparing providers
+}
+@GetMapping("/vethome")
+public String vetHome(Model model) {
+    Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+    String username = auth.getName();
+    User vetUser = userService.findByUsername(username);
+
+    if (vetUser != null && vetUser.getRole() == UserRole.VET) {
+        List<Appointment> vetAppointments = appointmentService.getAppointmentsByVet(vetUser.getId());
+        model.addAttribute("appointments", vetAppointments);
+    } else {
+        return "403"; // Handle unauthorized access
+    }
+
+    return "vethome"; // This is the vet's home page displaying their appointments
 }
 
 

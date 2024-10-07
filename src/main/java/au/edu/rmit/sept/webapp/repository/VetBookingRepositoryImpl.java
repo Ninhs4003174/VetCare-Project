@@ -25,7 +25,10 @@ public class VetBookingRepositoryImpl implements VetBookingRepository {
     public List<VetBooking> findAll() {
         try {
             Connection connection = source.getConnection();
-            PreparedStatement stm = connection.prepareStatement("SELECT vb.id, vu.id AS vet_user_id, vu.username AS vet_name, vb.clinic, vb.service_type FROM vetbooking vb INNER JOIN vet_users vu ON vb.vet_user_id = vu.id WHERE vu.role = 'VET';");
+            PreparedStatement stm = connection.prepareStatement("SELECT vb.id, vu.id AS vet_user_id, vu.username AS vet_name, vb.clinic_id, vb.service_type " +
+            "FROM vetbooking vb " +
+            "INNER JOIN vet_users vu ON vb.vet_user_id = vu.id " +
+            "WHERE vu.role = 'VET';");
             ResultSet rs = stm.executeQuery();
             List<VetBooking> vets = new ArrayList<>();
             while (rs.next()) {

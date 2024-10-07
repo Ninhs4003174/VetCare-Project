@@ -33,7 +33,10 @@ public class AppointmentServiceImpl implements AppointmentService {
     public List<Appointment> getAppointmentsByUser(User user) {
         return repository.findByUser(user); // Corrected repository call
     }
-
+    @Override
+    public List<Appointment> getAppointmentsByVet(Long vetId) {
+    return repository.findByVetId(vetId); // Fetch appointments by vetId
+    }
     @Override
     public void saveAppointment(Appointment appointment) {
        // Convert the String date to LocalDate
