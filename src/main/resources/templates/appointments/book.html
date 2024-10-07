@@ -27,7 +27,10 @@
             <h1>Book an Appointment</h1>
             <form th:action="@{/appointments/book}" method="post" th:object="${appointment}" class="form-container">
                 <label for="petName">Pet Name:</label>
-                <input type="text" id="petName" th:field="*{petName}" required class="input-field">
+                <select id="petName" th:field="*{petId}" class="select-field">
+                    <option value="" disabled selected>Select a pet</option>
+                    <option th:each="pet : ${pets}" th:value="${pet.id}" th:text="${pet.name}"></option>
+                </select>
 
                 <!-- <label for="vetName">Vet Name:</label>
                 <select id="vetName" th:field="*{vetName}" class="select-field">

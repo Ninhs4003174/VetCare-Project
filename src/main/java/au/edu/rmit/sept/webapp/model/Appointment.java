@@ -19,6 +19,7 @@ public class Appointment {
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
+    private Long petId;
 
     // Default no-argument constructor (required by Spring)
     public Appointment() {
@@ -118,5 +119,13 @@ public class Appointment {
         System.out.println("Formatted Details: " + appointmentDetails);
 
         return appointmentDetails;
+    }
+
+    public Long getPetId() {
+        return petId;
+    }
+
+    public void setPetId(Long petId) {
+        this.petId = petId;
     }
 }
