@@ -104,6 +104,10 @@ public class Appointment {
         this.user = user;
     }
 
+    public Long getUserId() {
+        return user != null ? user.getId() : null;
+    }
+
     public String formattedDetails() {
         // Debugging output
         System.out.println("Vet ID in formattedDetails: " + vetId);
@@ -121,5 +125,4 @@ public class Appointment {
 
         return appointmentDetails;
     }
-
 }

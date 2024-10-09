@@ -1,93 +1,116 @@
 package au.edu.rmit.sept.webapp.controller;
 
-import au.edu.rmit.sept.webapp.model.PrescriptionRequest;
+import au.edu.rmit.sept.webapp.model.Appointment;
 import au.edu.rmit.sept.webapp.model.User;
-import au.edu.rmit.sept.webapp.model.Pet;
-import au.edu.rmit.sept.webapp.service.PrescriptionRequestService;
+import au.edu.rmit.sept.webapp.model.enums.UserRole;
+import au.edu.rmit.sept.webapp.service.AppointmentService;
 import au.edu.rmit.sept.webapp.service.UserService;
-import au.edu.rmit.sept.webapp.service.PetService;
-
-import java.time.LocalDateTime;
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Controller
 public class PrescriptionController {
 
-    @Autowired
-    private PrescriptionRequestService prescriptionRequestService;
+    private static final Logger logger = LoggerFactory.getLogger(PrescriptionController.class);
+
+    private final AppointmentService appointmentService;
+    private final UserService userService;
 
     @Autowired
-    private UserService userService;
-
-    @Autowired
-    private PetService petService;
-
-    @GetMapping("/prescription-management")
-    public String showRequestFormAndPrescriptions(Model model) {
-        // Get the logged-in user's username
-        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        String username;
-
-        if (principal instanceof UserDetails) {
-            username = ((UserDetails) principal).getUsername();
-        } else {
-            username = principal.toString();
-        }
-
-        // Fetch the current user and their pets
-        User currentUser = userService.findByUsername(username);
-        List<Pet> pets = petService.findPetsByUser(currentUser); // Get user's pets
-
-        // Fetch prescription requests for the current user
-        List<PrescriptionRequest> pendingRequests = prescriptionRequestService.findByUserId(currentUser.getId());
-
-        // Add pets and pending requests to the model
-        model.addAttribute("pets", pets);
-        model.addAttribute("pendingRequests", pendingRequests);
-        System.out.println("Pending Requests: " + pendingRequests);
-
-        return "prescription_management"; // Renders the HTML page
+    public PrescriptionController(AppointmentService appointmentService, UserService userService) {
+        this.appointmentService = appointmentService;
+        this.userService = userService;
     }
 
-    @PostMapping("/prescription-management/request") // Specify the URL for POST request
-    public String requestPrescription(@RequestParam String medication,
-            @RequestParam String reason,
-            @RequestParam Long petId) {
-        // Get the logged-in user's username
-        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        String username;
+    @GetMapping("/vethome")
+    public String vetHome(Model model) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String username = auth.getName();
+        User vetUser = userService.findByUsername(username);
 
-        if (principal instanceof UserDetails) {
-            username = ((UserDetails) principal).getUsername();
+        if (vetUser != null && vetUser.getRole() == UserRole.VET) {
+            List<Appointment> vetAppointments = appointmentService.getAppointmentsByVet(vetUser.getId());
+            model.addAttribute("appointments", vetAppointments);
+            model.addAttribute("username", username);
         } else {
-            username = principal.toString();
+            return "403";
         }
 
-        // Fetch the user using the username
-        User currentUser = userService.findByUsername(username);
+        return "vet-dashboard/vethome"; // Ensure this matches the template path
+    }
 
-        // Fetch the pet by ID
-        Pet pet = petService.findPetById(petId);
-        if (pet == null) {
-            return "redirect:/prescription-management?error=PetNotFound"; // Handle error appropriately
+    @GetMapping("/patients")
+    public String showPatientsDashboard(Model model) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String username = auth.getName();
+        logger.info("Fetching patients for vet: {}", username);
+        User vetUser = userService.findByUsername(username);
+
+        if (vetUser != null && vetUser.getRole() == UserRole.VET) {
+            logger.info("Vet user found: {}", vetUser);
+            // Fetch appointments for the logged-in vet
+            List<Appointment> vetAppointments = appointmentService.getAppointmentsByVet(vetUser.getId());
+            logger.info("Number of appointments found: {}", vetAppointments.size());
+
+            // Log detailed appointment information
+            vetAppointments.forEach(appointment -> logger.info(
+                    "Appointment details: ID={}, User ID={}, Pet ID={}, Pet Name={}",
+                    appointment.getId(), appointment.getUserId(), appointment.getPetId(), appointment.getPetName()));
+
+            // Extract unique client IDs from these appointments
+            List<Long> clientIds = vetAppointments.stream()
+                    .map(Appointment::getUserId)
+                    .distinct()
+                    .collect(Collectors.toList());
+            logger.info("Unique client IDs extracted: {}", clientIds);
+
+            // Fetch client details using these IDs
+            List<User> clients = userService.findAllById(clientIds);
+            logger.info("Number of clients found: {}", clients.size());
+
+            // Log client details
+            clients.forEach(client -> logger.info("Client details: ID={}, Username={}, Email={}",
+                    client.getId(), client.getUsername(), client.getEmail()));
+
+            model.addAttribute("clients", clients);
+            model.addAttribute("username", username);
+        } else {
+            logger.warn("Vet user not found or user is not a vet");
+            return "403";
         }
 
-        // Create a new prescription request with the current date
-        PrescriptionRequest request = new PrescriptionRequest(currentUser, pet, medication, reason);
-        request.setRequestDate(LocalDateTime.now()); // Set the current date and time
+        return "vet-dashboard/patients"; // Ensure this matches the template path
+    }
 
-        // Save the prescription request to the database
-        prescriptionRequestService.saveRequest(request);
+    @GetMapping("/send-prescription")
+    public String sendPrescription(@RequestParam Long clientId, Model model) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String username = auth.getName();
+        User vetUser = userService.findByUsername(username);
 
-        return "redirect:/prescription-management"; // Redirect to the request form
+        if (vetUser != null && vetUser.getRole() == UserRole.VET) {
+            User client = userService.findById(clientId);
+            if (client != null) {
+                model.addAttribute("client", client);
+                model.addAttribute("vetUser", vetUser);
+                return "vet-dashboard/send-prescription"; // Ensure this matches the template path
+            } else {
+                logger.warn("Client not found with ID: {}", clientId);
+                return "404";
+            }
+        } else {
+            logger.warn("Vet user not found or user is not a vet");
+            return "403";
+        }
     }
 }

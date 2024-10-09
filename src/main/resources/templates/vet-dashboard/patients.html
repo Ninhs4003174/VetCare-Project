@@ -3,58 +3,47 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vet Dashboard - Patients</title>
+    <title>Patients Dashboard</title>
     <link rel="stylesheet" href="/css/styles.css">
 </head>
 <body>
     <header>
         <nav>
             <ul class="navbar-menu">
-                <li><a href="vethome"><img src="img/logo.png" alt="Logo" class="logo"></a></li>
-                <li><a href="appointments">Appointments</a></li>
-                <li><a href="patients">Patients</a></li>
-                <li><a href="profile">Profile</a></li>
+                <li><a href="/vet-dashboard/vethome"><img src="/img/logo.png" alt="Logo" class="logo"></a></li>
+                <li><a href="/appointments">Appointments</a></li>
+                <li><a href="/patients">Patients</a></li>
+                <li><a href="/profile">Profile</a></li>
                 <li><a href="/logout">Log Out</a></li>
             </ul>
         </nav>
     </header>
     
     <main class="container">
-        <section id="overview">
-            <h2>Patients Dashboard</h2>
-            <p>Welcome to the patients dashboard. Here you can view and manage patient records.</p>
-        </section>
-        
-        <section id="patients-list">
-            <h3>Patient Records</h3>
-            <table>
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Vet User ID</th>
-                        <th>Pet Owner ID</th>
-                        <th>Clinic ID</th>
-                        <th>Service Type</th>
-                        <th>Address</th>
-                        <th>Phone Number</th>
-                        <th>Email</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <!-- Example row, replace with dynamic content -->
-                    <tr>
-                        <td>1</td>
-                        <td>101</td>
-                        <td>202</td>
-                        <td>303</td>
-                        <td>Check-up</td>
-                        <td>123 Vet St.</td>
-                        <td>(123) 456-7890</td>
-                        <td>clinic@example.com</td>
-                    </tr>
-                </tbody>
-            </table>
-        </section>
+        <h1>Patients Dashboard</h1>
+        <p>Logged in as: <span th:text="${username}"></span></p>
+        <table>
+            <thead>
+                <tr>
+                    <th>Username</th>
+                    <th>Email</th>
+                    <th>Phone Number</th>
+                    <th>Address</th>
+                    <th>Actions</th> <!-- New column for actions -->
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="client : ${clients}">
+                    <td th:text="${client.username}"></td>
+                    <td th:text="${client.email}"></td>
+                    <td th:text="${client.phoneNumber}"></td>
+                    <td th:text="${client.address}"></td>
+                    <td>
+                        <a th:href="@{/send-prescription(clientId=${client.id})}" class="btn">Send Prescription</a> <!-- New button -->
+                    </td>
+                </tr>
+            </tbody>
+        </table>
     </main>
     
     <footer>

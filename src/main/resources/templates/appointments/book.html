@@ -2,9 +2,11 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>Book an Appointment</title>
+    <!-- Link to external stylesheet -->
     <link rel="stylesheet" th:href="@{/css/appointmentstyle.css}">
 </head>
 <body>
+    <!-- Header section with navigation -->
     <header>
         <nav>
             <ul class="navbar-menu">
@@ -14,10 +16,12 @@
                 <li><a th:href="@{/appointments/compare-providers}">compare-providers</a></li>
                 <li><a href="profile">Profile</a></li>
                 <li><a href="/logout">Log Out</a></li>
+
             </ul>
         </nav>
     </header>
 
+    <!-- Main section where the form is located -->
     <main>
         <section class="appointment-form">
             <h1>Book an Appointment</h1>
@@ -28,11 +32,21 @@
                     <option th:each="pet : ${pets}" th:value="${pet.id}" th:text="${pet.name}"></option>
                 </select>
 
-                <label for="vetName">Vet Name:</label>
-                <select id="vetName" th:field="*{vetId}" class="select-field">
+                <!-- <label for="vetName">Vet Name:</label>
+                <select id="vetName" th:field="*{vetName}" class="select-field">
+                    <option value="" disabled selected>Select a vet</option>
+                    <option th:each="vet : ${vets}" th:value="${vet.name}" th:text="${vet.name}"></option>
+                </select> -->
+                <!-- <select id="vetName" th:field="*{vetName}" class="select-field">
                     <option value="" disabled selected>Select a vet</option>
                     <option th:each="vet : ${vets}" th:value="${vet.vetUserId}" th:text="${vet.vetName}"></option>
-                </select>
+                </select> -->
+
+                <label for="vetName">Vet Name:</label>
+<select id="vetName" th:field="*{vetId}" class="select-field">
+    <option value="" disabled selected>Select a vet</option>
+    <option th:each="vet : ${vets}" th:value="${vet.vetUserId}" th:text="${vet.vetName}"></option>
+</select>
 
                 <label for="date">Date:</label>
                 <input type="date" id="date" th:field="*{date}" required 
@@ -43,20 +57,23 @@
                 <label for="time">Time:</label>
                 <select id="time" th:field="*{time}" class="select-field">
                     <option value="" disabled selected>Select a time</option>
+                    <!-- Loop through time slots to display available ones -->
                     <option th:each="time : ${timeSlots}" th:value="${time}" th:text="${time}"></option>
                 </select>
 
-                
 
+                <!-- Error message display -->
                 <div th:if="${errorMessage}" class="alert alert-danger">
                     <p th:text="${errorMessage}"></p>
                 </div>
 
+                <!-- Submit button -->
                 <button type="submit" class="btn-primary">Book Appointment</button>
             </form>
         </section>
     </main>
 
+    <!-- Footer section with links and logos -->
     <footer>
         <p>© 2024 VetCare</p>
     </footer>

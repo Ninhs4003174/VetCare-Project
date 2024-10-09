@@ -10,10 +10,10 @@
     <header>
         <nav>
             <ul class="navbar-menu">
-                <li><a href="vethome"><img src="img/logo.png" alt="Logo" class="logo"></a></li>
-                <li><a href="appointments">Appointments</a></li>
-                <li><a href="patients">Patients</a></li>
-                <li><a href="profile">Profile</a></li>
+                <li><a href="/vet-dashboard/vethome"><img src="/img/logo.png" alt="Logo" class="logo"></a></li>
+                <li><a href="/appointments">Appointments</a></li>
+                <li><a href="/patients">Patients</a></li>
+                <li><a href="/profile">Profile</a></li>
                 <li><a href="/logout">Log Out</a></li>
             </ul>
         </nav>
@@ -23,6 +23,28 @@
         <section id="overview">
             <h2>Vet Dashboard</h2>
             <p>Welcome to the vet dashboard. Here you can manage appointments, view patient records, and update your profile. Use the navigation links above to access different sections.</p>
+        </section>
+        
+        <section id="appointments">
+            <h3>Your Appointments</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Time</th>
+                        <th>Pet Name</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="appointment : ${appointments}">
+                        <td th:text="${appointment.date}"></td>
+                        <td th:text="${appointment.time}"></td>
+                        <td th:text="${appointment.petName}"></td>
+                        <td th:text="${appointment.status}"></td>
+                    </tr>
+                </tbody>
+            </table>
         </section>
     </main>
     
