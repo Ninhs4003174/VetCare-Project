@@ -32,46 +32,47 @@ public class AppointmentController {
     private final UserService userService;
 
     @Autowired
-    public AppointmentController(AppointmentService appointmentService, VetBookingService vetService, UserService userService) {
+    public AppointmentController(AppointmentService appointmentService, VetBookingService vetService,
+            UserService userService) {
         this.appointmentService = appointmentService;
         this.vetService = vetService;
         this.userService = userService;
     }
 
     @GetMapping
-public String all(Model model) {
-    Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-    String username = auth.getName();
-    User user = userService.findByUsername(username);
+    public String all(Model model) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String username = auth.getName();
+        User user = userService.findByUsername(username);
 
-    List<Appointment> appointments = appointmentService.getAppointmentsByUser(user);
+        List<Appointment> appointments = appointmentService.getAppointmentsByUser(user);
 
-    // Create a list to hold appointment details along with vet name
-    List<Map<String, Object>> appointmentDetailsList = new ArrayList<>();
+        // Create a list to hold appointment details along with vet name
+        List<Map<String, Object>> appointmentDetailsList = new ArrayList<>();
 
-    for (Appointment appointment : appointments) {
-        Map<String, Object> appointmentDetails = new HashMap<>();
-        appointmentDetails.put("appointment", appointment);
+        for (Appointment appointment : appointments) {
+            Map<String, Object> appointmentDetails = new HashMap<>();
+            appointmentDetails.put("appointment", appointment);
 
-        // Fetch the vet details using vetId from the appointment
-        VetBooking vet = vetService.getAllVets().stream()
-            .filter(v -> v.getId().equals(appointment.getVetId()))  // Match based on vetId
-            .findFirst()
-            .orElse(null);
+            // Fetch the vet details using vetId from the appointment
+            VetBooking vet = vetService.getAllVets().stream()
+                    .filter(v -> v.getId().equals(appointment.getVetId())) // Match based on vetId
+                    .findFirst()
+                    .orElse(null);
 
-        if (vet != null) {
-            System.out.println("Vet Name: " + vet.getVetName());  // Debugging line
-            appointmentDetails.put("vetName", vet.getVetName());  // Add vet name to the details
-        } else {
-            System.out.println("Vet not found for Vet ID: " + appointment.getVetId());
+            if (vet != null) {
+                System.out.println("Vet Name: " + vet.getVetName()); // Debugging line
+                appointmentDetails.put("vetName", vet.getVetName()); // Add vet name to the details
+            } else {
+                System.out.println("Vet not found for Vet ID: " + appointment.getVetId());
+            }
+
+            appointmentDetailsList.add(appointmentDetails);
         }
 
-        appointmentDetailsList.add(appointmentDetails);
+        model.addAttribute("appointmentDetailsList", appointmentDetailsList);
+        return "appointments/list";
     }
-
-    model.addAttribute("appointmentDetailsList", appointmentDetailsList);
-    return "appointments/list";
-}
 
     @GetMapping("/book")
     public String showBookingForm(Model model) {
@@ -80,7 +81,7 @@ public String all(Model model) {
         // Generate time slots and add them to the model
         List<String> timeSlots = getTimeSlots();
         model.addAttribute("timeSlots", timeSlots);
- // Pass today's date and five days later for the date picker
+        // Pass today's date and five days later for the date picker
         LocalDate today = LocalDate.now();
         LocalDate fiveDaysLater = today.plusDays(5);
         model.addAttribute("today", today);
@@ -90,33 +91,34 @@ public String all(Model model) {
     }
 
     @PostMapping("/book")
-public String bookAppointment(@ModelAttribute Appointment appointment,BindingResult result, Model model) {
-    try {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        String username = auth.getName();
-        User user = userService.findByUsername(username);
-        System.out.println("Selected Vet: " + appointment.getVetId());  // Debugging line
+    public String bookAppointment(@ModelAttribute Appointment appointment, BindingResult result, Model model) {
+        try {
+            Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+            String username = auth.getName();
+            User user = userService.findByUsername(username);
+            System.out.println("Selected Vet: " + appointment.getVetId()); // Debugging line
 
-        if (user == null) {
-            throw new IllegalArgumentException("User not found.");
+            if (user == null) {
+                throw new IllegalArgumentException("User not found.");
+            }
+            if (result.hasErrors()) {
+                model.addAttribute("vets", vetService.getAllVets());
+                model.addAttribute("timeSlots", getTimeSlots()); // Add time slots on error
+                return "appointments/book";
+            }
+            System.out.println("Selected Vet: " + appointment.getVetId());
+            appointment.setUser(user); // Make sure user is set in the appointment
+            appointmentService.saveAppointment(appointment);
+        } catch (IllegalArgumentException e) {
+            model.addAttribute("errorMessage", e.getMessage());
+            model.addAttribute("vets", vetService.getAllVets());
+            model.addAttribute("timeSlots", getTimeSlots());
+            return "appointments/book";
         }
-        if (result.hasErrors()) {
-                       model.addAttribute("vets", vetService.getAllVets());
-                         model.addAttribute("timeSlots", getTimeSlots());  // Add time slots on error
-                        return "appointments/book";
-                    }
-                    System.out.println("Selected Vet: " + appointment.getVetId());
-        appointment.setUser(user);  // Make sure user is set in the appointment
-        appointmentService.saveAppointment(appointment);
-    } catch (IllegalArgumentException e) {
-        model.addAttribute("errorMessage", e.getMessage());
-        model.addAttribute("vets", vetService.getAllVets());
-        model.addAttribute("timeSlots", getTimeSlots());
-        return "appointments/book";
+        return "redirect:/appointments";
     }
-    return "redirect:/appointments";
-}
-// Helper method to generate time slots from 9 AM to 5 PM
+
+    // Helper method to generate time slots from 9 AM to 5 PM
     private List<String> getTimeSlots() {
         List<String> timeSlots = new ArrayList<>();
         LocalTime startTime = LocalTime.of(9, 0);
@@ -129,84 +131,79 @@ public String bookAppointment(@ModelAttribute Appointment appointment,BindingRes
         return timeSlots;
     }
 
-@PostMapping("/cancel")
-public String cancelAppointment(@ModelAttribute("id") Long id) {
-appointmentService.cancelAppointment(id);
-return "redirect:/appointments";
-}
-
-@GetMapping("/edit/{id}")
-public String showEditForm(@PathVariable("id") Long id, Model model) {
-    Appointment appointment = appointmentService.findAppointmentById(id); // Get the appointment by ID
-    model.addAttribute("appointment", appointment);
-    model.addAttribute("vets", vetService.getAllVets()); // Pass the list of vets
-
-    // Generate time slots and add them to the model
-    List<String> timeSlots = getTimeSlots();
-    model.addAttribute("timeSlots", timeSlots);
-
-    return "appointments/edit"; // Return the edit form
-}
-
-@PostMapping("/edit")
-public String editAppointment(@ModelAttribute Appointment appointment, BindingResult result, Model model) {
-    if (result.hasErrors()) {
-        model.addAttribute("vets", vetService.getAllVets());
-        model.addAttribute("timeSlots", getTimeSlots()); // Add time slots on error
-        return "appointments/edit";
+    @PostMapping("/cancel")
+    public String cancelAppointment(@ModelAttribute("id") Long id) {
+        appointmentService.cancelAppointment(id);
+        return "redirect:/appointments";
     }
 
-    try {
-        // Retrieve the logged-in user
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        String username = auth.getName();
-        User user = userService.findByUsername(username);
+    @GetMapping("/edit/{id}")
+    public String showEditForm(@PathVariable("id") Long id, Model model) {
+        Appointment appointment = appointmentService.findAppointmentById(id); // Get the appointment by ID
+        model.addAttribute("appointment", appointment);
+        model.addAttribute("vets", vetService.getAllVets()); // Pass the list of vets
 
-        if (user == null) {
-            throw new IllegalArgumentException("User not found.");
+        // Generate time slots and add them to the model
+        List<String> timeSlots = getTimeSlots();
+        model.addAttribute("timeSlots", timeSlots);
+
+        return "appointments/edit"; // Return the edit form
+    }
+
+    @PostMapping("/edit")
+    public String editAppointment(@ModelAttribute Appointment appointment, BindingResult result, Model model) {
+        if (result.hasErrors()) {
+            model.addAttribute("vets", vetService.getAllVets());
+            model.addAttribute("timeSlots", getTimeSlots()); // Add time slots on error
+            return "appointments/edit";
         }
 
-        // Set the user in the appointment before updating
-        appointment.setUser(user);
+        try {
+            // Retrieve the logged-in user
+            Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+            String username = auth.getName();
+            User user = userService.findByUsername(username);
 
-        // Proceed with updating the appointment
-        appointmentService.updateAppointment(appointment);
-    } catch (IllegalArgumentException e) {
-        model.addAttribute("errorMessage", e.getMessage());
-        model.addAttribute("vets", vetService.getAllVets());
-        model.addAttribute("timeSlots", getTimeSlots()); // Add time slots on error
-        return "appointments/edit";
+            if (user == null) {
+                throw new IllegalArgumentException("User not found.");
+            }
+
+            // Set the user in the appointment before updating
+            appointment.setUser(user);
+
+            // Proceed with updating the appointment
+            appointmentService.updateAppointment(appointment);
+        } catch (IllegalArgumentException e) {
+            model.addAttribute("errorMessage", e.getMessage());
+            model.addAttribute("vets", vetService.getAllVets());
+            model.addAttribute("timeSlots", getTimeSlots()); // Add time slots on error
+            return "appointments/edit";
+        }
+
+        return "redirect:/appointments"; // Redirect to the list after successful update
     }
 
-    return "redirect:/appointments"; // Redirect to the list after successful update
-}
-@GetMapping("/compare-providers")
-public String compareProviders(
-    @RequestParam(value = "serviceType", required = false) String serviceType,
-    @RequestParam(value = "location", required = false) String location,
-    Model model) {
-    try {
-        // Fetch the filtered vets based on serviceType and location
-        List<VetBooking> filteredVets = vetService.getFilteredVets(serviceType, location);
+    @GetMapping("/compare-providers")
+    public String compareProviders(
+            @RequestParam(value = "serviceType", required = false) String serviceType,
+            @RequestParam(value = "location", required = false) String location,
+            Model model) {
+        try {
+            // Fetch the filtered vets based on serviceType and location
+            List<VetBooking> filteredVets = vetService.getFilteredVets(serviceType, location);
 
-        // Add the list of filtered vets to the model
-        model.addAttribute("filteredVets", filteredVets);
-    } catch (Exception e) {
-        // Handle errors (such as database connection issues)
-        model.addAttribute("errorMessage", "Unable to load comparison data due to a server error.");
+            // Add the list of filtered vets to the model
+            model.addAttribute("filteredVets", filteredVets);
+        } catch (Exception e) {
+            // Handle errors (such as database connection issues)
+            model.addAttribute("errorMessage", "Unable to load comparison data due to a server error.");
+        }
+
+        // Pass filter criteria back to the view so the user sees what they selected
+        model.addAttribute("serviceType", serviceType);
+        model.addAttribute("location", location);
+
+        return "appointments/compare-providers"; // New view for comparing providers
     }
 
-    // Pass filter criteria back to the view so the user sees what they selected
-    model.addAttribute("serviceType", serviceType);
-    model.addAttribute("location", location);
-
-    return "appointments/compare-providers";  // New view for comparing providers
 }
-
-
-
-}
-
-
-
-

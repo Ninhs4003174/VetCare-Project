@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @Controller
-@RequestMapping("/admin-dashboard")
 public class AdminDashBoardController {
 
     @Autowired
@@ -69,7 +68,7 @@ public class AdminDashBoardController {
     public String addVet(@ModelAttribute User user) {
         user.setRole(UserRole.VET);
         userService.saveUser(user);
-        return "redirect:/admin-dashboard/vetlist";
+        return "redirect:/vetlist";
     }
 
     @GetMapping("/add-user")
@@ -82,7 +81,7 @@ public class AdminDashBoardController {
     public String addUser(@ModelAttribute User user) {
         user.setRole(UserRole.CLIENT);
         userService.saveUser(user);
-        return "redirect:/admin-dashboard/userlist";
+        return "redirect:/userlist";
     }
 
     @GetMapping("/add-clinic")
@@ -95,7 +94,7 @@ public class AdminDashBoardController {
     public String addClinic(@ModelAttribute User user) {
         user.setRole(UserRole.RECEPTIONIST);
         userService.saveUser(user);
-        return "redirect:/admin-dashboard/cliniclist";
+        return "redirect:/cliniclist";
     }
 
     @GetMapping("/add-admin")
@@ -108,7 +107,7 @@ public class AdminDashBoardController {
     public String addAdmin(@ModelAttribute User user) {
         user.setRole(UserRole.ADMIN);
         userService.saveUser(user);
-        return "redirect:/admin-dashboard/adminlist";
+        return "redirect:/adminlist";
     }
 
     // Pet Records Management
@@ -116,14 +115,14 @@ public class AdminDashBoardController {
     @PostMapping("/records/create")
     public String createPetRecord(@ModelAttribute PetRecord petRecord) {
         petRecordService.save(petRecord);
-        return "redirect:/admin-dashboard/records";
+        return "redirect:/records";
     }
 
     @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/records/delete/{id}")
     public String deletePetRecord(@PathVariable Long id) {
         petRecordService.delete(id);
-        return "redirect:/admin-dashboard/records";
+        return "redirect:/records";
     }
 
     @GetMapping("/records")
@@ -142,7 +141,7 @@ public class AdminDashBoardController {
     @PostMapping("/records/save")
     public String saveRecord(@ModelAttribute PetRecord petRecord) {
         petRecordService.save(petRecord);
-        return "redirect:/admin-dashboard/records";
+        return "redirect:/records";
     }
 
     @GetMapping("/records/edit/{id}")
@@ -172,6 +171,6 @@ public class AdminDashBoardController {
 
             petRecordService.update(existingRecord);
         }
-        return "redirect:/admin-dashboard/records";
+        return "redirect:/records";
     }
 }
