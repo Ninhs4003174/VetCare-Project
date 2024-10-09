@@ -9,39 +9,43 @@ public class PrescriptionRequest {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long requestId;
+    private Long id;
 
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
     @ManyToOne
-    @JoinColumn(name = "pet_id", nullable = false)
-    private Pet pet;
+    @JoinColumn(name = "prescription_id", nullable = false)
+    private Prescription prescription;
 
-    private String medication;
-    private String reason;
+    private String petName; // Use petName instead of pet relationship
+    private String status = "PENDING"; // Possible values: PENDING, APPROVED, DENIED
+    private LocalDateTime requestedAt = LocalDateTime.now();
+    private LocalDateTime processedAt;
+    private String comments;
 
-    private LocalDateTime requestDate = LocalDateTime.now();
-    private String status = "Pending"; // Possible values: Pending, Approved, Rejected
+    @ManyToOne
+    @JoinColumn(name = "processed_by")
+    private User processedBy;
 
     // Constructors, getters, setters
     public PrescriptionRequest() {
     }
 
-    public PrescriptionRequest(User user, Pet pet, String medication, String reason) {
+    public PrescriptionRequest(User user, Prescription prescription, String petName, String comments) {
         this.user = user;
-        this.pet = pet;
-        this.medication = medication;
-        this.reason = reason;
+        this.prescription = prescription;
+        this.petName = petName;
+        this.comments = comments;
     }
 
-    public Long getRequestId() {
-        return requestId;
+    public Long getId() {
+        return id;
     }
 
-    public void setRequestId(Long requestId) {
-        this.requestId = requestId;
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public User getUser() {
@@ -52,36 +56,20 @@ public class PrescriptionRequest {
         this.user = user;
     }
 
-    public Pet getPet() {
-        return pet;
+    public Prescription getPrescription() {
+        return prescription;
     }
 
-    public void setPet(Pet pet) {
-        this.pet = pet;
+    public void setPrescription(Prescription prescription) {
+        this.prescription = prescription;
     }
 
-    public String getMedication() {
-        return medication;
+    public String getPetName() {
+        return petName;
     }
 
-    public void setMedication(String medication) {
-        this.medication = medication;
-    }
-
-    public String getReason() {
-        return reason;
-    }
-
-    public void setReason(String reason) {
-        this.reason = reason;
-    }
-
-    public LocalDateTime getRequestDate() {
-        return requestDate;
-    }
-
-    public void setRequestDate(LocalDateTime requestDate) {
-        this.requestDate = requestDate;
+    public void setPetName(String petName) {
+        this.petName = petName;
     }
 
     public String getStatus() {
@@ -92,4 +80,41 @@ public class PrescriptionRequest {
         this.status = status;
     }
 
+    public LocalDateTime getRequestedAt() {
+        return requestedAt;
+    }
+
+    public void setRequestedAt(LocalDateTime requestedAt) {
+        this.requestedAt = requestedAt;
+    }
+
+    public LocalDateTime getProcessedAt() {
+        return processedAt;
+    }
+
+    public void setProcessedAt(LocalDateTime processedAt) {
+        this.processedAt = processedAt;
+    }
+
+    public String getComments() {
+        return comments;
+    }
+
+    public void setComments(String comments) {
+        this.comments = comments;
+    }
+
+    public User getProcessedBy() {
+        return processedBy;
+    }
+
+    public void setProcessedBy(User processedBy) {
+        this.processedBy = processedBy;
+        this.processedAt = LocalDateTime.now();
+        this.status = "APPROVED"; // Assuming the status should be set to APPROVED when processed
+    }
+
+    public Long getPrescriptionId() {
+        return this.prescription != null ? this.prescription.getId() : null;
+    }
 }

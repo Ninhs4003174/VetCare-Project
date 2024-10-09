@@ -1,9 +1,14 @@
 package au.edu.rmit.sept.webapp.controller;
 
 import au.edu.rmit.sept.webapp.model.Pet;
+import au.edu.rmit.sept.webapp.model.Prescription;
 import au.edu.rmit.sept.webapp.model.User;
 import au.edu.rmit.sept.webapp.service.PetService;
+import au.edu.rmit.sept.webapp.service.PrescriptionService;
 import au.edu.rmit.sept.webapp.service.UserService;
+
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -19,7 +24,12 @@ public class ProfileController {
 
     @Autowired
     private UserService userService;
-    private PetService petService;
+
+    @Autowired
+    private PrescriptionService prescriptionService; // Ensure this is autowired
+
+    @Autowired
+    private PetService petService; // Ensure this is autowired
 
     @GetMapping("/profile")
     public String showProfile(Model model) {
@@ -159,5 +169,33 @@ public class ProfileController {
         redirectAttributes.addFlashAttribute("message", "Pet added successfully!");
         redirectAttributes.addFlashAttribute("success", true); // Indicate success
         return "redirect:/profile"; // Redirect to profile page after adding pet
+    }
+
+    @GetMapping("/user-prescriptions")
+    public String showUserPrescriptions(Model model) {
+        // Get the logged-in user's username
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String username;
+
+        if (principal instanceof UserDetails) {
+            username = ((UserDetails) principal).getUsername();
+        } else {
+            username = principal.toString();
+        }
+
+        // Fetch the user details using the username
+        User user = userService.findByUsername(username);
+        if (user == null) {
+            model.addAttribute("message", "User not found");
+            return "error"; // Redirect to an error page or handle appropriately
+        }
+
+        // Fetch the prescriptions for the user
+        List<Prescription> prescriptions = prescriptionService.findByUser(user.getId());
+
+        // Add the prescriptions to the model to pass to the view
+        model.addAttribute("prescriptions", prescriptions);
+
+        return "profile/user-prescriptions"; // The name of your Thymeleaf template
     }
 }
