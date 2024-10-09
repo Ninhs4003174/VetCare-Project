@@ -4,6 +4,7 @@ import au.edu.rmit.sept.webapp.model.PetRecord;
 import au.edu.rmit.sept.webapp.service.PetRecordService;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -14,6 +15,20 @@ public class PetRecordController {
 
     @Autowired
     private PetRecordService petRecordService;
+
+    @PreAuthorize("hasRole('ADMIN')")
+    @PostMapping("/create")
+    public String createPetRecord(@RequestBody PetRecord petRecord) {
+        petRecordService.save(petRecord);
+        return "redirect:/records"; // Redirect to records list after creation
+    }
+
+    @PreAuthorize("hasRole('ADMIN')")
+    @GetMapping("/delete/{id}")
+    public String deletePetRecord(@PathVariable Long id) {
+        petRecordService.delete(id);
+        return "redirect:/records"; // Redirect to records list after deletion
+    }
 
     @GetMapping
     public String getAllRecords(Model model) {
