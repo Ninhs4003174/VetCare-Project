@@ -39,8 +39,9 @@ public class ProfileController {
             return "error"; // Redirect to an error page or handle appropriately
         }
 
-        // Add the user to the model to pass to the view
+        // Add the user and user role to the model to pass to the view
         model.addAttribute("user", user);
+        model.addAttribute("userRole", user.getRole());
 
         return "profile"; // The name of your Thymeleaf template
     }
