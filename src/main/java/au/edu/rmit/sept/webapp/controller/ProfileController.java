@@ -1,6 +1,8 @@
 package au.edu.rmit.sept.webapp.controller;
 
+import au.edu.rmit.sept.webapp.model.Pet;
 import au.edu.rmit.sept.webapp.model.User;
+import au.edu.rmit.sept.webapp.service.PetService;
 import au.edu.rmit.sept.webapp.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -17,6 +19,7 @@ public class ProfileController {
 
     @Autowired
     private UserService userService;
+    private PetService petService;
 
     @GetMapping("/profile")
     public String showProfile(Model model) {
@@ -94,5 +97,67 @@ public class ProfileController {
             redirectAttributes.addFlashAttribute("success", false); // Indicate failure
             return "redirect:/edit-user"; // Redirect back to edit user form on error
         }
+    }
+
+    @GetMapping("/add-pet")
+    public String showAddPetForm(Model model) {
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String username;
+
+        if (principal instanceof UserDetails) {
+            username = ((UserDetails) principal).getUsername();
+        } else {
+            username = principal.toString();
+        }
+
+        User user = userService.findByUsername(username);
+        if (user == null) {
+            model.addAttribute("message", "User not found");
+            return "error"; // Redirect to an error page or handle appropriately
+        }
+
+        model.addAttribute("user", user);
+        return "add-pet"; // Return the Thymeleaf template for adding a pet
+    }
+
+    @PostMapping("/add-pet")
+    public String addPet(
+            @RequestParam String petName,
+            @RequestParam String petType,
+            @RequestParam int petAge,
+            @RequestParam String petBio,
+            RedirectAttributes redirectAttributes) {
+
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String username;
+
+        if (principal instanceof UserDetails) {
+            username = ((UserDetails) principal).getUsername();
+        } else {
+            username = principal.toString();
+        }
+
+        User user = userService.findByUsername(username);
+        if (user == null) {
+            redirectAttributes.addFlashAttribute("message", "User not found");
+            redirectAttributes.addFlashAttribute("success", false); // Indicate failure
+            return "redirect:/add-pet";
+        }
+
+        // Validate pet age
+        if (petAge < 0 || petAge > 20) {
+            redirectAttributes.addFlashAttribute("message", "Pet age must be between 0 and 20 years");
+            redirectAttributes.addFlashAttribute("success", false); // Indicate failure
+            return "redirect:/add-pet";
+        }
+
+        // Create and register new pet
+        Pet newPet = new Pet(petName, petType, petAge, petBio, user);
+        user.getPets().add(newPet);
+        petService.addPet(newPet);
+
+        redirectAttributes.addFlashAttribute("message", "Pet added successfully!");
+        redirectAttributes.addFlashAttribute("success", true); // Indicate success
+        return "redirect:/profile"; // Redirect to profile page after adding pet
     }
 }
