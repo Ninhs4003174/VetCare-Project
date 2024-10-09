@@ -1,23 +1,29 @@
 package au.edu.rmit.sept.webapp.controller;
 
+import au.edu.rmit.sept.webapp.model.PetRecord;
 import au.edu.rmit.sept.webapp.model.User;
 import au.edu.rmit.sept.webapp.model.enums.UserRole;
+import au.edu.rmit.sept.webapp.service.PetRecordService;
 import au.edu.rmit.sept.webapp.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @Controller
+@RequestMapping("/admin-dashboard")
 public class AdminDashBoardController {
 
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private PetRecordService petRecordService;
+
+    // User and Role Management
     @GetMapping("/adminlist")
     public String adminList(Model model) {
         List<User> admins = userService.getUsersByRole(UserRole.ADMIN);
@@ -46,6 +52,7 @@ public class AdminDashBoardController {
         return "admin-dashboard/vetlist";
     }
 
+    // Add users, clinics, and vets
     @GetMapping("/add-vet")
     public String addVetForm(Model model) {
         List<User> clinics = userService.getUsersByRole(UserRole.RECEPTIONIST);
@@ -62,7 +69,7 @@ public class AdminDashBoardController {
     public String addVet(@ModelAttribute User user) {
         user.setRole(UserRole.VET);
         userService.saveUser(user);
-        return "redirect:/vetlist";
+        return "redirect:/admin-dashboard/vetlist";
     }
 
     @GetMapping("/add-user")
@@ -75,7 +82,7 @@ public class AdminDashBoardController {
     public String addUser(@ModelAttribute User user) {
         user.setRole(UserRole.CLIENT);
         userService.saveUser(user);
-        return "redirect:/userlist";
+        return "redirect:/admin-dashboard/userlist";
     }
 
     @GetMapping("/add-clinic")
@@ -88,7 +95,7 @@ public class AdminDashBoardController {
     public String addClinic(@ModelAttribute User user) {
         user.setRole(UserRole.RECEPTIONIST);
         userService.saveUser(user);
-        return "redirect:/cliniclist";
+        return "redirect:/admin-dashboard/cliniclist";
     }
 
     @GetMapping("/add-admin")
@@ -101,6 +108,70 @@ public class AdminDashBoardController {
     public String addAdmin(@ModelAttribute User user) {
         user.setRole(UserRole.ADMIN);
         userService.saveUser(user);
-        return "redirect:/adminlist";
+        return "redirect:/admin-dashboard/adminlist";
+    }
+
+    // Pet Records Management
+    @PreAuthorize("hasRole('ADMIN')")
+    @PostMapping("/records/create")
+    public String createPetRecord(@ModelAttribute PetRecord petRecord) {
+        petRecordService.save(petRecord);
+        return "redirect:/admin-dashboard/records";
+    }
+
+    @PreAuthorize("hasRole('ADMIN')")
+    @GetMapping("/records/delete/{id}")
+    public String deletePetRecord(@PathVariable Long id) {
+        petRecordService.delete(id);
+        return "redirect:/admin-dashboard/records";
+    }
+
+    @GetMapping("/records")
+    public String getAllRecords(Model model) {
+        model.addAttribute("records", petRecordService.getAllPetRecords());
+        return "admin-dashboard/records";
+    }
+
+    @GetMapping("/records/new")
+    public String showNewRecordForm(Model model) {
+        PetRecord petRecord = new PetRecord();
+        model.addAttribute("petRecord", petRecord);
+        return "admin-dashboard/new_record";
+    }
+
+    @PostMapping("/records/save")
+    public String saveRecord(@ModelAttribute PetRecord petRecord) {
+        petRecordService.save(petRecord);
+        return "redirect:/admin-dashboard/records";
+    }
+
+    @GetMapping("/records/edit/{id}")
+    public String showEditRecordForm(@PathVariable Long id, Model model) {
+        PetRecord petRecord = petRecordService.getPetRecordById(id);
+        model.addAttribute("petRecord", petRecord);
+        return "admin-dashboard/edit_record";
+    }
+
+    @PostMapping("/records/update/{id}")
+    public String updateRecord(@PathVariable Long id, @ModelAttribute PetRecord petRecord) {
+        PetRecord existingRecord = petRecordService.getPetRecordById(id);
+        if (existingRecord != null) {
+            // Update fields
+            existingRecord.setName(petRecord.getName());
+            existingRecord.setBreed(petRecord.getBreed());
+            existingRecord.setDateOfBirth(petRecord.getDateOfBirth());
+            existingRecord.setVeterinarian(petRecord.getVeterinarian());
+            existingRecord.setLastVisit(petRecord.getLastVisit());
+            existingRecord.setAllergies(petRecord.getAllergies());
+            existingRecord.setPrescriptions(petRecord.getPrescriptions());
+            existingRecord.setVaccinationHistory(petRecord.getVaccinationHistory());
+            existingRecord.setRecentTests(petRecord.getRecentTests());
+            existingRecord.setRecentSurgeries(petRecord.getRecentSurgeries());
+            existingRecord.setDietaryRecommendations(petRecord.getDietaryRecommendations());
+            existingRecord.setNotes(petRecord.getNotes());
+
+            petRecordService.update(existingRecord);
+        }
+        return "redirect:/admin-dashboard/records";
     }
 }
