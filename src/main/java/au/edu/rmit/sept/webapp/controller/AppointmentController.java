@@ -179,6 +179,8 @@ public class AppointmentController {
             if (user == null) {
                 throw new IllegalArgumentException("User not found.");
             }
+            // Set the status to "Scheduled" during updates
+        appointment.setStatus("Scheduled");
 
             appointment.setUser(user);
             appointmentService.updateAppointment(appointment);
