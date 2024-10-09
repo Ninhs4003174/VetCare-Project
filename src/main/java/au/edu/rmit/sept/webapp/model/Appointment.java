@@ -111,18 +111,21 @@ public class Appointment {
     public String formattedDetails() {
         // Debugging output
         System.out.println("Vet ID in formattedDetails: " + vetId);
-
+    
         // Start with pet name
-        String appointmentDetails = (petName == null) ? "Unknown Pet" : petName;
-
-        // Add vet ID
-        appointmentDetails += " with Vet ID " + ((vetId == null) ? "Unknown Vet" : vetId);
+        StringBuilder appointmentDetails = new StringBuilder((petName == null) ? "Unknown Pet" : petName);
+    
 
         // Add date and time
-        appointmentDetails += " on " + date + " at " + time;
-
-        System.out.println("Formatted Details: " + appointmentDetails);
-
-        return appointmentDetails;
+        appointmentDetails.append(" on ").append((date == null) ? "Unknown Date" : date);
+        appointmentDetails.append(" at ").append((time == null) ? "Unknown Time" : time);
+    
+        // Add appointment status
+        appointmentDetails.append(". Status: ").append((status == null) ? "Unknown Status" : status);
+    
+        System.out.println("Formatted Details: " + appointmentDetails.toString());
+    
+        return appointmentDetails.toString();
     }
+    
 }

@@ -209,5 +209,24 @@ public class AppointmentController {
 
         return "appointments/compare-providers";
     }
-
-}
+    @PostMapping("/updateStatus")
+    public String updateAppointmentStatus(
+        @RequestParam Long appointmentId, 
+        @RequestParam String status, 
+        Model model) {
+        
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String username = auth.getName();
+        User vetUser = userService.findByUsername(username);
+    
+        if (vetUser != null && vetUser.getRole() == UserRole.VET) {
+            // Use the new service method to update the status
+            appointmentService.updateAppointmentStatus(appointmentId, status);
+    
+            return "redirect:/vethome"; // Redirect back to vet's dashboard after update
+        } else {
+            return "403"; // Unauthorized access
+        }
+    }
+    
+} 
