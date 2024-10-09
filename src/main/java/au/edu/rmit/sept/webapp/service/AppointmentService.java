@@ -18,6 +18,9 @@ public interface AppointmentService {
     Appointment findAppointmentById(Long id);
 
     void updateAppointment(Appointment appointment);
+    
 
     List<Appointment> getAppointmentsByVet(Long vetId);
+     // New method to update appointment status
+     void updateAppointmentStatus(Long appointmentId, String status);
 }

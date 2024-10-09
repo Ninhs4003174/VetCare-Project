@@ -141,4 +141,19 @@ public class AppointmentServiceImpl implements AppointmentService {
 
         repository.save(appointment);
     }
+    
+
+    @Override
+    public void updateAppointmentStatus(Long appointmentId, String status) {
+        // Fetch the appointment by ID
+        Appointment appointment = repository.findById(appointmentId)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid appointment ID: " + appointmentId));
+
+        // Update the status of the appointment
+        appointment.setStatus(status);
+
+        // Save the updated appointment
+        repository.save(appointment);
+    }
+
 }
