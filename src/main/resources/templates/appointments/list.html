@@ -41,8 +41,13 @@
                     <span th:text="${appointmentDetails.get('appointment').formattedDetails()}">Appointment details</span>
                     <span> - Vet: <span th:text="${appointmentDetails.get('vetName')}">Vet Name</span></span>
 
-                    <!-- Only show Cancel and Edit buttons if the status is not COMPLETED -->
-                    <span th:if="${appointmentDetails.get('appointment').status != 'COMPLETED'}">
+                    <!-- Check if appointment status is 'REJECTED' -->
+                    <span th:if="${appointmentDetails.get('appointment').status == 'REJECTED'}">
+                        <p>Your appointment has been rejected. Please book a new appointment.</p>
+                    </span>
+
+                    <!-- Show Cancel and Edit buttons if the status is neither 'COMPLETED' nor 'REJECTED' -->
+                    <span th:if="${appointmentDetails.get('appointment').status != 'COMPLETED' && appointmentDetails.get('appointment').status != 'REJECTED'}">
                         <!-- Cancel button -->
                         <form th:action="@{/appointments/cancel}" method="post" style="display:inline;">
                             <input type="hidden" th:value="${appointmentDetails.get('appointment').id}" name="id" />
