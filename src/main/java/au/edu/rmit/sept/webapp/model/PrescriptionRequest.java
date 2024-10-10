@@ -12,10 +12,6 @@ public class PrescriptionRequest {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false)
-    private User user;
-
-    @ManyToOne
     @JoinColumn(name = "prescription_id", nullable = false)
     private Prescription prescription;
 
@@ -33,8 +29,7 @@ public class PrescriptionRequest {
     public PrescriptionRequest() {
     }
 
-    public PrescriptionRequest(User user, Prescription prescription, String petName, String comments) {
-        this.user = user;
+    public PrescriptionRequest(Prescription prescription, String petName, String comments) {
         this.prescription = prescription;
         this.petName = petName;
         this.comments = comments;
@@ -46,14 +41,6 @@ public class PrescriptionRequest {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
     }
 
     public Prescription getPrescription() {
@@ -116,5 +103,12 @@ public class PrescriptionRequest {
 
     public Long getPrescriptionId() {
         return this.prescription != null ? this.prescription.getId() : null;
+    }
+
+    public void setPrescriptionId(Long prescriptionId) {
+        if (this.prescription == null) {
+            this.prescription = new Prescription();
+        }
+        this.prescription.setId(prescriptionId);
     }
 }

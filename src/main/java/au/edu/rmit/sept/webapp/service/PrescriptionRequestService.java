@@ -22,10 +22,6 @@ public class PrescriptionRequestService {
     @Autowired
     private PrescriptionRequestRepository prescriptionRequestRepository;
 
-    public List<PrescriptionRequest> findByUserId(Long userId) {
-        return prescriptionRequestRepository.findByUserId(userId);
-    }
-
     public void saveRequest(PrescriptionRequest request) {
         prescriptionRequestRepository.save(request);
     }

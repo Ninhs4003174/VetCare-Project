@@ -91,10 +91,6 @@ public class UserService implements UserDetailsService {
         return userRepository.findByUsername(username) != null;
     }
 
-    public List<PrescriptionRequest> findPrescriptionRequestsByUserId(Long userId) {
-        return prescriptionRequestRepository.findByUserId(userId);
-    }
-
     public boolean isEmailTaken(String email) {
         return userRepository.findByEmail(email) != null;
     }
