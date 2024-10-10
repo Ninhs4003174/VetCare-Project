@@ -23,7 +23,8 @@ public class PetRecord {
     private String recentSurgeries;
     private String dietaryRecommendations;
     private String notes;
-    private String veterinarian; // Add veterinarian field
+    private String veterinarian;
+    private String owner; // Add owner field
 
     // Constructors
     public PetRecord() {
@@ -32,7 +33,7 @@ public class PetRecord {
     public PetRecord(String name, String breed, String dateOfBirth, String lastVisit, String allergies,
             String prescriptions, String vaccinationHistory, String recentTests,
             String recentSurgeries, String dietaryRecommendations, String notes,
-            String veterinarian) { // Add veterinarian to the constructor
+            String veterinarian, String owner) {
         this.name = name;
         this.breed = breed;
         this.dateOfBirth = dateOfBirth;
@@ -44,7 +45,8 @@ public class PetRecord {
         this.recentSurgeries = recentSurgeries;
         this.dietaryRecommendations = dietaryRecommendations;
         this.notes = notes;
-        this.veterinarian = veterinarian; // Set veterinarian
+        this.veterinarian = veterinarian;
+        this.owner = owner;
     }
 
     // Getters and Setters
@@ -150,5 +152,13 @@ public class PetRecord {
 
     public void setVeterinarian(String veterinarian) {
         this.veterinarian = veterinarian;
+    }
+
+    public String getOwner() {
+        return owner;
+    }
+
+    public void setOwner(String owner) {
+        this.owner = owner;
     }
 }
