@@ -10,24 +10,21 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-
 import au.edu.rmit.sept.webapp.model.PetRecord;
 
 @Controller
-public class VetCareHomeController {
+public class VetHomeController {
 
     @Autowired
     private PetRecordService petRecordService;
 
     @GetMapping("/vetcaresystemhome")
     public String showHome() {
-        return "vetcaresystemhome"; // Serve the role selection view
+        return "vetcaresystemhome";
     }
 
     @PostMapping("/vetcaresystemhome/selectrole")
     public String handleRoleSelection(@RequestParam("role") String role) {
-        System.out.println("Selected role: " + role); // Add this line for debugging
-        // Redirect to the appropriate login page based on the role
         switch (role) {
             case "CLIENT":
                 return "redirect:/login-client";
@@ -36,42 +33,41 @@ public class VetCareHomeController {
             case "VETERINARIAN":
                 return "redirect:/login-veterinarian";
             default:
-                // Handle unknown roles by redirecting back to the role selection page
                 return "redirect:/vetcaresystemhome";
         }
     }
 
-    @GetMapping("/records")
+    // Pet Records Management
+    @GetMapping("/vet/records")
     public String getAllRecords(Model model) {
         model.addAttribute("records", petRecordService.getAllPetRecords());
-        return "admin-dashboard/records";
+        return "vet-dashboard/records";
     }
 
-    @GetMapping("/records/new")
+    @GetMapping("/vet/records/new")
     public String showNewRecordForm(Model model) {
         PetRecord petRecord = new PetRecord();
         model.addAttribute("petRecord", petRecord);
-        return "admin-dashboard/new_record";
+        return "vet-dashboard/new_record";
     }
 
-    @PostMapping("/records/save")
+    @PostMapping("/vet/records/save")
     public String saveRecord(@ModelAttribute PetRecord petRecord) {
         petRecordService.save(petRecord);
-        return "redirect:/records";
+        return "redirect:/vet/records";
     }
 
-    @GetMapping("/records/edit/{id}")
+    @GetMapping("/vet/records/edit/{id}")
     public String showEditRecordForm(@PathVariable Long id, Model model) {
         PetRecord petRecord = petRecordService.getPetRecordById(id);
         model.addAttribute("petRecord", petRecord);
-        return "admin-dashboard/edit_record";
+        return "vet-dashboard/edit_record";
     }
 
-    @PostMapping("/records/update/{id}")
+    @PostMapping("/vet/records/update/{id}")
     public String updateRecord(@PathVariable Long id, @ModelAttribute PetRecord petRecord) {
         PetRecord existingRecord = petRecordService.getPetRecordById(id);
         if (existingRecord != null) {
-            // Update fields
             existingRecord.setName(petRecord.getName());
             existingRecord.setBreed(petRecord.getBreed());
             existingRecord.setDateOfBirth(petRecord.getDateOfBirth());
@@ -87,13 +83,13 @@ public class VetCareHomeController {
 
             petRecordService.update(existingRecord);
         }
-        return "redirect:/records";
+        return "redirect:/vet/records";
     }
 
-    @GetMapping("/records/view/{id}")
+    @GetMapping("/vet/records/view/{id}")
     public String viewPetRecord(@PathVariable Long id, Model model) {
         PetRecord petRecord = petRecordService.getPetRecordById(id);
         model.addAttribute("petRecord", petRecord);
-        return "admin-dashboard/view_record";
+        return "vet-dashboard/view_record";
     }
 }
