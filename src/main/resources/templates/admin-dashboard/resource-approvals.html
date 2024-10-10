@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resource Approvals</title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+    <header>
+        <nav>
+            <ul class="navbar-menu">
+                <li><a href="adminhome"><img src="/img/logo.png" alt="Logo" class="logo"></a></li>
+                <li><a href="/userlist">Users</a></li>
+                <li><a href="/cliniclist">Clinics</a></li>
+                <li><a href="/vetlist">Vets</a></li>
+                <li><a href="/adminlist">Admins</a></li>
+                <li><a href="/resources/approvals">Resource Approvals</a></li>
+                <li><a href="/logout">Log Out</a></li>
+            </ul>
+        </nav>
+    </header>
+    
+    <main class="container">
+        <section>
+            <h2>Pending Resources</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Title</th>
+                        <th>Description</th>
+                        <th>Type</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="resource : ${pendingResources}">
+                        <td th:text="${resource.title}"></td>
+                        <td th:text="${resource.description}"></td>
+                        <td th:text="${resource.type}"></td>
+                        <td>
+                            <form th:action="@{/resources/approve/{id}(id=${resource.id})}" method="post">
+                                <button type="submit" class="btn-primary">Approve</button>
+                            </form>
+                            <form th:action="@{/resources/deny/{id}(id=${resource.id})}" method="post">
+                                <button type="submit" class="btn-secondary">Deny</button>
+                            </form>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+    </main>
+    
+    <footer>
+        <p>© 2024 VetCare</p>
+    </footer>
+</body>
+</html>

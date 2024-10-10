@@ -16,8 +16,7 @@ public class Resource {
     private String description;
     private String url;
     private String type;  // Type can be "article", "video", "tutorial", etc.
-
-    // Removed @Lob annotation for the TEXT type in the database
+    private String status; // Can be "PENDING", "APPROVED", "REJECTED"
     private String content; // Field for storing the full article or tutorial content
 
     public Resource() {}
@@ -28,6 +27,7 @@ public class Resource {
         this.url = url;
         this.type = type;
         this.content = content;
+        this.status = "PENDING"; // Default status when a new resource is created
     }
 
     // Getters and Setters
@@ -69,6 +69,14 @@ public class Resource {
 
     public void setType(String type) { 
         this.type = type; 
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 
     public String getContent() { 
