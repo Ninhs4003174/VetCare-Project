@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "prescriptions")
+@EntityListeners(PrescriptionListener.class)
 public class Prescription {
 
     @Id
@@ -40,6 +41,14 @@ public class Prescription {
 
     @Column(name = "updated_at", nullable = false)
     private LocalDateTime updatedAt;
+
+    public void handleDeliveryStatusChange() {
+        if ("DELIVERED".equals(this.deliveryStatus) && this.refillRequest) {
+            this.refillRequest = false;
+            this.deliveryStatus = "PENDING";
+            this.refillsAvailable++;
+        }
+    }
 
     // Getters and setters
     public Long getId() {

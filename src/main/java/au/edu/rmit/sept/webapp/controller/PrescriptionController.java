@@ -222,7 +222,6 @@ public class PrescriptionController {
             Authentication auth = SecurityContextHolder.getContext().getAuthentication();
             String username = auth.getName();
             User vetUser = userService.findByUsername(username);
-
             // Check if the logged-in vet is the same as the vet who prescribed it
             if (!prescription.getVetId().equals(vetUser.getId())) {
                 redirectAttributes.addFlashAttribute("message", "You are not authorized to approve this request");
@@ -237,8 +236,8 @@ public class PrescriptionController {
             prescriptionRequestService.save(request);
 
             // Update the prescription
-            prescription.setRefillsAvailable(prescription.getRefillsAvailable() + 1);
-            prescription.setRefillRequest(false);
+            prescription.setRefillsAvailable(prescription.getRefillsAvailable() - 1);
+            prescription.setRefillRequest(true);
             prescription.setUpdatedAt(LocalDateTime.now());
             prescriptionService.savePrescription(prescription);
 
@@ -247,7 +246,7 @@ public class PrescriptionController {
             return "redirect:/view-prescription-requests";
         } catch (Exception e) {
             redirectAttributes.addFlashAttribute("message",
-                    "Failed to approve prescription request: " + e.getMessage());
+                    "Failed to approve prescriptionsss request: " + e.getMessage());
             redirectAttributes.addFlashAttribute("success", false);
             return "redirect:/view-prescription-requests";
         }
