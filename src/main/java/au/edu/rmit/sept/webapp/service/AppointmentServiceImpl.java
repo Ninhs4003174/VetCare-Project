@@ -39,29 +39,36 @@ public class AppointmentServiceImpl implements AppointmentService {
     }
 
     @Override
-    public void saveAppointment(Appointment appointment) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        LocalDate appointmentDate = LocalDate.parse(appointment.getDate(), formatter);
+public void saveAppointment(Appointment appointment) {
+    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+    LocalDate appointmentDate = LocalDate.parse(appointment.getDate(), formatter);
+    LocalDate today = LocalDate.now();
 
-        if (appointmentDate.isBefore(LocalDate.now())) {
-            throw new IllegalArgumentException("Cannot book appointments for past dates.");
-        }
-
-        if (appointment.getId() == null) {
-            if (!isValidAppointmentTime(appointment.getTime())) {
-                throw new IllegalArgumentException(
-                        "Appointment time must be between 9 AM and 5 PM, in 15-minute intervals.");
-            }
-
-            if (isOverlappingAppointment(appointment)) {
-                throw new IllegalArgumentException("This time slot is already booked for the selected vet.");
-            }
-
-            repository.save(appointment);
-        } else {
-            updateAppointment(appointment);
-        }
+    // Validate that the appointment is not for a past date
+    if (appointmentDate.isBefore(today)) {
+        throw new IllegalArgumentException("Cannot book appointments for past dates.");
     }
+
+    // If booking for today, ensure the time is not in the past
+    if (appointmentDate.equals(today) && LocalTime.parse(appointment.getTime()).isBefore(LocalTime.now())) {
+        throw new IllegalArgumentException("Cannot book appointments for a past time today.");
+    }
+
+    if (appointment.getId() == null) {
+        if (!isValidAppointmentTime(appointment.getTime())) {
+            throw new IllegalArgumentException(
+                    "Appointment time must be between 9 AM and 5 PM, in 15-minute intervals.");
+        }
+
+        if (isOverlappingAppointment(appointment)) {
+            throw new IllegalArgumentException("This time slot is already booked for the selected vet.");
+        }
+
+        repository.save(appointment);
+    } else {
+        updateAppointment(appointment);
+    }
+}
 
     private boolean isValidAppointmentTime(String time) {
         if (time == null || time.isEmpty()) {
@@ -122,27 +129,32 @@ public class AppointmentServiceImpl implements AppointmentService {
     }
 
     @Override
-    public void updateAppointment(Appointment appointment) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        LocalDate appointmentDate = LocalDate.parse(appointment.getDate(), formatter);
+public void updateAppointment(Appointment appointment) {
+    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+    LocalDate appointmentDate = LocalDate.parse(appointment.getDate(), formatter);
+    LocalDate today = LocalDate.now();
 
-        if (appointmentDate.isBefore(LocalDate.now())) {
-            throw new IllegalArgumentException("Cannot update appointments to past dates.");
-        }
-
-        if (!isValidAppointmentTime(appointment.getTime())) {
-            throw new IllegalArgumentException(
-                    "Appointment time must be between 9 AM and 5 PM, in 15-minute intervals.");
-        }
-
-        if (isOverlappingAppointment(appointment)) {
-            throw new IllegalArgumentException("This time slot is already booked for the selected vet.");
-        }
-
-        repository.save(appointment);
+    // Validate that the appointment is not for a past date
+    if (appointmentDate.isBefore(today)) {
+        throw new IllegalArgumentException("Cannot update appointments for past dates.");
     }
-    
 
+    // If updating for today, ensure the time is not in the past
+    if (appointmentDate.equals(today) && LocalTime.parse(appointment.getTime()).isBefore(LocalTime.now())) {
+        throw new IllegalArgumentException("Cannot update appointments for a past time today.");
+    }
+
+    if (!isValidAppointmentTime(appointment.getTime())) {
+        throw new IllegalArgumentException(
+                "Appointment time must be between 9 AM and 5 PM, in 15-minute intervals.");
+    }
+
+    if (isOverlappingAppointment(appointment)) {
+        throw new IllegalArgumentException("This time slot is already booked for the selected vet.");
+    }
+
+    repository.save(appointment);
+}
     @Override
     public void updateAppointmentStatus(Long appointmentId, String status) {
         // Fetch the appointment by ID

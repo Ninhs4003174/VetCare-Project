@@ -80,59 +80,99 @@ public class AppointmentController {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String username = auth.getName();
         User user = userService.findByUsername(username);
-
+    
         model.addAttribute("appointment", new Appointment());
         model.addAttribute("vets", vetService.getAllVets());
-        model.addAttribute("pets", userService.findPetsByUser(user));
-
+        model.addAttribute("pets", petService.findPetsByUser(user)); // Fetch pets from PetService
+    
         List<String> timeSlots = getTimeSlots();
         model.addAttribute("timeSlots", timeSlots);
-
+    
         LocalDate today = LocalDate.now();
         LocalDate fiveDaysLater = today.plusDays(5);
         model.addAttribute("today", today);
         model.addAttribute("fiveDaysLater", fiveDaysLater);
-
+    
         return "appointments/book";
     }
-
+    
+   
     @PostMapping("/book")
-    public String bookAppointment(@ModelAttribute Appointment appointment, BindingResult result, Model model) {
-        try {
-            Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-            String username = auth.getName();
-            User user = userService.findByUsername(username);
-            System.out.println("Selected Vet: " + appointment.getVetId());
+public String bookAppointment(@ModelAttribute Appointment appointment, BindingResult result, Model model) {
+    // Declare the user variable outside the try block
+    User user = null;
 
-            if (user == null) {
-                throw new IllegalArgumentException("User not found.");
-            }
-            if (result.hasErrors()) {
-                model.addAttribute("vets", vetService.getAllVets());
-                model.addAttribute("timeSlots", getTimeSlots());
-                return "appointments/book";
-            }
+    try {
+        // Get the authenticated user's username
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String username = auth.getName();
+        
+        // Find the user by username
+        user = userService.findByUsername(username);
+        
+        // Ensure user is not null
+        if (user == null) {
+            throw new IllegalArgumentException("User not found.");
+        }
 
-            Pet pet = petService.findById(appointment.getPetId());
-            if (pet != null) {
-                appointment.setPetName(pet.getName());
-            } else {
-                throw new IllegalArgumentException("Pet not found.");
-            }
-
-            System.out.println("Selected Vet: " + appointment.getVetId());
-            appointment.setUser(user);
-            appointment.setStatus("Scheduled");
-            appointmentService.saveAppointment(appointment);
-        } catch (IllegalArgumentException e) {
-            model.addAttribute("errorMessage", e.getMessage());
+        // Check if there are validation errors
+        if (result.hasErrors()) {
             model.addAttribute("vets", vetService.getAllVets());
+            model.addAttribute("pets", petService.findPetsByUser(user)); // Ensure pets are loaded again
             model.addAttribute("timeSlots", getTimeSlots());
             return "appointments/book";
         }
-        return "redirect:/appointments";
+
+        // Validate that a pet is selected
+        if (appointment.getPetId() == null) {
+            throw new IllegalArgumentException("Please select a pet.");
+        }
+        // Ensure time is not empty
+        if (appointment.getTime() == null || appointment.getTime().isEmpty()) {
+            throw new IllegalArgumentException("Please select a valid time.");
+        }
+
+        // Log the pet ID for debugging
+        System.out.println("Pet ID: " + appointment.getPetId());
+
+        // Fetch the pet and set the pet name in the appointment
+        Pet pet = petService.findById(appointment.getPetId());
+        if (pet != null) {
+            appointment.setPetName(pet.getName());
+        } else {
+            throw new IllegalArgumentException("Pet not found.");
+        }
+
+        // Validate appointment date and time
+        LocalDate today = LocalDate.now();
+        LocalDate appointmentDate = LocalDate.parse(appointment.getDate());
+        if (appointmentDate.isBefore(today)) {
+            throw new IllegalArgumentException("Cannot book an appointment for a past date.");
+        }
+        if (appointmentDate.equals(today) && LocalTime.parse(appointment.getTime()).isBefore(LocalTime.now())) {
+            throw new IllegalArgumentException("Cannot book an appointment for a past time today.");
+        }
+
+        // Set user and status, then save the appointment
+        appointment.setUser(user);
+        appointment.setStatus("Scheduled");
+        appointmentService.saveAppointment(appointment);
+
+    } catch (IllegalArgumentException e) {
+        // Handle errors and re-populate the form fields
+        model.addAttribute("errorMessage", e.getMessage());
+        model.addAttribute("vets", vetService.getAllVets());
+        
+        // Use the user variable outside the try block
+        model.addAttribute("pets", petService.findPetsByUser(user)); 
+        model.addAttribute("timeSlots", getTimeSlots());
+        return "appointments/book";
     }
 
+    return "redirect:/appointments";
+}
+
+    
     private List<String> getTimeSlots() {
         List<String> timeSlots = new ArrayList<>();
         LocalTime startTime = LocalTime.of(9, 0);
@@ -179,8 +219,21 @@ public class AppointmentController {
             if (user == null) {
                 throw new IllegalArgumentException("User not found.");
             }
+
+            // Validate that the appointment is not for a past date or past time
+            LocalDate today = LocalDate.now();
+            LocalDate appointmentDate = LocalDate.parse(appointment.getDate());
+            if (appointmentDate.isBefore(today)) {
+                throw new IllegalArgumentException("Cannot update an appointment for a past date.");
+            }
+
+            // If updating for today, ensure the time is not in the past
+            if (appointmentDate.equals(today) && LocalTime.parse(appointment.getTime()).isBefore(LocalTime.now())) {
+                throw new IllegalArgumentException("Cannot update an appointment for a past time today.");
+            }
+
             // Set the status to "Scheduled" during updates
-        appointment.setStatus("Scheduled");
+            appointment.setStatus("Scheduled");
 
             appointment.setUser(user);
             appointmentService.updateAppointment(appointment);
@@ -193,7 +246,6 @@ public class AppointmentController {
 
         return "redirect:/appointments";
     }
-
     @GetMapping("/compare-providers")
     public String compareProviders(
             @RequestParam(value = "serviceType", required = false) String serviceType,
@@ -232,3 +284,4 @@ public class AppointmentController {
     }
     
 } 
+
