@@ -13,6 +13,7 @@ import au.edu.rmit.sept.webapp.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -62,9 +63,11 @@ public class PrescriptionController {
             List<Appointment> vetAppointments = appointmentService.getAppointmentsByVet(vetUser.getId());
             model.addAttribute("appointments", vetAppointments);
             model.addAttribute("username", username);
+            model.addAttribute("userRole", vetUser.getRole());
         } else {
             return "403";
         }
+        // Fetch the user details using the username
 
         return "vet-dashboard/vethome"; // Ensure this matches the template path
     }
