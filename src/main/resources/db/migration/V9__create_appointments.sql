@@ -3,7 +3,7 @@ CREATE TABLE IF NOT EXISTS appointments (
     id BIGSERIAL PRIMARY KEY,   
      pet_name VARCHAR(255), 
      vet_id BIGINT,    
-       date VARCHAR(255),           
+     date VARCHAR(255),           
      time VARCHAR(255),         
     status VARCHAR(255),      
     user_id BIGINT,            
