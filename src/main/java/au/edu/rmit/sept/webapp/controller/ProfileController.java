@@ -283,4 +283,52 @@ public class ProfileController {
         redirectAttributes.addFlashAttribute("success", true);
         return "redirect:/user-prescriptions";
     }
+
+    @GetMapping("/edit-pet/{id}")
+    public String showEditPetForm(@PathVariable Long id, Model model) {
+        Pet pet = petService.findById(id);
+        if (pet == null) {
+            model.addAttribute("message", "Pet not found");
+            return "error"; // Redirect to an error page or handle appropriately
+        }
+
+        model.addAttribute("pet", pet);
+        return "edit-pet"; // Return the Thymeleaf template for editing pet info
+    }
+
+    @PostMapping("/edit-pet")
+    public String editPet(
+            @RequestParam Long petId,
+            @RequestParam String petName,
+            @RequestParam String petType,
+            @RequestParam int petAge,
+            @RequestParam String petBio,
+            RedirectAttributes redirectAttributes) {
+
+        Pet pet = petService.findById(petId);
+        if (pet == null) {
+            redirectAttributes.addFlashAttribute("message", "Pet not found");
+            redirectAttributes.addFlashAttribute("success", false); // Indicate failure
+            return "redirect:/edit-pet/" + petId;
+        }
+
+        // Validate pet age
+        if (petAge < 0 || petAge > 20) {
+            redirectAttributes.addFlashAttribute("message", "Pet age must be between 0 and 20 years");
+            redirectAttributes.addFlashAttribute("success", false); // Indicate failure
+            return "redirect:/edit-pet/" + petId;
+        }
+
+        // Update pet details
+        pet.setName(petName);
+        pet.setType(petType);
+        pet.setAge(petAge);
+        pet.setBio(petBio);
+
+        petService.updatePet(pet); // Ensure this method exists in your service
+
+        redirectAttributes.addFlashAttribute("message", "Pet details updated successfully!");
+        redirectAttributes.addFlashAttribute("success", true); // Indicate success
+        return "redirect:/profile"; // Redirect to profile page after update
+    }
 }
