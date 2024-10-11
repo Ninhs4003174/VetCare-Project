@@ -1,1 +1,0 @@
-ALTER TABLE vetbooking ADD CONSTRAINT vet_user_id_unique UNIQUE (vet_user_id);
