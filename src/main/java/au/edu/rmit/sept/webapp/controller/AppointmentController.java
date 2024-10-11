@@ -178,7 +178,6 @@ public class AppointmentController {
         return "redirect:/appointments";
     }
     
-    
     private List<String> getTimeSlots() {
         List<String> timeSlots = new ArrayList<>();
         LocalTime startTime = LocalTime.of(9, 0);
