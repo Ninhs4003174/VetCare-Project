@@ -7,6 +7,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.security.test.context.support.WithMockUser;
 
+import au.edu.rmit.sept.webapp.model.enums.UserRole;
+
 import java.util.HashSet;
 import java.util.Set;
 
@@ -18,7 +20,7 @@ public class UserPetTest {
 
     @BeforeEach
     public void setUp() {
-        user = new User("john_doe", "password123");
+        user = new User("john_doe", "password123", UserRole.VET);
         user.setEmail("john@example.com");
         user.setAddress("123 Main St");
         user.setPhoneNumber("555-1234");

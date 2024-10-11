@@ -1,5 +1,6 @@
 package au.edu.rmit.sept.webapp.model;
 
+import au.edu.rmit.sept.webapp.model.enums.UserRole;
 import jakarta.persistence.*;
 
 import java.util.HashSet;
@@ -18,6 +19,10 @@ public class User {
     private String email;
     private String address; // New field
     private String phoneNumber; // New field
+    private Long clinicId; // New field
+
+    @Enumerated(EnumType.STRING) // Store the role as a string in the database
+    private UserRole role; // Change this to UserRole enum
 
     @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Pet> pets = new HashSet<>(); // Initialize the set
@@ -26,9 +31,23 @@ public class User {
     public User() {
     }
 
-    public User(String username, String password) {
+    public User(String username, String password, UserRole role) { // Updated constructor to include role
         this.username = username;
         this.password = password;
+        this.role = role; // Set the role
+    }
+
+    // Add the required constructor
+    public User(Long id, String username, String password, String email, String phoneNumber, String address,
+            String role, Long clinicId) {
+        this.id = id;
+        this.username = username;
+        this.password = password;
+        this.email = email;
+        this.phoneNumber = phoneNumber;
+        this.address = address;
+        this.role = UserRole.valueOf(role); // Convert string to UserRole enum
+        this.clinicId = clinicId;
     }
 
     public Long getId() {
@@ -79,11 +98,27 @@ public class User {
         this.phoneNumber = phoneNumber;
     }
 
+    public UserRole getRole() { // Getter for role
+        return role;
+    }
+
+    public void setRole(UserRole role) { // Setter for role
+        this.role = role;
+    }
+
     public Set<Pet> getPets() {
         return pets;
     }
 
     public void setPets(Set<Pet> pets) {
         this.pets = pets;
+    }
+
+    public Long getClinicId() {
+        return clinicId;
+    }
+
+    public void setClinicId(Long clinicId) {
+        this.clinicId = clinicId;
     }
 }

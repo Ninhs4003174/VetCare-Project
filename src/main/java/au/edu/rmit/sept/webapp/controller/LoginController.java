@@ -1,57 +1,96 @@
 package au.edu.rmit.sept.webapp.controller;
 
+import au.edu.rmit.sept.webapp.model.User;
+import au.edu.rmit.sept.webapp.model.enums.UserRole;
+import au.edu.rmit.sept.webapp.service.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.ui.Model;
+import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import java.util.Collection;
 
 @Controller
 public class LoginController {
 
-    @GetMapping("/login")
+    @Autowired
+    private UserService userService;
+
+    @GetMapping("/login-client")
     public String login() {
-        return "login"; // Return the login page
+        return "login-client";
     }
 
-    @PostMapping("/login")
-    public String handleLogin(@RequestParam String username, @RequestParam String password, Model model) {
-        // Basic error handling for missing or incorrect credentials
-        if (username.isEmpty() || password.isEmpty()) {
-            model.addAttribute("error", "Username and password must be provided");
-            return "login"; // Show the error on the login page
-        }
+    @PostMapping("/login-client")
+    public String handleLogin(
+            @RequestParam String username,
+            @RequestParam String password,
+            Model model,
+            RedirectAttributes redirectAttributes) {
 
-        // Simulate login logic (replace with real authentication)
-        if (!username.equals("correctUser") || !password.equals("correctPass")) {
+        User user = userService.authenticate(username, password);
+        if (user == null) {
             model.addAttribute("error", "Invalid username or password");
-            return "login";
+            return "login-client";
         }
 
-        // On successful login, redirect to the user home page
-        return "redirect:/userhome";
+        UserRole userRole = user.getRole();
+        switch (userRole) {
+            case CLIENT:
+                return "redirect:/userhome";
+            case RECEPTIONIST:
+                return "redirect:/clinichome";
+            case VET:
+                return "redirect:/appointments/vethome";
+            case ADMIN:
+                return "redirect:/adminhome";
+            default:
+                model.addAttribute("error", "Unknown role");
+                return "login-client";
+        }
     }
 
     @GetMapping("/userhome")
-    public String userhome() {
-        return "userhome";
+    public ModelAndView userHome() {
+        if (!hasRole("CLIENT")) {
+            return new ModelAndView("403");
+        }
+        return new ModelAndView("userhome");
     }
 
-    @GetMapping("/home")
-    public String home() {
-        return "home";
+    @GetMapping("/receptionisthome")
+    public ModelAndView receptionistHome() {
+        if (!hasRole("RECEPTIONIST")) {
+            return new ModelAndView("403");
+        }
+        return new ModelAndView("clinichome");
     }
 
-    @GetMapping("/about")
-    public String about() {
-        return "about";
+    @GetMapping("/adminhome")
+    public ModelAndView adminHome() {
+        if (!hasRole("ADMIN")) {
+            return new ModelAndView("403");
+        }
+        return new ModelAndView("admin-dashboard/adminhome");
     }
 
-    // Example of handling exceptions at the controller level
-    @ExceptionHandler(Exception.class)
-    public String handleException(Model model, Exception ex) {
-        model.addAttribute("errorMessage", "An unexpected error occurred: " + ex.getMessage());
-        return "error"; // Return error page
+    private boolean hasRole(String role) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication != null && authentication.getAuthorities() != null) {
+            Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
+            for (GrantedAuthority authority : authorities) {
+                if (authority.getAuthority().equals(role)) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 }

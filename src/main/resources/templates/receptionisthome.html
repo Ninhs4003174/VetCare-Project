@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Receptionist Home</title>
+    <link rel="stylesheet" href="css/styles.css" />
+    <link rel="stylesheet" href="css/homestyles.css" />
+</head>
+<body>
+    <!-- Header Start -->
+    <header>
+        <nav>
+            <ul class="navbar-menu">
+                <li><a href="userhome"><img src="img/logo.png" alt="Logo" class="logo"></a></li>
+                <li><a href="about">About</a></li>
+                <li><a href="resources">Resources</a></li>
+                <li><a href="contact">Contact</a></li>
+                <li><a href="appointments">Appointments</a></li>
+                <li><a href="prescription-management">Prescriptions</a></li>
+                <li><a href="appointments/compare-providers">Compare Providers</a></li>
+                <li><a href="profile">Profile</a></li>
+                <li><a href="/logout">Log Out</a></li>
+            </ul>
+        </nav>
+    </header>
+    <!-- Header End -->
+
+    <!-- Main Content Start -->
+    <div class="main-content">
+        <h1>Welcome to the Receptionist Home</h1>
+        <p>Here you can manage appointments and patient information.</p>
+
+        <section class="features">
+            <h2>Key Features</h2>
+            <ul>
+                <li><strong>Appointment Scheduling:</strong> Effortlessly book, reschedule, or cancel appointments with your doctor.</li>
+                <li><strong>Patient Records Access:</strong> View and manage patient records securely from anywhere.</li>
+                <li><strong>Prescription Management:</strong> Request medication refills and receive reminders when it's time to restock.</li>
+                <li><strong>Health Reminders:</strong> Set reminders for check-ups and medication schedules.</li>
+                <li><strong>Community Support:</strong> Join our community forum to connect with other patients.</li>
+            </ul>
+        </section>
+
+        <section class="appointment-form">
+            <h2>Book an Appointment</h2>
+            <form>
+                <label for="patient-name">Patient Name:</label>
+                <input type="text" id="patient-name" name="patient-name" placeholder="Enter patient name">
+                
+                <label for="appointment-date">Appointment Date:</label>
+                <input type="date" id="appointment-date" name="appointment-date">
+                
+                <label for="appointment-time">Appointment Time:</label>
+                <input type="time" id="appointment-time" name="appointment-time">
+                
+                <label for="doctor">Doctor:</label>
+                <select id="doctor" name="doctor">
+                    <option value="dr-smith">Dr. Smith</option>
+                    <option value="dr-jones">Dr. Jones</option>
+                    <option value="dr-williams">Dr. Williams</option>
+                </select>
+                
+                <button type="submit">Book Appointment</button>
+            </form>
+        </section>
+
+        <section class="testimonials">
+            <h2>What Our Users Say</h2>
+            <blockquote>
+                <p>"This system has made it so easy for me to manage appointments. I love the reminders!" - Sarah L.</p>
+            </blockquote>
+            <blockquote>
+                <p>"A fantastic resource for managing patient records and appointments!" - Tom R.</p>
+            </blockquote>
+        </section>
+    </div>
+    <!-- Main Content End -->
+
+    <!-- Footer with Social Links -->
+    <footer>
+        <p>© 2024 VetCare</p>
+    </footer>
+</body>
+</html>

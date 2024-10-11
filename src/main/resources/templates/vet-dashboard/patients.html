@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Patients Dashboard</title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+    <header>
+        <nav>
+            <ul class="navbar-menu">
+                <!-- Logo for vet or user based on role -->
+                <li>
+                    <a th:href="@{/vethome}" th:if="${userRole == 'CLIENT'}">
+                        <img th:src="@{/img/logo.png}" alt="Vet Logo" class="logo">
+                    </a>
+                </li>
+                <li>
+                    <a th:href="@{/userhome}" th:if="${userRole != 'CLIENT'}">
+                        <img th:src="@{/img/logo.png}" alt="User Logo" class="logo">
+                    </a>
+                </li>
+
+                <!-- Vet-specific navigation -->
+                <li th:if="${userRole == 'CLIENT'}"><a th:href="@{/appointments}">Appointments</a></li>
+                <li th:if="${userRole == 'CLIENT'}"><a th:href="@{/patients}">Patients</a></li>
+                <li th:if="${userRole == 'CLIENT'}"><a th:href="@{/prescriptions}">Prescriptions</a></li>
+                <li th:if="${userRole == 'CLIENT'}"><a th:href="@{/view-prescription-requests}">Prescription Requests</a></li>
+                <li th:if="${userRole == 'CLIENT'}"><a th:href="@{/records}">Records</a></li>
+
+                <!-- User-specific navigation -->
+                <li th:if="${userRole != 'CLIENT'}"><a th:href="@{/resources}">About</a></li>
+                <li th:if="${userRole != 'CLIENT'}"><a th:href="@{/contact}">Contact</a></li>
+                <li th:if="${userRole != 'CLIENT'}"><a th:href="@{/resources}">Resources</a></li>
+                <li th:if="${userRole != 'CLIENT'}"><a th:href="@{/appointments}">Appointments</a></li>
+                <li th:if="${userRole != 'CLIENT'}"><a th:href="@{/user-prescriptions}">Prescriptions</a></li>
+                <li th:if="${userRole != 'CLIENT'}"><a th:href="@{/records}">Records</a></li>
+                <!-- Common pages -->
+                <li><a th:href="@{/profile}">Profile</a></li>
+                <li><a th:href="@{/logout}">Log Out</a></li>
+            </ul>
+        </nav>
+    </header>
+    
+    <main class="container">
+        <h1>Patients Dashboard</h1>
+        <p>Logged in as: <span th:text="${username}"></span></p>
+        <table>
+            <thead>
+                <tr>
+                    <th>Username</th>
+                    <th>Email</th>
+                    <th>Phone Number</th>
+                    <th>Address</th>
+                    <th>Actions</th> <!-- New column for actions -->
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="client : ${clients}">
+                    <td th:text="${client.username}"></td>
+                    <td th:text="${client.email}"></td>
+                    <td th:text="${client.phoneNumber}"></td>
+                    <td th:text="${client.address}"></td>
+                    <td>
+                        <a th:href="@{/send-prescription(clientId=${client.id})}" class="btn">Send Prescription</a> <!-- New button -->
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </main>
+    
+    <footer>
+        <p>© 2024 VetCare</p>
+    </footer>
+</body>
+</html>

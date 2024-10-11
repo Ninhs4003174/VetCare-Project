@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View Your Prescriptions</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body>
+    <header>
+        <nav>
+            <ul class="navbar-menu">
+                <!-- Logo for vet or user based on role -->
+                <li>
+                    <a th:href="@{/vethome}" th:if="${userRole == 'CLIENT'}">
+                        <img th:src="@{/img/logo.png}" alt="Vet Logo" class="logo">
+                    </a>
+                </li>
+                <li>
+                    <a th:href="@{/userhome}" th:if="${userRole != 'CLIENT'}">
+                        <img th:src="@{/img/logo.png}" alt="User Logo" class="logo">
+                    </a>
+                </li>
+
+                <!-- Vet-specific navigation -->
+                <li th:if="${userRole == 'CLIENT'}"><a th:href="@{/appointments}">Appointments</a></li>
+                <li th:if="${userRole == 'CLIENT'}"><a th:href="@{/patients}">Patients</a></li>
+                <li th:if="${userRole == 'CLIENT'}"><a th:href="@{/prescriptions}">Prescriptions</a></li>
+                <li th:if="${userRole == 'CLIENT'}"><a th:href="@{/view-prescription-requests}">Prescription Requests</a></li>
+                <li th:if="${userRole == 'CLIENT'}"><a th:href="@{/records}">Records</a></li>
+
+                <!-- User-specific navigation -->
+                <li th:if="${userRole != 'CLIENT'}"><a th:href="@{/resources}">About</a></li>
+                <li th:if="${userRole != 'CLIENT'}"><a th:href="@{/contact}">Contact</a></li>
+                <li th:if="${userRole != 'CLIENT'}"><a th:href="@{/resources}">Resources</a></li>
+                <li th:if="${userRole != 'CLIENT'}"><a th:href="@{/appointments}">Appointments</a></li>
+                <li th:if="${userRole != 'CLIENT'}"><a th:href="@{/user-prescriptions}">Prescriptions</a></li>
+                <li th:if="${userRole != 'CLIENT'}"><a th:href="@{/records}">Records</a></li>
+                <!-- Common pages -->
+                <li><a th:href="@{/profile}">Profile</a></li>
+                <li><a th:href="@{/logout}">Log Out</a></li>
+            </ul>
+        </nav>
+    </header>
+    
+    <main class="container">
+        <h1>Your Prescriptions</h1>
+        <table>
+            <thead>
+                <tr>
+                    <th>Pet Name</th>
+                    <th>Medication Name</th>
+                    <th>Dosage</th>
+                    <th>Refills Available</th>
+                    <th>Refill Request</th>
+                    <th>Delivery Status</th>
+                    <th>Created At</th>
+                    <th>Updated At</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="prescription : ${prescriptions}">
+                    <td th:text="${prescription.petName}"></td>
+                    <td th:text="${prescription.medicationName}"></td>
+                    <td th:text="${prescription.dosage}"></td>
+                    <td th:text="${prescription.refillsAvailable}"></td>
+                    <td th:text="${prescription.refillRequest ? 'Yes' : 'No'}"></td>
+                    <td th:text="${prescription.deliveryStatus}"></td>
+                    <td th:text="${#temporals.format(prescription.createdAt, 'yyyy-MM-dd HH:mm')}"></td>
+                    <td th:text="${#temporals.format(prescription.updatedAt, 'yyyy-MM-dd HH:mm')}"></td>
+                    <td>
+                        <a th:href="@{/request-prescription/{id}(id=${prescription.id})}" class="btn btn-primary">Request Refill</a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </main>
+    
+    <footer>
+        <p>© 2024 VetCare</p>
+    </footer>
+</body>
+</html>

@@ -9,11 +9,15 @@ import org.springframework.security.authentication.dao.DaoAuthenticationProvider
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.beans.factory.annotation.Autowired; // Import the @Autowired annotation
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+
+import java.util.Collection;
 
 @Configuration
 @EnableWebSecurity
@@ -43,23 +47,64 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
-        return httpSecurity
-                .csrf(AbstractHttpConfigurer::disable)
-                .formLogin(httpForm -> {
-                    httpForm.loginPage("/login").permitAll();
-                    httpForm.defaultSuccessUrl("/userhome", true);
-
-                })
+        httpSecurity
+                .csrf(AbstractHttpConfigurer::disable) // Disable CSRF for simplicity; consider re-enabling in
+                                                       // production
                 .authorizeHttpRequests(registry -> {
-                    registry.requestMatchers("/signup", "contacts", "/home", "/about", "/resources", "/profile",
-                            "/css/**",
-                            "/img/**")
-                            .permitAll(); // Ensure
-                    // static
-                    // resources are
-                    // accessible
-                    registry.anyRequest().authenticated();
+                    // Open access for public resources and role selection page
+                    registry.requestMatchers("/vetcaresystemhome", "/vetcaresystemhome/selectrole", "/signup-client",
+                            "/signup-admin", "/home", "/about", "/resources", "/css/**", "/img/**").permitAll();
+
+                    // Define access control for different roles after login
+                    registry.requestMatchers("/clinichome/").hasRole("RECEPTIONIST");
+                    registry.requestMatchers("/vethome/").hasRole("VET");
+                    registry.requestMatchers("/userhome/").hasRole("CLIENT");
+                    registry.requestMatchers("/adminhome/").hasRole("ADMIN");
+
+                    // All other requests need authentication
+                    registry.anyRequest().authenticated(); // Ensure all other requests require authentication
                 })
-                .build();
+                .formLogin(httpForm -> {
+                    // Define custom login pages for different roles
+                    httpForm.loginPage("/login-client").permitAll(); // Allow all users to access the login page
+                    httpForm.successHandler(customSuccessHandler()); // Use the custom success handler
+                })
+                .exceptionHandling(exceptionHandling -> {
+                    exceptionHandling.accessDeniedPage("/403"); // Redirect to access denied page for unauthorized
+                                                                // access
+                });
+
+        return httpSecurity.build(); // Finalize the SecurityFilterChain
+    }
+
+    // Custom authentication success handler
+    @Bean
+    public AuthenticationSuccessHandler customSuccessHandler() {
+        return (request, response, authentication) -> {
+            // Get the user's roles
+            Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
+            System.out.println("Granted Authorities: " + authorities);
+
+            // Determine the redirect URL based on roles
+            String redirectUrl = "/vetcaresystemhome"; // Default if no role matched
+            for (GrantedAuthority authority : authorities) {
+                if (authority.getAuthority().equals("CLIENT")) {
+                    redirectUrl = "/userhome"; // Redirect to user home for CLIENT role
+                    break;
+                } else if (authority.getAuthority().equals("RECEPTIONIST")) {
+                    redirectUrl = "/clinichome"; // Redirect to receptionist home for RECEPTIONIST role
+                    break;
+                } else if (authority.getAuthority().equals("VET")) {
+                    redirectUrl = "/vethome"; // Redirect to vet home for VET role
+                    break;
+                } else if (authority.getAuthority().equals("ADMIN")) {
+                    redirectUrl = "/adminhome"; // Redirect to vet home for VET role
+                    break;
+                }
+            }
+
+            // Redirect to the determined URL
+            response.sendRedirect(redirectUrl);
+        };
     }
 }

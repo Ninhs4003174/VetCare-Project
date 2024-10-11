@@ -10,14 +10,35 @@
     <header>
         <nav>
             <ul class="navbar-menu">
-                <li><a href="userhome"><img src="img/logo.png" alt="Logo" class="logo"></a></li>
-                <li><a href="about">About</a></li>
-                <li><a href="resources">Resources</a></li>
-                <li><a href="contact">Contact</a></li>
-                <li><a href="appointments">Appointments</a></li>
-                <li><a href="prescription-management">Prescriptions</a></li>
-                <li><a href="profile">Profile</a></li>
-                <li><a href="/logout">Log Out</a></li>
+                <!-- Logo for vet or user based on role -->
+                <li>
+                    <a th:href="@{/vethome}" th:if="${userRole == 'CLIENT'}">
+                        <img th:src="@{/img/logo.png}" alt="Vet Logo" class="logo">
+                    </a>
+                </li>
+                <li>
+                    <a th:href="@{/userhome}" th:if="${userRole != 'CLIENT'}">
+                        <img th:src="@{/img/logo.png}" alt="User Logo" class="logo">
+                    </a>
+                </li>
+
+                <!-- Vet-specific navigation -->
+                <li th:if="${userRole == 'CLIENT'}"><a th:href="@{/appointments}">Appointments</a></li>
+                <li th:if="${userRole == 'CLIENT'}"><a th:href="@{/patients}">Patients</a></li>
+                <li th:if="${userRole == 'CLIENT'}"><a th:href="@{/prescriptions}">Prescriptions</a></li>
+                <li th:if="${userRole == 'CLIENT'}"><a th:href="@{/view-prescription-requests}">Prescription Requests</a></li>
+                <li th:if="${userRole == 'CLIENT'}"><a th:href="@{/records}">Records</a></li>
+
+                <!-- User-specific navigation -->
+                <li th:if="${userRole != 'CLIENT'}"><a th:href="@{/resources}">About</a></li>
+                <li th:if="${userRole != 'CLIENT'}"><a th:href="@{/contact}">Contact</a></li>
+                <li th:if="${userRole != 'CLIENT'}"><a th:href="@{/resources}">Resources</a></li>
+                <li th:if="${userRole != 'CLIENT'}"><a th:href="@{/appointments}">Appointments</a></li>
+                <li th:if="${userRole != 'CLIENT'}"><a th:href="@{/user-prescriptions}">Prescriptions</a></li>
+                <li th:if="${userRole != 'CLIENT'}"><a th:href="@{/records}">Records</a></li>
+                <!-- Common pages -->
+                <li><a th:href="@{/profile}">Profile</a></li>
+                <li><a th:href="@{/logout}">Log Out</a></li>
             </ul>
         </nav>
     </header>
@@ -27,37 +48,45 @@
         <section class="appointment-form">
             <h1>Edit Appointment</h1>
             <form th:action="@{/appointments/edit}" th:object="${appointment}" method="post" class="form-container">
+                
+                <!-- Hidden field for petId -->
+                <input type="hidden" th:field="*{petId}"/>
+
+                <!-- Appointment ID -->
                 <input type="hidden" th:field="*{id}"/>
 
+                <!-- Display pet name as read-only -->
                 <div>
                     <label for="petName">Pet Name:</label>
                     <input type="text" id="petName" th:field="*{petName}" readonly class="input-field"/>
                 </div>
 
+                <!-- Vet selection -->
                 <div>
-                    <label for="vetName">Vet:</label>
-                    <select id="vetName" th:field="*{vetName}" class="select-field">
-                        <option th:each="vet : ${vets}" th:value="${vet.name}" th:text="${vet.name}"
-                                th:selected="${vet.name == appointment.vetName}">Vet</option>
+                    <label for="vetId">Vet:</label>
+                    <select id="vetId" th:field="*{vetId}" class="select-field">
+                        <option th:each="vet : ${vets}" th:value="${vet.vetUserId}" th:text="${vet.vetName}"
+                                th:selected="${vet.vetUserId == appointment.vetId}">Vet</option>
                     </select>
                 </div>
 
+                <!-- Appointment date -->
                 <div>
                     <label for="date">Date:</label>
                     <input type="date" id="date" th:field="*{date}" class="input-field"/>
                 </div>
 
-                <label for="time">Time:</label>
-                <select id="time" th:field="*{time}" class="select-field">
-                    <option value="" disabled selected>Select a time</option>
-                    <!-- Loop through time slots to display available ones -->
-                    <option th:each="time : ${timeSlots}" th:value="${time}" th:text="${time}"></option>
-                </select>
+                <!-- Appointment time -->
+                <div>
+                    <label for="time">Time:</label>
+                    <select id="time" th:field="*{time}" class="select-field">
+                        <option value="" disabled selected>Select a time</option>
+                        <!-- Loop through time slots to display available ones -->
+                        <option th:each="time : ${timeSlots}" th:value="${time}" th:text="${time}"></option>
+                    </select>
+                </div>
 
-                <label for="status">Status:</label>
-                <input type="text" id="status" th:field="*{status}" required class="input-field">
-
-                <!-- Submit button -->
+                <!-- Submit and cancel buttons -->
                 <div>
                     <button type="submit" class="btn-primary">Save Changes</button>
                     <a th:href="@{/appointments}" class="btn-secondary">Cancel</a>

@@ -10,48 +10,50 @@ public class Appointment {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    private Long petId;
     private String petName;
-    private String vetName;
+    private Long vetId;
     private String date;
     private String time;
     private String status;
 
     @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false)
+    @JoinColumn(name = "user_id")
     private User user;
 
-    // Default no-argument constructor (required by Spring)
+    // Constructors, getters, setters
+
     public Appointment() {
     }
 
-    // New constructor to match the controller's call (without the User parameter)
-    public Appointment(Long id, String petName, String vetName, String date, String time, String status) {
+    public Appointment(Long id, Long petId, String petName, Long vetId, String date, String time, String status,
+            User user) {
         this.id = id;
+        this.petId = petId;
         this.petName = petName;
-        this.vetName = vetName;
-        this.date = date;
-        this.time = time;
-        this.status = status;
-    }
-
-    // Existing constructor with the User parameter
-    public Appointment(Long id, String petName, String vetName, String date, String time, String status, User user) {
-        this.id = id;
-        this.petName = petName;
-        this.vetName = vetName;
+        this.vetId = vetId;
         this.date = date;
         this.time = time;
         this.status = status;
         this.user = user;
     }
 
-    // Getters and setters for all fields
+    // Getters and setters for all properties
+
     public Long getId() {
         return id;
     }
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public Long getPetId() {
+        return petId;
+    }
+
+    public void setPetId(Long petId) {
+        this.petId = petId;
     }
 
     public String getPetName() {
@@ -62,12 +64,12 @@ public class Appointment {
         this.petName = petName;
     }
 
-    public String getVetName() {
-        return vetName;
+    public Long getVetId() {
+        return vetId;
     }
 
-    public void setVetName(String vetName) {
-        this.vetName = vetName;
+    public void setVetId(Long vetId) {
+        this.vetId = vetId;
     }
 
     public String getDate() {
@@ -102,21 +104,28 @@ public class Appointment {
         this.user = user;
     }
 
+    public Long getUserId() {
+        return user != null ? user.getId() : null;
+    }
+
     public String formattedDetails() {
         // Debugging output
-        System.out.println("Vet Name in formattedDetails: " + vetName);
-
+        System.out.println("Vet ID in formattedDetails: " + vetId);
+    
         // Start with pet name
-        String appointmentDetails = (petName == null) ? "Unknown Pet" : petName;
-
-        // Add vet name
-        appointmentDetails += " with " + ((vetName == null) ? "Unknown Vet" : vetName);
+        StringBuilder appointmentDetails = new StringBuilder((petName == null) ? "Unknown Pet" : petName);
+    
 
         // Add date and time
-        appointmentDetails += " on " + date + " at " + time;
-
-        System.out.println("Formatted Details: " + appointmentDetails);
-
-        return appointmentDetails;
+        appointmentDetails.append(" on ").append((date == null) ? "Unknown Date" : date);
+        appointmentDetails.append(" at ").append((time == null) ? "Unknown Time" : time);
+    
+        // Add appointment status
+        appointmentDetails.append(". Status: ").append((status == null) ? "Unknown Status" : status);
+    
+        System.out.println("Formatted Details: " + appointmentDetails.toString());
+    
+        return appointmentDetails.toString();
     }
+    
 }

@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pet Sign Up Form</title>
+    <link rel="stylesheet" href="/css/styles.css" />
+    <link rel="stylesheet" href="/css/signupstyles.css">
+</head>
+<body>
+    <header>
+        <nav>
+            <ul class="navbar-menu">
+                <li><a href="home"><img src="img/logo.png" alt="Logo" class="logo"></a></li>
+                <li><a href="about">About</a></li>
+                <li><a href="contacts">Contact</a></li>
+                <li><a href="/login-client">Log In</a></li>
+            </ul>
+        </nav>
+    </header>
+    <main class="container">
+        <div class="row">
+            <!-- Display flash message -->
+            <div class="col-md-6 sign-up-form">
+                <!-- Display Error/Success Messages -->
+                <div th:if="${message}" class="alert" th:class="${success ? 'alert-success' : 'alert-danger'}" th:text="${message}"></div>
+
+                
+                <!-- Sign Up Form -->
+<form action="/signup-client" method="post" th:action="@{/signup-client}" th:object="${signupForm}">
+    <h1>Sign Up Your Pet</h1>
+    <fieldset>
+        <legend><span class="number">1</span> Pet Owner Info</legend>
+        <label for="owner_name">Username:</label>
+        <input type="text" id="owner_name" name="username" required>
+        <label for="owner_email">Email:</label>
+        <input type="email" id="owner_email" name="email" required>
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password" required>
+        <!-- Remove the role selection since it's fixed to CLIENT -->
+    </fieldset>
+    <fieldset>
+        <legend><span class="number">2</span> Pet Info</legend>
+        <label for="pet_name">Pet Name:</label>
+        <input type="text" id="pet_name" name="petName" required>
+        <label for="pet_type">Pet Type:</label>
+        <select id="pet_type" name="petType" required>
+            <option value="dog">Dog</option>
+            <option value="cat">Cat</option>
+            <option value="bird">Bird</option>
+            <option value="reptile">Reptile</option>
+            <option value="other">Other</option>
+        </select>
+        <label for="pet_age">Pet Age (Max 20 years):</label>
+        <input type="number" id="pet_age" name="petAge" min="0" max="20" required>
+        <label for="pet_bio">Pet Bio:</label>
+        <textarea id="pet_bio" name="petBio" placeholder="Tell us about your pet" required></textarea>
+    </fieldset>
+    <button type="submit">Sign Up</button>
+</form>
+            </div>
+        </div>
+    </main>
+    <footer>
+        <p>© 2024 VetCare</p>
+    </footer>
+</body>
+</html>

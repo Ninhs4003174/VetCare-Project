@@ -14,7 +14,7 @@
                 <li><a href="home"><img src="img/logo.png" alt="Logo" class="logo"></a></li>
                 <li><a href="about">About</a></li>
                 <li><a href="contacts">Contact</a></li>
-                <li><a href="/login">Log In</a></li>
+                <li><a href="/login-client">Log In</a></li>
             </ul>
         </nav>
     </header>
@@ -28,7 +28,7 @@
                 <p th:text="${error}"></p>
             </div>
 
-            <form action="/login" method="post" th:action="@{/login}">
+            <form action="/login-client" method="post">
                 <div class="form-group">
                     <label for="username">Username:</label>
                     <input type="text" id="username" name="username" required>
@@ -43,7 +43,7 @@
             </form>
 
             <div class="form-footer">
-                <p>Don't have an account? <a href="/signup">Sign up here</a>.</p>
+                <p>Don't have an account? <a href="/signup-client">Sign up here</a>.</p>
             </div>
         </div>
     </main>
