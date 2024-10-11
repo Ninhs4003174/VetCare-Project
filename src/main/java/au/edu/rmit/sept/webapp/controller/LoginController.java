@@ -48,7 +48,7 @@ public class LoginController {
             case RECEPTIONIST:
                 return "redirect:/clinichome";
             case VET:
-                return "redirect:/vethome";
+                return "redirect:/appointments/vethome";
             case ADMIN:
                 return "redirect:/adminhome";
             default:

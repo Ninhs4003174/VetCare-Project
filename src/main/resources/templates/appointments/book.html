@@ -13,10 +13,9 @@
                 <li><a th:href="@{/userhome}"><img th:src="@{/img/logo.png}" alt="Logo" class="logo"></a></li>
                 <li><a th:href="@{/resources}">Resources</a></li>
                 <li><a th:href="@{/appointments}">Appointments</a></li>
-                <li><a th:href="@{/appointments/compare-providers}">compare-providers</a></li>
+                <li><a th:href="@{/appointments/compare-providers}">Compare Providers</a></li>
                 <li><a href="profile">Profile</a></li>
                 <li><a href="/logout">Log Out</a></li>
-
             </ul>
         </nav>
     </header>
@@ -27,23 +26,20 @@
             <h1>Book an Appointment</h1>
             <form th:action="@{/appointments/book}" method="post" th:object="${appointment}" class="form-container">
                 <label for="petName">Pet Name:</label>
-                <input type="text" id="petName" th:field="*{petName}" required class="input-field">
+<select id="petName" th:field="*{petId}" class="select-field" required>
+    <option value="" disabled>Select a pet</option>
+    <option th:each="pet : ${pets}" th:value="${pet.id}" 
+            th:selected="${appointment.petId == pet.id}" 
+            th:text="${pet.name}">
+    </option>
+</select>
 
-                <!-- <label for="vetName">Vet Name:</label>
-                <select id="vetName" th:field="*{vetName}" class="select-field">
-                    <option value="" disabled selected>Select a vet</option>
-                    <option th:each="vet : ${vets}" th:value="${vet.name}" th:text="${vet.name}"></option>
-                </select> -->
-                <!-- <select id="vetName" th:field="*{vetName}" class="select-field">
-                    <option value="" disabled selected>Select a vet</option>
-                    <option th:each="vet : ${vets}" th:value="${vet.vetUserId}" th:text="${vet.vetName}"></option>
-                </select> -->
 
                 <label for="vetName">Vet Name:</label>
-<select id="vetName" th:field="*{vetId}" class="select-field">
-    <option value="" disabled selected>Select a vet</option>
-    <option th:each="vet : ${vets}" th:value="${vet.vetUserId}" th:text="${vet.vetName}"></option>
-</select>
+                <select id="vetName" th:field="*{vetId}" class="select-field" required>
+                    <option value="" disabled selected>Select a vet</option>
+                    <option th:each="vet : ${vets}" th:value="${vet.vetUserId}" th:text="${vet.vetName}"></option>
+                </select>
 
                 <label for="date">Date:</label>
                 <input type="date" id="date" th:field="*{date}" required 
@@ -51,15 +47,13 @@
                        max="${#dates.format(fiveDaysLater, 'yyyy-MM-dd')}" 
                        class="input-field">
 
-                <label for="time">Time:</label>
-                <select id="time" th:field="*{time}" class="select-field">
-                    <option value="" disabled selected>Select a time</option>
-                    <!-- Loop through time slots to display available ones -->
-                    <option th:each="time : ${timeSlots}" th:value="${time}" th:text="${time}"></option>
-                </select>
-
-                <label for="status">Status:</label>
-                <input type="text" id="status" th:field="*{status}" required class="input-field">
+                       <label for="time">Time:</label>
+                       <select id="time" th:field="*{time}" class="select-field" required>
+                           <option value="" disabled selected>Select a time</option>
+                           <!-- Loop through time slots to display available ones -->
+                           <option th:each="time : ${timeSlots}" th:value="${time}" th:text="${time}"></option>
+                       </select>
+                       
 
                 <!-- Error message display -->
                 <div th:if="${errorMessage}" class="alert alert-danger">
@@ -76,5 +70,51 @@
     <footer>
         <p>© 2024 VetCare</p>
     </footer>
+
+    <!-- Add JavaScript for client-side validation -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const dateField = document.getElementById('date');
+            const timeField = document.getElementById('time');
+            const today = new Date().toISOString().split('T')[0];
+            const form = document.querySelector('form');
+    
+            // Disable past dates
+            dateField.setAttribute('min', today);
+    
+            dateField.addEventListener('change', function () {
+                const selectedDate = dateField.value;
+                const now = new Date();
+                
+                if (selectedDate === today) {
+                    const currentTime = now.getHours() * 60 + now.getMinutes();
+                    const options = timeField.querySelectorAll('option');
+    
+                    options.forEach(option => {
+                        const [hours, minutes] = option.value.split(':').map(Number);
+                        const optionTime = hours * 60 + minutes;
+    
+                        if (optionTime < currentTime) {
+                            option.disabled = true;
+                        } else {
+                            option.disabled = false;
+                        }
+                    });
+                } else {
+                    const options = timeField.querySelectorAll('option');
+                    options.forEach(option => option.disabled = false);
+                }
+            });
+    
+            // Prevent form submission if no time is selected
+            form.addEventListener('submit', function (e) {
+                if (timeField.value === "") {
+                    alert("Please select a valid time slot.");
+                    e.preventDefault(); // Prevent form submission
+                }
+            });
+        });
+    </script>
+    
 </body>
 </html>

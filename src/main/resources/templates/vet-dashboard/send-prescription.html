@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Send Prescription</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body>
+    <header>
+        <nav>
+            <ul class="navbar-menu">
+                <li><a href="/vethome"><img src="/img/logo.png" alt="Logo" class="logo"></a></li>
+                <li><a href="/appointments">Appointments</a></li>
+                <li><a href="/patients">Patients</a></li>
+                <li><a href="/prescriptions">Prescriptions</a></li>
+                <li><a href="/profile">Profile</a></li>
+                <li><a href="/logout">Log Out</a></li>
+            </ul>
+        </nav>
+    </header>
+    
+    <main class="container">
+        <h1>Send Prescription</h1>
+        <p>Logged in as: <span th:text="${vetUser.username}"></span></p>
+        <p>Sending prescription for: <span th:text="${client.username}"></span></p>
+        
+        <form th:action="@{/submit-prescription}" method="post">
+            <input type="hidden" name="clientId" th:value="${client.id}">
+            <input type="hidden" name="vetId" th:value="${vetUser.id}">
+            
+            <div>
+                <label for="petName">Pet Name:</label>
+                <select id="petName" name="petName" class="select-field" required>
+                    <option value="" disabled selected>Select a pet</option>
+                    <option th:each="pet : ${pets}" th:value="${pet.name}" th:text="${pet.name}"></option>
+                </select>
+            </div>
+            <div>
+                <label for="medicationName">Medication Name:</label>
+                <select id="medicationName" name="medicationName" class="select-field" required>
+                    <option value="" disabled selected>Select a medication</option>
+                    <option th:each="medication : ${medications}" th:value="${medication}" th:text="${medication}"></option>
+                </select>
+            </div>
+            <div>
+                <label for="dosage">Dosage:</label>
+                <select id="dosage" name="dosage" class="select-field" required>
+                    <option value="" disabled selected>Select a dosage</option>
+                    <option th:each="dosage : ${dosages}" th:value="${dosage}" th:text="${dosage}"></option>
+                </select>
+            </div>
+            <div>
+                <label for="refillsAvailable">Refills Available:</label>
+                <input type="number" id="refillsAvailable" name="refillsAvailable" min="0" required>
+            </div>
+            <div>
+                <button type="submit" class="btn">Send Prescription</button>
+            </div>
+        </form>
+    </main>
+    
+    <footer>
+        <p>© 2024 VetCare</p>
+    </footer>
+</body>
+</html>a<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Send Prescription</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body>
+    <header>
+        <nav>
+            <ul class="navbar-menu">
+                <li><a th:href="@{/vet-dashboard/vethome}"><img th:src="@{/img/logo.png}" alt="Logo" class="logo"></a></li>
+                <li><a th:href="@{/appointments}">Appointments</a></li>
+                <li><a th:href="@{/patients}">Patients</a></li>
+                <li><a th:href="@{/profile}">Profile</a></li>
+                <li><a th:href="@{/logout}">Log Out</a></li>
+            </ul>
+        </nav>
+    </header>
+    
+    <main class="container">
+        <h1>Send Prescription</h1>
+        <p>Logged in as: <span th:text="${vetUser.username}"></span></p>
+        <p>Sending prescription for: <span th:text="${client.username}"></span></p>
+        
+        <form th:action="@{/submit-prescription}" method="post">
+            <input type="hidden" name="clientId" th:value="${client.id}">
+            <input type="hidden" name="vetId" th:value="${vetUser.id}">
+            
+            <div>
+                <label for="petName">Pet Name:</label>
+                <select id="petName" name="petName" class="select-field" required>
+                    <option value="" disabled selected>Select a pet</option>
+                    <option th:each="pet : ${pets}" th:value="${pet.name}" th:text="${pet.name}"></option>
+                </select>
+            </div>
+            <div>
+                <label for="medicationName">Medication Name:</label>
+                <select id="medicationName" name="medicationName" class="select-field" required>
+                    <option value="" disabled selected>Select a medication</option>
+                    <option th:each="medication : ${medications}" th:value="${medication}" th:text="${medication}"></option>
+                </select>
+            </div>
+            <div>
+                <label for="dosage">Dosage:</label>
+                <select id="dosage" name="dosage" class="select-field" required>
+                    <option value="" disabled selected>Select a dosage</option>
+                    <option th:each="dosage : ${dosages}" th:value="${dosage}" th:text="${dosage}"></option>
+                </select>
+            </div>
+            <div>
+                <label for="refillsAvailable">Refills Available:</label>
+                <input type="number" id="refillsAvailable" name="refillsAvailable" min="0" required>
+            </div>
+            <div>
+                <button type="submit" class="btn">Send Prescription</button>
+            </div>
+        </form>
+    </main>
+    
+    <footer>
+        <p>© 2024 VetCare</p>
+    </footer>
+</body>
+</html>

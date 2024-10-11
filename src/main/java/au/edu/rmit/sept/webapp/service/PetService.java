@@ -27,6 +27,10 @@ public class PetService {
         petRepository.save(pet);
     }
 
+    public Pet findById(Long id) {
+        return petRepository.findById(id).orElse(null);
+    }
+
     // New method to find pets by user
     public List<Pet> findPetsByUser(User user) {
         return petRepository.findByOwner(user); // Ensure this method is implemented in your PetRepository

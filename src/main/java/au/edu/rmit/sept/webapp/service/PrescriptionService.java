@@ -1,36 +1,48 @@
 package au.edu.rmit.sept.webapp.service;
 
 import au.edu.rmit.sept.webapp.model.Prescription;
-import au.edu.rmit.sept.webapp.model.Vet;
 import au.edu.rmit.sept.webapp.repository.PrescriptionRepository;
-import au.edu.rmit.sept.webapp.repository.VetRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class PrescriptionService {
 
-    @Autowired
-    private PrescriptionRepository prescriptionRepository;
+    private final PrescriptionRepository prescriptionRepository;
 
     @Autowired
-    private VetRepository vetRepository;
-
-    public Prescription requestPrescription(Prescription prescription) {
-        return prescriptionRepository.save(prescription);
+    public PrescriptionService(PrescriptionRepository prescriptionRepository) {
+        this.prescriptionRepository = prescriptionRepository;
     }
 
-    public List<Prescription> getPendingPrescriptions() {
-        return prescriptionRepository.findByRefillStatus("Pending");
+    public void savePrescription(Prescription prescription) {
+        prescriptionRepository.save(prescription);
     }
 
-    public List<Vet> searchClinics(String query) {
-        return vetRepository.findByClinicNameContainingIgnoreCase(query);
+    public List<Prescription> findPrescriptionsByVetId(Long vetId) {
+        return prescriptionRepository.findByVetId(vetId);
     }
 
-    public Vet findVetById(Long vetId) {
-        return vetRepository.findById(vetId).orElse(null);
+    public List<Prescription> findByUser(Long userId) {
+        return prescriptionRepository.findByUserId(userId);
+    }
+
+    public Optional<Prescription> findById(Long id) {
+        return prescriptionRepository.findById(id);
+    }
+
+    public void updateDeliveryStatus(Long prescriptionId, String newStatus) {
+        Optional<Prescription> optionalPrescription = prescriptionRepository.findById(prescriptionId);
+        if (optionalPrescription.isPresent()) {
+            Prescription prescription = optionalPrescription.get();
+            prescription.setDeliveryStatus(newStatus);
+            prescription.handleDeliveryStatusChange();
+            prescription.setUpdatedAt(LocalDateTime.now());
+            prescriptionRepository.save(prescription);
+        }
     }
 }

@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Request Prescription Refill</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body>
+    <header>
+        <nav>
+            <ul class="navbar-menu">
+                <li><a th:href="@{/userhome}"><img th:src="@{/img/logo.png}" alt="Logo" class="logo"></a></li>
+                <li><a th:href="@{/appointments}">Appointments</a></li>
+                <li><a th:href="@{/profile}">Profile</a></li>
+                <li><a th:href="@{/logout}">Log Out</a></li>
+            </ul>
+        </nav>
+    </header>
+    
+    <main class="container">
+        <h1>Request Prescription Refill</h1>
+        <form th:action="@{/request-prescription}" method="post">
+            <input type="hidden" th:value="${prescription.id}" name="prescriptionId"/>
+            <button type="submit" class="btn btn-primary">Confirm Refill Request</button>
+        </form>
+    </main>
+    
+    <footer>
+        <p>© 2024 VetCare</p>
+    </footer>
+</body>
+</html>

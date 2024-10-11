@@ -1,48 +1,146 @@
 package au.edu.rmit.sept.webapp.model;
 
 import jakarta.persistence.*;
-import java.util.Date;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "prescriptions")
+@EntityListeners(PrescriptionListener.class)
 public class Prescription {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long prescriptionId;
+    private Long id;
 
-    @Column(name = "pet_id", nullable = false)
-    private Long petId;
+    @Column(name = "user_id", nullable = false)
+    private Long userId;
 
-    @ManyToOne
-    @JoinColumn(name = "vet_id", nullable = false)
-    private Vet vet;
+    @Column(name = "vet_id", nullable = false)
+    private Long vetId;
+
+    @Column(name = "pet_name")
+    private String petName;
 
     @Column(name = "medication_name", nullable = false)
     private String medicationName;
 
+    @Column(name = "dosage", nullable = false)
     private String dosage;
 
-    @Column(length = 500)
-    private String instructions;
+    @Column(name = "refills_available", nullable = false)
+    private int refillsAvailable;
 
-    @Temporal(TemporalType.DATE)
-    private Date issueDate = new Date();
+    @Column(name = "refill_request", nullable = false)
+    private boolean refillRequest;
 
-    @Column(length = 20)
-    private String refillStatus = "Pending"; // Default value
+    @Column(name = "delivery_status", nullable = false)
+    private String deliveryStatus;
 
-    // Constructors, getters, setters
-    public Prescription() {
-    }
+    @Column(name = "created_at", nullable = false)
+    private LocalDateTime createdAt;
 
-    public Prescription(Long petId, Vet vet, String medicationName, String dosage, String instructions) {
-        this.petId = petId;
-        this.vet = vet;
-        this.medicationName = medicationName;
-        this.dosage = dosage;
-        this.instructions = instructions;
+    @Column(name = "updated_at", nullable = false)
+    private LocalDateTime updatedAt;
+
+    public void handleDeliveryStatusChange() {
+        if ("DELIVERED".equals(this.deliveryStatus) && this.refillRequest) {
+            this.refillRequest = false;
+            this.deliveryStatus = "PENDING";
+            this.refillsAvailable++;
+        }
     }
 
     // Getters and setters
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Long userId) {
+        this.userId = userId;
+    }
+
+    public Long getVetId() {
+        return vetId;
+    }
+
+    public void setVetId(Long vetId) {
+        this.vetId = vetId;
+    }
+
+    public String getPetName() {
+        return petName;
+    }
+
+    public void setPetName(String petName) {
+        this.petName = petName;
+    }
+
+    public String getMedicationName() {
+        return medicationName;
+    }
+
+    public void setMedicationName(String medicationName) {
+        this.medicationName = medicationName;
+    }
+
+    public String getDosage() {
+        return dosage;
+    }
+
+    public void setDosage(String dosage) {
+        this.dosage = dosage;
+    }
+
+    public int getRefillsAvailable() {
+        return refillsAvailable;
+    }
+
+    public void setRefillsAvailable(int refillsAvailable) {
+        this.refillsAvailable = refillsAvailable;
+    }
+
+    public boolean isRefillRequest() {
+        return refillRequest;
+    }
+
+    public void setRefillRequest(boolean refillRequest) {
+        this.refillRequest = refillRequest;
+    }
+
+    public String getDeliveryStatus() {
+        return deliveryStatus;
+    }
+
+    public void setDeliveryStatus(String deliveryStatus) {
+        this.deliveryStatus = deliveryStatus;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public LocalDateTime getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(LocalDateTime updatedAt) {
+        this.updatedAt = updatedAt;
+    }
+
+    public Prescription orElse(Object object) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'orElse'");
+    }
 }

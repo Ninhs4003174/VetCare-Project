@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,6 +8,7 @@
     <link rel="stylesheet" href="/css/styles.css" />
     <link rel="stylesheet" href="/css/appointment.css">
 </head>
+
 <body>
     <!-- Header with Navigation -->
     <header>
@@ -23,6 +25,7 @@
             </ul>
         </nav>
     </header>
+
     <!-- Main Content -->
     <main>
         <div class="appointments-container">
@@ -37,18 +40,25 @@
                 <li>
                     <span th:text="${appointmentDetails.get('appointment').formattedDetails()}">Appointment details</span>
                     <span> - Vet: <span th:text="${appointmentDetails.get('vetName')}">Vet Name</span></span>
-                    
-                    <!-- Cancel button -->
-                    <form th:action="@{/appointments/cancel}" method="post" style="display:inline;">
-                        <input type="hidden" th:value="${appointmentDetails.get('appointment').id}" name="id"/>
-                        <button class="cancel" type="submit">Cancel</button>
-                    </form>
-            
-                    <!-- Edit button that links to the edit page -->
-                    <a th:href="@{/appointments/edit/{id}(id=${appointmentDetails.get('appointment').id})}">Edit</a>
+
+                    <!-- Check if appointment status is 'REJECTED' -->
+                    <span th:if="${appointmentDetails.get('appointment').status == 'REJECTED'}">
+                        <p>Your appointment has been rejected. Please book a new appointment.</p>
+                    </span>
+
+                    <!-- Show Cancel and Edit buttons if the status is neither 'COMPLETED' nor 'REJECTED' -->
+                    <span th:if="${appointmentDetails.get('appointment').status != 'COMPLETED' && appointmentDetails.get('appointment').status != 'REJECTED'}">
+                        <!-- Cancel button -->
+                        <form th:action="@{/appointments/cancel}" method="post" style="display:inline;">
+                            <input type="hidden" th:value="${appointmentDetails.get('appointment').id}" name="id" />
+                            <button class="cancel" type="submit">Cancel</button>
+                        </form>
+
+                        <!-- Edit button that links to the edit page -->
+                        <a class="edit-link" th:href="@{/appointments/edit/{id}(id=${appointmentDetails.get('appointment').id})}">Edit</a>
+                    </span>
                 </li>
             </ul>
-            
         </div>
     </main>
 
@@ -57,4 +67,5 @@
         <p>© 2024 VetCare</p>
     </footer>
 </body>
+
 </html>

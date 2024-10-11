@@ -6,5 +6,6 @@ import au.edu.rmit.sept.webapp.model.VetBooking;
 
 public interface VetBookingRepository {
     List<VetBooking> findAll();
-}
 
+    void save(VetBooking vetBooking);
+}

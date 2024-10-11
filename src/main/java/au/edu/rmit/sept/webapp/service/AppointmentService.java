@@ -8,16 +8,19 @@ import au.edu.rmit.sept.webapp.model.User;
 
 public interface AppointmentService {
     Collection<Appointment> getAppointments();
-    // method to retrieve appointments for the logged-in user
-    List<Appointment> getAppointmentsByUser(User user); 
-    //method to save appointments
+
+    List<Appointment> getAppointmentsByUser(User user);
+
     void saveAppointment(Appointment appointment);
-     // method to cancel appointments
+
     void cancelAppointment(Long id);
-    //finding apointment byid to update it
+
     Appointment findAppointmentById(Long id);
+
     void updateAppointment(Appointment appointment);
+    
+
+    List<Appointment> getAppointmentsByVet(Long vetId);
+     // New method to update appointment status
+     void updateAppointmentStatus(Long appointmentId, String status);
 }
-
-
-

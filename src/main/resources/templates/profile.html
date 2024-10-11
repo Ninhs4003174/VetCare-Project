@@ -1,28 +1,42 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href='https://fonts.googleapis.com/css?family=Nunito:400,300' rel='stylesheet' type='text/css'>
-    <link rel="stylesheet" href="css/styles.css" />
-    <link rel="stylesheet" href="/css/profile.css">
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+    <link rel="stylesheet" th:href="@{/css/profile.css}">
 </head>
 <body>
     <!-- Header Start -->
     <header>
         <nav>
             <ul class="navbar-menu">
-                <li><a href="userhome"><img src="img/logo.png" alt="Logo" class="logo"></a></li>
-                <li><a href="about">About</a></li>
-                <li><a href="resources">Resources</a></li>
-                <li><a href="contact">Contact</a></li>
-                <li><a href="appointments">Appointments</a></li>
-                <li><a href="prescription-management">Prescriptions</a></li>
-                <li><a href="profile">Profile</a></li>
-                <li><a href="/logout">Log Out</a></li>
+                <!-- Logo for vet or user based on role -->
+                <li><a th:href="@{/vethome}" th:if="${userRole != 'CLIENT'}"><img th:src="@{/img/logo.png}" alt="Vet Logo" class="logo"></a></li>
+                <li><a th:href="@{/userhome}" th:if="${userRole == 'CLIENT'}"><img th:src="@{/img/logo.png}" alt="User Logo" class="logo"></a></li>
+    
+                <!-- Vet-specific navigation -->
+                <li th:if="${userRole != 'CLIENT'}"><a th:href="@{/appointments}">Appointments</a></li>
+                <li th:if="${userRole != 'CLIENT'}"><a th:href="@{/patients}">Patients</a></li>
+                <li th:if="${userRole != 'CLIENT'}"><a th:href="@{/prescriptions}">Prescriptions</a></li>
+                <li th:if="${userRole != 'CLIENT'}"><a th:href="@{/precision-requests}">Precision Requests</a></li>
+                <li th:if="${userRole != 'CLIENT'}"><a th:href="@{/records}">Records</a></li>
+    
+                <!-- User-specific navigation -->
+                <li th:if="${userRole == 'CLIENT'}"><a th:href="@{/appointments}">Appointments</a></li>
+                <li th:if="${userRole == 'CLIENT'}"><a th:href="@{/records}">Records</a></li>
+                <li th:if="${userRole == 'CLIENT'}"><a th:href="@{/resources}">Resources</a></li>
+                <li th:if="${userRole == 'CLIENT'}"><a th:href="@{/contact}">Contact</a></li>
+                <li th:if="${userRole == 'CLIENT'}"><a th:href="@{/products}">Products</a></li>
+    
+                <!-- Common pages -->
+                <li><a th:href="@{/profile}">Profile</a></li>
+                <li><a th:href="@{/logout}">Log Out</a></li>
             </ul>
         </nav>
     </header>
+    
     
     <!-- Main Content Start -->
     <div class="profile-content">
@@ -30,10 +44,9 @@
             <h2>Profile</h2>
             
             <!-- Display messages -->
-            <!-- Display messages -->
-<div th:if="${message}" class="alert" th:class="${success ? 'alert-success' : 'alert-danger'}">
-    <p th:text="${message}"></p>
-</div>
+            <div th:if="${message}" class="alert" th:classappend="${success ? 'alert-success' : 'alert-danger'}">
+                <p th:text="${message}"></p>
+            </div>
 
             <div class="info-box">
                 <p><strong>Username:</strong> <span th:text="${user?.username}"></span></p>

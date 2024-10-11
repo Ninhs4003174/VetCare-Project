@@ -37,6 +37,19 @@ public class User {
         this.role = role; // Set the role
     }
 
+    // Add the required constructor
+    public User(Long id, String username, String password, String email, String phoneNumber, String address,
+            String role, Long clinicId) {
+        this.id = id;
+        this.username = username;
+        this.password = password;
+        this.email = email;
+        this.phoneNumber = phoneNumber;
+        this.address = address;
+        this.role = UserRole.valueOf(role); // Convert string to UserRole enum
+        this.clinicId = clinicId;
+    }
+
     public Long getId() {
         return id;
     }

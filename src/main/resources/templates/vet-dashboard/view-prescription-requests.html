@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View Prescription Requests</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body>
+    <header>
+        <nav>
+            <ul class="navbar-menu">
+                <li><a th:href="@{/vethome}"><img th:src="@{/img/logo.png}" alt="Logo" class="logo"></a></li>
+                <li><a th:href="@{/appointments}">Appointments</a></li>
+                <li><a th:href="@{/profile}">Profile</a></li>
+                <li><a th:href="@{/logout}">Log Out</a></li>
+            </ul>
+        </nav>
+    </header>
+    
+    <main class="container">
+        <h1>Prescription Requests</h1>
+        <table>
+            <thead>
+                <tr>
+                    <th>Prescription ID</th>
+                    <th>Pet Name</th>
+                    <th>Medication</th>
+                    <th>Status</th>
+                    <th>Requested At</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="request : ${prescriptionRequests}">
+                    <td th:text="${request.prescription.id}"></td>
+                    <td th:text="${request.petName}"></td>
+                    <td th:text="${request.prescription.medicationName}"></td>
+                    <td th:text="${request.status}"></td>
+                    <td th:text="${#temporals.format(request.requestedAt, 'yyyy-MM-dd HH:mm')}"></td>
+                    <td>
+                        <form th:action="@{/approve-prescription-request/{id}(id=${request.id})}" method="post">
+                            <button type="submit" class="btn btn-success">Approve</button>
+                        </form>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </main>
+    
+    <footer>
+        <p>© 2024 VetCare</p>
+    </footer>
+</body>
+</html>
