@@ -8,6 +8,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import java.util.List;
@@ -102,5 +103,23 @@ public class AdminDashBoardController {
         user.setRole(UserRole.ADMIN);
         userService.saveUser(user);
         return "redirect:/adminlist";
+    }
+
+    @GetMapping("/delete-clinic/{id}")
+    public String deleteClinic(@PathVariable Long id) {
+        userService.deleteUserById(id);
+        return "redirect:/admin-dashboard/cliniclist";
+    }
+
+    @GetMapping("/delete-user/{id}")
+    public String deleteUser(@PathVariable Long id) {
+        userService.deleteUserById(id);
+        return "redirect:/admin-dashboard/userlist";
+    }
+
+    @GetMapping("/delete-vet/{id}")
+    public String deleteVet(@PathVariable Long id) {
+        userService.deleteUserById(id);
+        return "redirect:/admin-dashboard/vetlist";
     }
 }

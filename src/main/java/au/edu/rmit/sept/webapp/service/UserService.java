@@ -124,4 +124,9 @@ public class UserService implements UserDetailsService {
     public List<User> findAllById(List<Long> userIds) {
         return userRepository.findAllById(userIds);
     }
+
+    public void deleteUserById(Long id) {
+        userRepository.deleteById(id);
+    }
+
 }

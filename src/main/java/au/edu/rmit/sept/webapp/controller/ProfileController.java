@@ -101,6 +101,20 @@ public class ProfileController {
                 return "redirect:/edit-user"; // Redirect back to edit user form
             }
 
+            // Validate address
+            if (!address.matches("[0-9a-zA-Z\\s,.-]+")) {
+                redirectAttributes.addFlashAttribute("message", "Invalid address format");
+                redirectAttributes.addFlashAttribute("success", false); // Indicate failure
+                return "redirect:/edit-user"; // Redirect back to edit user form
+            }
+
+            // Validate phone number
+            if (!phoneNumber.matches("\\+?[0-9]{1,3}?[-. ]?[0-9]{1,4}[-. ]?[0-9]{1,4}[-. ]?[0-9]{1,9}")) {
+                redirectAttributes.addFlashAttribute("message", "Invalid phone number format");
+                redirectAttributes.addFlashAttribute("success", false); // Indicate failure
+                return "redirect:/edit-user"; // Redirect back to edit user form
+            }
+
             // Update user details
             user.setAddress(address);
             user.setPhoneNumber(phoneNumber);
