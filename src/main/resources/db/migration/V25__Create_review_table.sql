@@ -1,0 +1,12 @@
+DROP TABLE IF EXISTS review CASCADE;
+
+CREATE TABLE review (
+    id SERIAL PRIMARY KEY,
+    clinic_name VARCHAR(255) NOT NULL,
+    user_id BIGINT NOT NULL,
+    content VARCHAR(255) NOT NULL,
+    rating INT NOT NULL,
+    review_date DATE NOT NULL,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES vet_users(id) ON DELETE CASCADE
+);
