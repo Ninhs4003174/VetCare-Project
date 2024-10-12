@@ -1,56 +1,70 @@
 package au.edu.rmit.sept.webapp.controller;
 
-import au.edu.rmit.sept.webapp.model.PetRecord;
-import au.edu.rmit.sept.webapp.service.PetRecordService;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import au.edu.rmit.sept.webapp.service.PetRecordService;
+import au.edu.rmit.sept.webapp.service.VetService;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import au.edu.rmit.sept.webapp.model.PetRecord;
+import au.edu.rmit.sept.webapp.model.Vet;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
-@RequestMapping("/records")
 public class PetRecordController {
 
     @Autowired
     private PetRecordService petRecordService;
 
-    @GetMapping
+    @Autowired
+    private VetService vetService; // Service to fetch Vet details
+
+    // Display all pet records
+    @GetMapping("/vet/records")
     public String getAllRecords(Model model) {
         model.addAttribute("records", petRecordService.getAllPetRecords());
-        return "records"; // This corresponds to records.html
+        return "vet-dashboard/records";
     }
 
-    // Serve the new record form page
-    @GetMapping("/new")
+    // Show form to create a new pet record
+    @GetMapping("/vet/records/new")
     public String showNewRecordForm(Model model) {
         PetRecord petRecord = new PetRecord();
         model.addAttribute("petRecord", petRecord);
-        return "new_record"; // This corresponds to new_record.html
+        model.addAttribute("vets", vetService.getAllVets()); // Add list of vets for selection
+        return "vet-dashboard/new_record";
     }
 
-    // Handle form submission to save the new pet record
-    @PostMapping("/save")
-    public String saveRecord(@ModelAttribute("petRecord") PetRecord petRecord) {
+    // Save a new pet record
+    @PostMapping("/vet/records/save")
+    public String saveRecord(@ModelAttribute PetRecord petRecord, @RequestParam("vetId") Long vetId) {
+        // Set the associated Vet entity
+        Vet vet = vetService.getVetById(vetId);
+        if (vet != null) {
+            petRecord.setVet(vet);
+        }
         petRecordService.save(petRecord);
-        return "redirect:/records"; // Redirect to records list after saving
+        return "redirect:/vet/records";
     }
 
-    // Serve the edit record form page
-    @GetMapping("/edit/{id}")
+    // Show form to edit an existing pet record
+    @GetMapping("/vet/records/edit/{id}")
     public String showEditRecordForm(@PathVariable Long id, Model model) {
         PetRecord petRecord = petRecordService.getPetRecordById(id);
         model.addAttribute("petRecord", petRecord);
-        return "edit_record"; // This corresponds to edit_record.html
+        model.addAttribute("vets", vetService.getAllVets()); // Add list of vets for selection
+        return "vet-dashboard/edit_record";
     }
 
-    // Handle form submission to update an existing pet record
-    @PostMapping("/update/{id}")
-    public String updateRecord(@PathVariable Long id, @ModelAttribute("petRecord") PetRecord petRecord) {
+    // Update an existing pet record
+    @PostMapping("/vet/records/update/{id}")
+    public String updateRecord(@PathVariable Long id, @ModelAttribute PetRecord petRecord,
+            @RequestParam("vetId") Long vetId) {
         PetRecord existingRecord = petRecordService.getPetRecordById(id);
-
         if (existingRecord != null) {
-            // Update the fields of the existing record with the form data
             existingRecord.setName(petRecord.getName());
             existingRecord.setBreed(petRecord.getBreed());
             existingRecord.setDateOfBirth(petRecord.getDateOfBirth());
@@ -64,22 +78,22 @@ public class PetRecordController {
             existingRecord.setDietaryRecommendations(petRecord.getDietaryRecommendations());
             existingRecord.setNotes(petRecord.getNotes());
 
-            petRecordService.update(existingRecord); // Call service to update the record
-        }
+            // Update Vet association
+            Vet vet = vetService.getVetById(vetId);
+            if (vet != null) {
+                existingRecord.setVet(vet);
+            }
 
-        return "redirect:/records"; // Redirect to records page after update
+            petRecordService.update(existingRecord);
+        }
+        return "redirect:/vet/records";
     }
 
-    // Delete a pet record
-    @GetMapping("/delete/{id}")
-    public String deleteRecord(@PathVariable Long id) {
-        PetRecord record = petRecordService.getPetRecordById(id);
-
-        if (record != null) {
-            petRecordService.delete(id);
-            return "redirect:/records?success"; // Success message can be handled in the frontend
-        }
-
-        return "redirect:/records?error"; // Redirect with error if record not found
+    // View a specific pet record
+    @GetMapping("/vet/records/view/{id}")
+    public String viewPetRecord(@PathVariable Long id, Model model) {
+        PetRecord petRecord = petRecordService.getPetRecordById(id);
+        model.addAttribute("petRecord", petRecord);
+        return "vet-dashboard/view_record";
     }
 }
