@@ -50,9 +50,10 @@ public class SecurityConfig {
         httpSecurity
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(registry -> {
-                    // Open access for public resources and login page
-                    registry.requestMatchers("/vetcaresystemhome", "/signup-client", "/signup-admin", "/home", "/about",
-                            "/resources", "/css/**", "/img/**").permitAll();
+                    // Open access for public resources and role selection page
+                    registry.requestMatchers("/vetcaresystemhome", "/vetcaresystemhome/selectrole", "/signup-client",
+                            "/signup-admin", "/home", "/about", "/resources", "/css/**", "/img/**", "/contacts")
+                            .permitAll();
 
                     // Role-based access control for creating and deleting pet records
                     registry.requestMatchers("/pets/create", "/pets/delete/**").hasRole("ADMIN");
