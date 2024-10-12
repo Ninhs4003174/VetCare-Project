@@ -53,7 +53,8 @@ public class SecurityConfig {
                 .authorizeHttpRequests(registry -> {
                     // Open access for public resources and role selection page
                     registry.requestMatchers("/vetcaresystemhome", "/vetcaresystemhome/selectrole", "/signup-client",
-                            "/signup-admin", "/home", "/about", "/resources", "/css/**", "/img/**").permitAll();
+                            "/signup-admin", "/home", "/about", "/resources", "/css/**", "/img/**", "/contacts")
+                            .permitAll();
 
                     // Define access control for different roles after login
                     registry.requestMatchers("/clinichome/").hasRole("RECEPTIONIST");
