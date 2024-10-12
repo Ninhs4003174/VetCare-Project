@@ -1,8 +1,7 @@
 package au.edu.rmit.sept.webapp.controller;
 
-import au.edu.rmit.sept.webapp.model.User;
-import au.edu.rmit.sept.webapp.model.enums.UserRole;
-import au.edu.rmit.sept.webapp.service.UserService;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -10,14 +9,22 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.util.List;
+import au.edu.rmit.sept.webapp.model.Resource;
+import au.edu.rmit.sept.webapp.model.User;
+import au.edu.rmit.sept.webapp.model.enums.UserRole;
+import au.edu.rmit.sept.webapp.service.ResourceService;
+import au.edu.rmit.sept.webapp.service.UserService;
 
 @Controller
 public class AdminDashBoardController {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private ResourceService resourceService;
 
     @GetMapping("/adminlist")
     public String adminList(Model model) {
@@ -105,21 +112,41 @@ public class AdminDashBoardController {
         return "redirect:/adminlist";
     }
 
+    @GetMapping("/resource-approvals")
+    public String viewPendingResources(Model model) {
+        List<Resource> pendingResources = resourceService.getPendingResources();
+        model.addAttribute("resources", pendingResources);
+        return "admin-dashboard/resource-approvals";
+    }
+
+    @GetMapping("/resources/approve/{id}")
+    public String approveResource(@PathVariable Long id, RedirectAttributes redirectAttributes) {
+        resourceService.approveResource(id);
+        redirectAttributes.addFlashAttribute("message", "Resource approved successfully.");
+        return "redirect:/resource-approvals";
+    }
+
+    @GetMapping("/resources/reject/{id}")
+    public String rejectResource(@PathVariable Long id, RedirectAttributes redirectAttributes) {
+        resourceService.denyResource(id);
+        redirectAttributes.addFlashAttribute("message", "Resource rejected.");
+        return "redirect:/resource-approvals";
+    }
     @GetMapping("/delete-clinic/{id}")
     public String deleteClinic(@PathVariable Long id) {
         userService.deleteUserById(id);
-        return "redirect:/admin-dashboard/cliniclist";
+        return "redirect:/cliniclist";
     }
 
     @GetMapping("/delete-user/{id}")
     public String deleteUser(@PathVariable Long id) {
         userService.deleteUserById(id);
-        return "redirect:/admin-dashboard/userlist";
+        return "redirect:/userlist";
     }
 
     @GetMapping("/delete-vet/{id}")
     public String deleteVet(@PathVariable Long id) {
         userService.deleteUserById(id);
-        return "redirect:/admin-dashboard/vetlist";
+        return "redirect:/vetlist";
     }
 }

@@ -3,18 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vet List</title>
+    <title>Resource Approvals</title>
     <link rel="stylesheet" href="/css/styles.css">
-    <script>
-        function toggleForm(formId) {
-            var form = document.getElementById(formId);
-            if (form.style.display === "none") {
-                form.style.display = "block";
-            } else {
-                form.style.display = "none";
-            }
-        }
-    </script>
 </head>
 <body>
     <header>
@@ -34,30 +24,34 @@
     </header>
     
     <main class="container">
-        <section id="vet-list">
-            <h2>Vet List</h2>
+        <section>
+            <h2>Pending Resources</h2>
             <table>
                 <thead>
                     <tr>
-                        <th>ID</th>
-                        <th>Name</th>
-                        <th>Email</th>
+                        <th>Title</th>
+                        <th>Description</th>
+                        <th>Type</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr th:each="user : ${users}">
-                        <td th:text="${user.id}"></td>
-                        <td th:text="${user.username}"></td>
-                        <td th:text="${user.email}"></td>
+                    <tr th:each="resource : ${pendingResources}">
+                        <td th:text="${resource.title}"></td>
+                        <td th:text="${resource.description}"></td>
+                        <td th:text="${resource.type}"></td>
                         <td>
-                            <a th:href="@{/delete-vet/{id}(id=${user.id})}">Delete</a>
+                            <form th:action="@{/resources/approve/{id}(id=${resource.id})}" method="post">
+                                <button type="submit" class="btn-primary">Approve</button>
+                            </form>
+                            <form th:action="@{/resources/deny/{id}(id=${resource.id})}" method="post">
+                                <button type="submit" class="btn-secondary">Deny</button>
+                            </form>
                         </td>
                     </tr>
                 </tbody>
             </table>
         </section>
-
     </main>
     
     <footer>
