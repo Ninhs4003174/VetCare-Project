@@ -1,7 +1,6 @@
 package au.edu.rmit.sept.webapp.service;
 
 import java.util.List;
-
 import au.edu.rmit.sept.webapp.model.PetRecord;
 
 public interface PetRecordService {
@@ -11,6 +10,9 @@ public interface PetRecordService {
 
     // Get a pet record by ID
     PetRecord getPetRecordById(Long id);
+
+    // Get all pet records associated with a specific user ID
+    List<PetRecord> getPetRecordsByUserId(Long userId);
 
     // Save a new pet record
     void save(PetRecord petRecord);
