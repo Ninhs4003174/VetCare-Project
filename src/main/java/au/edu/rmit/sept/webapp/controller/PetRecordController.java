@@ -2,6 +2,7 @@ package au.edu.rmit.sept.webapp.controller;
 
 import au.edu.rmit.sept.webapp.model.PetRecord;
 import au.edu.rmit.sept.webapp.model.Vet;
+import au.edu.rmit.sept.webapp.model.Vet;
 import au.edu.rmit.sept.webapp.service.PetRecordService;
 import au.edu.rmit.sept.webapp.service.VetService;
 
