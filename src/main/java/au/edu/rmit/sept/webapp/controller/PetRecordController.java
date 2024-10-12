@@ -5,33 +5,22 @@ import au.edu.rmit.sept.webapp.model.Vet;
 import au.edu.rmit.sept.webapp.service.PetRecordService;
 import au.edu.rmit.sept.webapp.service.VetService;
 
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-
+import org.apache.pdfbox.pdmodel.PDDocument;
+import org.apache.pdfbox.pdmodel.PDPage;
+import org.apache.pdfbox.pdmodel.PDPageContentStream;
+import org.apache.pdfbox.pdmodel.font.PDType1Font;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import org.springframework.http.HttpHeaders;
-import org.springframework.core.io.Resource;
-import org.springframework.http.MediaType;
-
 import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.InputStreamResource;
-import org.springframework.core.io.Resource;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 @RequestMapping("/records")
@@ -113,7 +102,7 @@ public class PetRecordController {
 
     // Download PDF of a specific pet record
     @RequestMapping("/download-pdf/{id}")
-    public ResponseEntity<Resource> downloadPdf(@PathVariable Long id) throws IOException {
+    public ResponseEntity<InputStreamResource> downloadPdf(@PathVariable Long id) throws IOException {
         PetRecord record = petRecordService.getPetRecordById(id);
 
         ByteArrayInputStream pdfStream = generatePdf(record);
@@ -127,8 +116,69 @@ public class PetRecordController {
                 .body(new InputStreamResource(pdfStream));
     }
 
-    private ByteArrayInputStream generatePdf(PetRecord record) {
-        // PDF generation logic (use iText or other PDF library)
-        return new ByteArrayInputStream(new byte[0]); // Replace with actual PDF generation logic.
+    private ByteArrayInputStream generatePdf(PetRecord record) throws IOException {
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+
+        // Create a new PDF document
+        try (PDDocument document = new PDDocument()) {
+            // Add a blank page
+            PDPage page = new PDPage();
+            document.addPage(page);
+
+            // Create a content stream to add content to the page
+            try (PDPageContentStream contentStream = new PDPageContentStream(document, page)) {
+                contentStream.setFont(PDType1Font.HELVETICA_BOLD, 14);
+                contentStream.beginText();
+                contentStream.newLineAtOffset(100, 750); // Set starting position on the page
+
+                // Add title
+                contentStream.showText("Pet Record for " + record.getName());
+                contentStream.newLineAtOffset(0, -20);
+                contentStream.setFont(PDType1Font.HELVETICA, 12); // Set font for the content
+
+                // Add Pet details
+                contentStream.showText("Breed: " + record.getBreed());
+                contentStream.newLineAtOffset(0, -15);
+                contentStream.showText("Date of Birth: " + record.getDateOfBirth());
+                contentStream.newLineAtOffset(0, -15);
+                contentStream.showText("Veterinarian: "
+                        + (record.getVeterinarian() != null ? record.getVeterinarian() : "No Vet Assigned"));
+                contentStream.newLineAtOffset(0, -15);
+                contentStream.showText("Last Visit: "
+                        + (record.getLastVisit() != null ? record.getLastVisit().toString() : "No Visit Data"));
+
+                // Add spacing before additional details
+                contentStream.newLineAtOffset(0, -20);
+
+                // Add Additional details
+                contentStream
+                        .showText("Allergies: " + (record.getAllergies() != null ? record.getAllergies() : "None"));
+                contentStream.newLineAtOffset(0, -15);
+                contentStream.showText("Recent Surgeries: "
+                        + (record.getRecentSurgeries() != null ? record.getRecentSurgeries() : "None"));
+                contentStream.newLineAtOffset(0, -15);
+                contentStream.showText("Vaccination History: "
+                        + (record.getVaccinationHistory() != null ? record.getVaccinationHistory() : "None"));
+                contentStream.newLineAtOffset(0, -15);
+                contentStream.showText(
+                        "Recent Tests: " + (record.getRecentTests() != null ? record.getRecentTests() : "None"));
+                contentStream.newLineAtOffset(0, -15);
+                contentStream.showText(
+                        "Prescriptions: " + (record.getPrescriptions() != null ? record.getPrescriptions() : "None"));
+                contentStream.newLineAtOffset(0, -15);
+                contentStream.showText("Dietary Recommendations: "
+                        + (record.getDietaryRecommendations() != null ? record.getDietaryRecommendations() : "None"));
+                contentStream.newLineAtOffset(0, -15);
+                contentStream
+                        .showText("Notes: " + (record.getNotes() != null ? record.getNotes() : "No additional notes"));
+
+                contentStream.endText();
+            }
+
+            // Save the document to the output stream
+            document.save(out);
+        }
+
+        return new ByteArrayInputStream(out.toByteArray());
     }
 }
