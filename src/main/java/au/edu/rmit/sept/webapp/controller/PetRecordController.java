@@ -1,8 +1,9 @@
 package au.edu.rmit.sept.webapp.controller;
 
 import au.edu.rmit.sept.webapp.model.PetRecord;
+import au.edu.rmit.sept.webapp.model.Vet;
 import au.edu.rmit.sept.webapp.service.PetRecordService;
-
+import au.edu.rmit.sept.webapp.service.VetService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

@@ -22,5 +22,5 @@ public class VetService {
     public Vet getVetById(Long id) {
         return vetRepository.findById(id).orElse(null);
     }
-    
+
 }
