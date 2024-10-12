@@ -131,21 +131,22 @@ public class AdminDashBoardController {
         resourceService.denyResource(id);
         redirectAttributes.addFlashAttribute("message", "Resource rejected.");
         return "redirect:/resource-approvals";
+    }
     @GetMapping("/delete-clinic/{id}")
     public String deleteClinic(@PathVariable Long id) {
         userService.deleteUserById(id);
-        return "redirect:/admin-dashboard/cliniclist";
+        return "redirect:/cliniclist";
     }
 
     @GetMapping("/delete-user/{id}")
     public String deleteUser(@PathVariable Long id) {
         userService.deleteUserById(id);
-        return "redirect:/admin-dashboard/userlist";
+        return "redirect:/userlist";
     }
 
     @GetMapping("/delete-vet/{id}")
     public String deleteVet(@PathVariable Long id) {
         userService.deleteUserById(id);
-        return "redirect:/admin-dashboard/vetlist";
+        return "redirect:/vetlist";
     }
 }
