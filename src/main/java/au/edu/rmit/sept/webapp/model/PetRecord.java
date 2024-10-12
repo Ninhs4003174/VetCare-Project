@@ -1,9 +1,6 @@
 package au.edu.rmit.sept.webapp.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 
 @Entity
 public class PetRecord {
@@ -23,16 +20,24 @@ public class PetRecord {
     private String recentSurgeries;
     private String dietaryRecommendations;
     private String notes;
-    private String veterinarian; // Add veterinarian field
+    private String veterinarian;
 
-    // Constructors
+    @ManyToOne
+    @JoinColumn(name = "vet_id")
+    private Vet vet; // Reference to Vet entity
+
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user; // User entity as a foreign key
+
+    // Constructors, getters, and setters
+
     public PetRecord() {
     }
 
     public PetRecord(String name, String breed, String dateOfBirth, String lastVisit, String allergies,
-            String prescriptions, String vaccinationHistory, String recentTests,
-            String recentSurgeries, String dietaryRecommendations, String notes,
-            String veterinarian) { // Add veterinarian to the constructor
+            String prescriptions, String vaccinationHistory, String recentTests, String recentSurgeries,
+            String dietaryRecommendations, String notes, String veterinarian, Vet vet, User user) {
         this.name = name;
         this.breed = breed;
         this.dateOfBirth = dateOfBirth;
@@ -44,10 +49,11 @@ public class PetRecord {
         this.recentSurgeries = recentSurgeries;
         this.dietaryRecommendations = dietaryRecommendations;
         this.notes = notes;
-        this.veterinarian = veterinarian; // Set veterinarian
+        this.veterinarian = veterinarian;
+        this.vet = vet;
+        this.user = user;
     }
 
-    // Getters and Setters
     public Long getId() {
         return id;
     }
@@ -150,5 +156,21 @@ public class PetRecord {
 
     public void setVeterinarian(String veterinarian) {
         this.veterinarian = veterinarian;
+    }
+
+    public Vet getVet() {
+        return vet;
+    }
+
+    public void setVet(Vet vet) {
+        this.vet = vet;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 }
