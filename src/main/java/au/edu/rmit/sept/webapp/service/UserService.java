@@ -55,7 +55,7 @@ public class UserService implements UserDetailsService {
         return null;
     }
 
-    public void registerUser(String username, String email, String password, UserRole role) {
+    public void registerUser(String username, String email, String password, UserRole role, Long clinicId) {
         User user = new User();
         user.setUsername(username);
         user.setEmail(email);

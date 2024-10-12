@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>View Pet Record</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body>
+    <header>
+        <nav>
+            <ul class="navbar-menu">
+                <li><a href="/adminhome"><img src="img/logo.png" alt="Logo" class="logo"></a></li>
+                <li><a href="/userlist">Users</a></li>
+                <li><a href="/cliniclist">Clinics</a></li>
+                <li><a href="/vetlist">Vets</a></li>
+                <li><a href="/records">Pet Records</a></li>
+                <li><a href="/adminlist">Admins</a></li>
+                <li><a href="/logout">Log Out</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section class="pet-record-details">
+            <h1>Pet Record Details</h1>
+            <div class="record-info">
+                <p><strong>ID:</strong> <span th:text="${petRecord.id}"></span></p>
+                <p><strong>Pet Name:</strong> <span th:text="${petRecord.name}"></span></p>
+                <p><strong>Owner:</strong> <span th:text="${petRecord.owner}"></span></p>
+                <p><strong>Breed:</strong> <span th:text="${petRecord.breed}"></span></p>
+                <p><strong>Date of Birth:</strong> <span th:text="${petRecord.dateOfBirth}"></span></p>
+                <p><strong>Veterinarian:</strong> <span th:text="${petRecord.veterinarian}"></span></p>
+                <p><strong>Last Visit:</strong> <span th:text="${petRecord.lastVisit}"></span></p>
+                <p><strong>Allergies:</strong> <span th:text="${petRecord.allergies}"></span></p>
+                <p><strong>Prescriptions:</strong> <span th:text="${petRecord.prescriptions}"></span></p>
+                <p><strong>Vaccination History:</strong> <span th:text="${petRecord.vaccinationHistory}"></span></p>
+                <p><strong>Recent Tests:</strong> <span th:text="${petRecord.recentTests}"></span></p>
+                <p><strong>Recent Surgeries:</strong> <span th:text="${petRecord.recentSurgeries}"></span></p>
+                <p><strong>Dietary Recommendations:</strong> <span th:text="${petRecord.dietaryRecommendations}"></span></p>
+                <p><strong>Notes:</strong> <span th:text="${petRecord.notes}"></span></p>
+            </div>
+            <a href="/records" class="btn-primary">Back to Records</a>
+        </section>
+    </main>
+
+    <footer>
+        <p>© 2024 VetCare</p>
+    </footer>
+</body>
+</html>
