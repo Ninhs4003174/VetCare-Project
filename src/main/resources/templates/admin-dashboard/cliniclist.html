@@ -20,12 +20,15 @@
     <header>
         <nav>
             <ul class="navbar-menu">
-                <li><a href="adminhome"><img src="img/logo.png" alt="Logo" class="logo"></a></li>
-                <li><a href="userlist">Users</a></li>
-                <li><a href="cliniclist">Clinics</a></li>
-                <li><a href="vetlist">Vets</a></li>
-                <li><a href="adminlist">Admins</a></li>
-                <li><a href="/logout">Log Out</a></li>
+                <li th:if="${#authorization.expression('hasAuthority(''ADMIN'')')}">
+                    <a th:href="@{/adminhome}"><img th:src="@{/img/logo.png}" alt="Admin Logo" class="logo"></a>
+                </li>
+                <li th:if="${#authorization.expression('hasAuthority(''ADMIN'')')}"><a th:href="@{/userlist}">Users</a></li>
+                <li th:if="${#authorization.expression('hasAuthority(''ADMIN'')')}"><a th:href="@{/cliniclist}">Clinics</a></li>
+                <li th:if="${#authorization.expression('hasAuthority(''ADMIN'')')}"><a th:href="@{/vetlist}">Vets</a></li>
+                <li th:if="${#authorization.expression('hasAuthority(''ADMIN'')')}"><a th:href="@{/adminlist}">Admins</a></li>
+                <li th:if="${#authorization.expression('hasAuthority(''ADMIN'')')}"><a th:href="@{/resources/approvals}">Resource Approvals</a></li>
+                <li th:if="${#authorization.expression('hasAuthority(''ADMIN'')')}"><a th:href="@{/logout}">Log Out</a></li>                
             </ul>
         </nav>
     </header>
