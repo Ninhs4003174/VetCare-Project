@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Pet Records</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body>
+    <header>
+        <nav>
+            <ul class="navbar-menu">
+                <li><a href="/adminhome"><img src="img/logo.png" alt="Logo" class="logo"></a></li>
+                <li><a href="/userlist">Users</a></li>
+                <li><a href="/cliniclist">Clinics</a></li>
+                <li><a href="/vetlist">Vets</a></li>
+                <li><a href="/records">Pet Records</a></li>
+                <li><a href="/adminlist">Admins</a></li>
+                <li><a href="/logout">Log Out</a></li>
+            </ul>
+        </nav>
+    </header>
+    
+    <main class="container">
+        <section id="pet-records">
+            <h2>Pet Records</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Pet Name</th>
+                        <th>Owner</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="record : ${records}">
+                        <td th:text="${record.id}"></td>
+                        <td th:text="${record.name}"></td>
+                        <td th:text="${record.owner}"></td>
+                        <td>
+                            <a th:href="@{/records/view/{id}(id=${record.id})}">View</a>
+                            <a th:href="@{/records/edit/{id}(id=${record.id})}">Edit</a>
+                            <a th:href="@{/records/delete/{id}(id=${record.id})}"
+                               onclick="return confirm('Are you sure you want to delete this record?')">Delete</a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <a href="/records/new" class="btn-primary">Create New Record</a>
+        </section>
+    </main>
+    
+    <footer>
+        <p>© 2024 VetCare</p>
+    </footer>
+</body>
+</html>
+
+

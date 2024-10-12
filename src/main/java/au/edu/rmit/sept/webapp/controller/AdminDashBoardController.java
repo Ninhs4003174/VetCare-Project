@@ -3,6 +3,7 @@ package au.edu.rmit.sept.webapp.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -54,6 +55,7 @@ public class AdminDashBoardController {
         return "admin-dashboard/vetlist";
     }
 
+    // Add users, clinics, and vets
     @GetMapping("/add-vet")
     public String addVetForm(Model model) {
         List<User> clinics = userService.getUsersByRole(UserRole.RECEPTIONIST);
