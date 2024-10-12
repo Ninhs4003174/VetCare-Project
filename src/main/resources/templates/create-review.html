@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create a Review - VetCare</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body>
+    <header>
+        <nav>
+            <ul class="navbar-menu">
+                <li><a href="/userhome"><img src="img/logo.png" alt="Logo" class="logo"></a></li>
+                <li><a href="/about">About</a></li>
+                <li><a href="/resources">Resources</a></li>
+                <li><a href="/contact">Contact</a></li>
+                <li><a href="/appointments">Appointments</a></li>
+                <li><a href="/prescription-management">Prescriptions</a></li>
+                <li><a href="/appointments/compare-providers">Compare Providers</a></li>
+                <li><a href="/reviews">Reviews</a></li>
+                <li><a href="/profile">Profile</a></li>
+                <li><a href="/logout">Log Out</a></li>
+            </ul>
+        </nav>
+    </header>
+    <div class="main-content">
+        <h1>Create a Review</h1>
+        
+        <!-- Review Form -->
+        <form th:action="@{/reviews}" method="post" class="form-container">
+            <div>
+                <label for="clinicName">Clinic Name:</label>
+                <input type="text" id="clinicName" name="clinicName" placeholder="Enter the clinic name" required />
+            </div>
+
+            <div>
+                <label for="content">Your Review:</label>
+                <textarea id="content" name="content" placeholder="Write your review..." required></textarea>
+            </div>
+
+            <div>
+                <label for="rating">Rating:</label>
+                <select id="rating" name="rating" required>
+                    <option value="1">1 Star</option>
+                    <option value="2">2 Stars</option>
+                    <option value="3">3 Stars</option>
+                    <option value="4">4 Stars</option>
+                    <option value="5">5 Stars</option>
+                </select>
+            </div>
+
+            <br>
+            <button type="submit" class="btn-primary">Submit Review</button>
+        </form>
+
+        <!-- Back to Reviews List -->
+        <br>
+        <a href="/reviews" class="btn-secondary">Back to Your Reviews</a>
+    </div>
+    <footer>
+        <p>© 2024 VetCare</p>
+    </footer>
+</body>
+</html>

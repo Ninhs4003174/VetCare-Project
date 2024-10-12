@@ -13,6 +13,7 @@ import au.edu.rmit.sept.webapp.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -62,9 +63,11 @@ public class PrescriptionController {
             List<Appointment> vetAppointments = appointmentService.getAppointmentsByVet(vetUser.getId());
             model.addAttribute("appointments", vetAppointments);
             model.addAttribute("username", username);
+            model.addAttribute("userRole", vetUser.getRole());
         } else {
             return "403";
         }
+        // Fetch the user details using the username
 
         return "vet-dashboard/vethome"; // Ensure this matches the template path
     }
@@ -222,7 +225,6 @@ public class PrescriptionController {
             Authentication auth = SecurityContextHolder.getContext().getAuthentication();
             String username = auth.getName();
             User vetUser = userService.findByUsername(username);
-
             // Check if the logged-in vet is the same as the vet who prescribed it
             if (!prescription.getVetId().equals(vetUser.getId())) {
                 redirectAttributes.addFlashAttribute("message", "You are not authorized to approve this request");
@@ -237,8 +239,8 @@ public class PrescriptionController {
             prescriptionRequestService.save(request);
 
             // Update the prescription
-            prescription.setRefillsAvailable(prescription.getRefillsAvailable() + 1);
-            prescription.setRefillRequest(false);
+            prescription.setRefillsAvailable(prescription.getRefillsAvailable() - 1);
+            prescription.setRefillRequest(true);
             prescription.setUpdatedAt(LocalDateTime.now());
             prescriptionService.savePrescription(prescription);
 
@@ -247,7 +249,7 @@ public class PrescriptionController {
             return "redirect:/view-prescription-requests";
         } catch (Exception e) {
             redirectAttributes.addFlashAttribute("message",
-                    "Failed to approve prescription request: " + e.getMessage());
+                    "Failed to approve prescriptionsss request: " + e.getMessage());
             redirectAttributes.addFlashAttribute("success", false);
             return "redirect:/view-prescription-requests";
         }

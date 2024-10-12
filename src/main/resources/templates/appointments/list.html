@@ -14,14 +14,37 @@
     <header>
         <nav>
             <ul class="navbar-menu">
-                <li><a href="userhome"><img src="img/logo.png" alt="Logo" class="logo"></a></li>
-                <li><a href="about">About</a></li>
-                <li><a href="resources">Resources</a></li>
-                <li><a href="contact">Contact</a></li>
-                <li><a href="appointments">Appointments</a></li>
-                <li><a href="prescription-management">Prescriptions</a></li>
-                <li><a href="profile">Profile</a></li>
-                <li><a href="/logout">Log Out</a></li>
+                <!-- Logo for vet or user based on role -->
+                <li>
+                    <a th:href="@{/vethome}" th:if="${#authorization.expression('hasAuthority(''VET'')')}">
+                        <img th:src="@{/img/logo.png}" alt="Vet Logo" class="logo">
+                    </a>
+                </li>
+                <li>
+                    <a th:href="@{/userhome}" th:if="${#authorization.expression('hasAuthority(''CLIENT'')')}">
+                        <img th:src="@{/img/logo.png}" alt="User Logo" class="logo">
+                    </a>
+                </li>
+    
+                <!-- Vet-specific navigation -->
+                <li th:if="${#authorization.expression('hasAuthority(''VET'')')}">
+                    <a th:href="@{/appointments}">Appointments</a>
+                </li>
+                <li th:if="${#authorization.expression('hasAuthority(''VET'')')}"><a th:href="@{/patients}">Patients</a></li>
+                <li th:if="${#authorization.expression('hasAuthority(''VET'')')}"><a th:href="@{/prescriptions}">Prescriptions</a></li>
+                <li th:if="${#authorization.expression('hasAuthority(''VET'')')}"><a th:href="@{/view-prescription-requests}">Prescription Requests</a></li>
+                <li th:if="${#authorization.expression('hasAuthority(''VET'')')}"><a th:href="@{/records}">Records</a></li>
+    
+                <!-- User-specific navigation -->
+                <li th:if="${#authorization.expression('hasAuthority(''CLIENT'')')}"><a th:href="@{/resources}">About</a></li>
+                <li th:if="${#authorization.expression('hasAuthority(''CLIENT'')')}"><a th:href="@{/contact}">Contact</a></li>
+                <li th:if="${#authorization.expression('hasAuthority(''CLIENT'')')}"><a th:href="@{/resources}">Resources</a></li>
+                <li th:if="${#authorization.expression('hasAuthority(''CLIENT'')')}"><a th:href="@{/appointments}">Appointments</a></li>
+                <li th:if="${#authorization.expression('hasAuthority(''CLIENT'')')}"><a th:href="@{/user-prescriptions}">Prescriptions</a></li>
+                <li th:if="${#authorization.expression('hasAuthority(''CLIENT'')')}"><a th:href="@{/records}">Records</a></li>
+                <!-- Common pages -->
+                <li><a th:href="@{/profile}">Profile</a></li>
+                <li><a th:href="@{/logout}">Log Out</a></li>
             </ul>
         </nav>
     </header>
@@ -41,8 +64,13 @@
                     <span th:text="${appointmentDetails.get('appointment').formattedDetails()}">Appointment details</span>
                     <span> - Vet: <span th:text="${appointmentDetails.get('vetName')}">Vet Name</span></span>
 
-                    <!-- Only show Cancel and Edit buttons if the status is not COMPLETED -->
-                    <span th:if="${appointmentDetails.get('appointment').status != 'COMPLETED'}">
+                    <!-- Check if appointment status is 'REJECTED' -->
+                    <span th:if="${appointmentDetails.get('appointment').status == 'REJECTED'}">
+                        <p>Your appointment has been rejected. Please book a new appointment.</p>
+                    </span>
+
+                    <!-- Show Cancel and Edit buttons if the status is neither 'COMPLETED' nor 'REJECTED' -->
+                    <span th:if="${appointmentDetails.get('appointment').status != 'COMPLETED' && appointmentDetails.get('appointment').status != 'REJECTED'}">
                         <!-- Cancel button -->
                         <form th:action="@{/appointments/cancel}" method="post" style="display:inline;">
                             <input type="hidden" th:value="${appointmentDetails.get('appointment').id}" name="id" />

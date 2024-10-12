@@ -5,7 +5,7 @@ CREATE TABLE IF NOT EXISTS prescription_requests (
     status VARCHAR(50) DEFAULT 'PENDING',      -- Status of the request (PENDING, APPROVED, DENIED)
     requested_at TIMESTAMP DEFAULT NOW(),      -- Timestamp of when the request was made
     processed_at TIMESTAMP,                    -- Timestamp for when the request is processed
-    processed_by BIGINT,                       -- Foreign key linking to vet_users (vet who processed the request)
+                      -- Foreign key linking to vet_users (vet who processed the request)
     
     -- Additional details about the request if needed
     comments TEXT
@@ -17,12 +17,3 @@ ADD CONSTRAINT fk_prescription
 FOREIGN KEY (prescription_id) REFERENCES prescriptions(id)
 ON DELETE CASCADE;
 
-ALTER TABLE prescription_requests
-ADD CONSTRAINT fk_request_user
-FOREIGN KEY (user_id) REFERENCES vet_users(id)
-ON DELETE CASCADE;
-
-ALTER TABLE prescription_requests
-ADD CONSTRAINT fk_vet_processed
-FOREIGN KEY (processed_by) REFERENCES vet_users(id)
-ON DELETE SET NULL;
