@@ -6,6 +6,6 @@ CREATE TABLE IF NOT EXISTS vetbooking (
     address VARCHAR(255),                     -- Address of the clinic
     phone_number VARCHAR(20),                 -- Phone number of the clinic
     email VARCHAR(100),                       -- Email of the clinic,
-    FOREIGN KEY (vet_user_id) REFERENCES vet_users(id),  -- Link to vet_users
+    FOREIGN KEY (vet_user_id) REFERENCES vet_users(id)  -- Link to vet_users
 
 );

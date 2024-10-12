@@ -9,5 +9,4 @@ ADD COLUMN clinic_id BIGINT REFERENCES vet_users(clinic_id);
 ALTER TABLE pet_record
 ADD COLUMN vet_id BIGINT,
 ADD CONSTRAINT fk_pet_record_vet
-FOREIGN KEY (vet_id)
-REFERENCES vet(vet_id);
+FOREIGN KEY (vet_id) REFERENCES vet_users(id);
