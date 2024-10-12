@@ -95,7 +95,7 @@ public class SignupController {
 
             // Register the user as CLIENT (no role selection needed)
             UserRole clientRole = UserRole.CLIENT; // Fixed role for client signup
-            userService.registerUser(username, email, password, clientRole); // Register user with CLIENT role
+            userService.registerUser(username, email, password, clientRole, null); // Register user with CLIENT role
 
             // Find the newly registered user by email
             User user = userService.findUserByEmail(email);

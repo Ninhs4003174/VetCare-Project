@@ -5,6 +5,7 @@ import au.edu.rmit.sept.webapp.repository.PetRecordRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 import java.util.List;
 import java.util.Optional;
 
@@ -27,6 +28,12 @@ public class PetRecordServiceImpl implements PetRecordService {
         return optionalPetRecord.orElse(null);
     }
 
+    // Fetch all pet records for a specific user ID
+    @Override
+    public List<PetRecord> getPetRecordsByUserId(Long userId) {
+        return petRecordRepository.findByUserId(userId);
+    }
+
     // Save a new pet record to the repository
     @Override
     public void save(PetRecord petRecord) {
@@ -36,7 +43,10 @@ public class PetRecordServiceImpl implements PetRecordService {
     // Update an existing pet record in the repository
     @Override
     public void update(PetRecord petRecord) {
-        petRecordRepository.save(petRecord);
+        // Check if the pet record exists before updating
+        if (petRecordRepository.existsById(petRecord.getId())) {
+            petRecordRepository.save(petRecord);
+        }
     }
 
     // Delete a pet record by its ID

@@ -3,37 +3,44 @@
 <head>
     <title>Edit Pet Record</title>
     <link rel="stylesheet" th:href="@{/css/styles.css}">
-
     <script>
-        function validateEditForm() {
+        function validateForm() {
             const name = document.forms["petRecordForm"]["name"].value;
             const breed = document.forms["petRecordForm"]["breed"].value;
             const dateOfBirth = document.forms["petRecordForm"]["dateOfBirth"].value;
             const veterinarian = document.forms["petRecordForm"]["veterinarian"].value;
+            const vetId = document.forms["petRecordForm"]["vetId"].value;
+            const userId = document.forms["petRecordForm"]["userId"].value;
 
             let isValid = true;
 
-            // Validate Pet Name
             if (name === "" || name.length < 2 || name.length > 50) {
                 alert("Pet name must be between 2 and 50 characters.");
                 isValid = false;
             }
 
-            // Validate Breed
             if (breed === "" || breed.length < 3 || breed.length > 50) {
                 alert("Breed must be between 3 and 50 characters.");
                 isValid = false;
             }
 
-            // Validate Date of Birth
             if (dateOfBirth === "") {
                 alert("Date of birth is required.");
                 isValid = false;
             }
 
-            // Validate Veterinarian
             if (veterinarian === "" || veterinarian.length < 3 || veterinarian.length > 100) {
                 alert("Veterinarian name must be between 3 and 100 characters.");
+                isValid = false;
+            }
+
+            if (vetId === "" || isNaN(vetId)) {
+                alert("Please select a valid Vet.");
+                isValid = false;
+            }
+
+            if (userId === "" || isNaN(userId)) {
+                alert("Please select a valid User.");
                 isValid = false;
             }
 
@@ -45,81 +52,67 @@
     <header>
         <nav>
             <ul class="navbar-menu">
-                <!-- Logo for vet or user based on role -->
-                <li>
-                    <a th:href="@{/vethome}" th:if="${#authorization.expression('hasAuthority(''VET'')')}">
-                        <img th:src="@{/img/logo.png}" alt="Vet Logo" class="logo">
-                    </a>
-                </li>
-                <li>
-                    <a th:href="@{/userhome}" th:if="${#authorization.expression('hasAuthority(''CLIENT'')')}">
-                        <img th:src="@{/img/logo.png}" alt="User Logo" class="logo">
-                    </a>
-                </li>
-    
-                <!-- Vet-specific navigation -->
-                <li th:if="${#authorization.expression('hasAuthority(''VET'')')}">
-                    <a th:href="@{/appointments}">Appointments</a>
-                </li>
-                <li th:if="${#authorization.expression('hasAuthority(''VET'')')}"><a th:href="@{/patients}">Patients</a></li>
-                <li th:if="${#authorization.expression('hasAuthority(''VET'')')}"><a th:href="@{/prescriptions}">Prescriptions</a></li>
-                <li th:if="${#authorization.expression('hasAuthority(''VET'')')}"><a th:href="@{/view-prescription-requests}">Prescription Requests</a></li>
-                <li th:if="${#authorization.expression('hasAuthority(''VET'')')}"><a th:href="@{/records}">Records</a></li>
-    
-                <!-- User-specific navigation -->
-                <li th:if="${#authorization.expression('hasAuthority(''CLIENT'')')}"><a th:href="@{/resources}">About</a></li>
-                <li th:if="${#authorization.expression('hasAuthority(''CLIENT'')')}"><a th:href="@{/contact}">Contact</a></li>
-                <li th:if="${#authorization.expression('hasAuthority(''CLIENT'')')}"><a th:href="@{/resources}">Resources</a></li>
-                <li th:if="${#authorization.expression('hasAuthority(''CLIENT'')')}"><a th:href="@{/appointments}">Appointments</a></li>
-                <li th:if="${#authorization.expression('hasAuthority(''CLIENT'')')}"><a th:href="@{/user-prescriptions}">Prescriptions</a></li>
-                <li th:if="${#authorization.expression('hasAuthority(''CLIENT'')')}"><a th:href="@{/records}">Records</a></li>
-                <!-- Common pages -->
-                <li><a th:href="@{/profile}">Profile</a></li>
-                <li><a th:href="@{/logout}">Log Out</a></li>
+                <li><a href="/vethome"><img src="img/logo.png" alt="Logo" class="logo"></a></li>
+                <li><a href="/appointments">Appointments</a></li>
+                <li><a href="/vet/records">Records</a></li>
+                <li><a href="/patients">Patients</a></li>
+                <li><a href="/profile">Profile</a></li>
+                <li><a href="/logout">Log Out</a></li>
             </ul>
         </nav>
     </header>
+
     <main>
         <section class="pet-record-form">
             <h1>Edit Pet Record</h1>
-            <form name="petRecordForm" th:action="@{'/records/update/' + ${petRecord.id}}" method="post" th:object="${petRecord}" class="form-container" onsubmit="return validateEditForm()">
-                <input type="hidden" th:field="*{id}" />
-            
+            <form name="petRecordForm" th:action="@{/vet/records/update/{id}(id=${petRecord.id})}" method="post" onsubmit="return validateForm()" class="form-container">
                 <label for="name">Pet Name:</label>
-                <input type="text" id="name" th:field="*{name}" required>
+                <input type="text" id="name" name="name" th:value="${petRecord.name}" required>
 
                 <label for="breed">Breed:</label>
-                <input type="text" id="breed" th:field="*{breed}" required>
+                <input type="text" id="breed" name="breed" th:value="${petRecord.breed}" required>
 
                 <label for="dateOfBirth">Date of Birth:</label>
-                <input type="date" id="dateOfBirth" th:field="*{dateOfBirth}" required>
+                <input type="date" id="dateOfBirth" name="dateOfBirth" th:value="${petRecord.dateOfBirth}" required>
 
                 <label for="veterinarian">Veterinarian:</label>
-                <input type="text" id="veterinarian" th:field="*{veterinarian}" required>
+                <input type="text" id="veterinarian" name="veterinarian" th:value="${petRecord.veterinarian}" required>
+
+                <label for="vetId">Vet:</label>
+                <select id="vetId" name="vetId" required>
+                    <option value="" disabled>Select a Vet</option>
+                    <option th:each="vet : ${vets}" th:value="${vet.vetId}" th:text="${vet.clinicName}" th:selected="${vet.vetId == petRecord.vet?.vetId}"></option>
+                </select>
+
+                <label for="userId">User:</label>
+                <select id="userId" name="userId" required>
+                    <option value="" disabled>Select a User</option>
+                    <option th:each="user : ${users}" th:value="${user.id}" th:text="${user.username}" th:selected="${user.id == petRecord.user?.id}"></option>
+                </select>
 
                 <label for="lastVisit">Last Visit:</label>
-                <input type="date" id="lastVisit" th:field="*{lastVisit}">
+                <input type="date" id="lastVisit" name="lastVisit" th:value="${petRecord.lastVisit}">
 
                 <label for="allergies">Allergies:</label>
-                <input type="text" id="allergies" th:field="*{allergies}">
+                <input type="text" id="allergies" name="allergies" th:value="${petRecord.allergies}">
 
                 <label for="prescriptions">Prescriptions:</label>
-                <input type="text" id="prescriptions" th:field="*{prescriptions}">
+                <input type="text" id="prescriptions" name="prescriptions" th:value="${petRecord.prescriptions}">
 
                 <label for="vaccinationHistory">Vaccination History:</label>
-                <textarea id="vaccinationHistory" th:field="*{vaccinationHistory}"></textarea>
+                <textarea id="vaccinationHistory" name="vaccinationHistory" th:text="${petRecord.vaccinationHistory}"></textarea>
 
                 <label for="recentTests">Recent Tests:</label>
-                <input type="text" id="recentTests" th:field="*{recentTests}">
+                <input type="text" id="recentTests" name="recentTests" th:value="${petRecord.recentTests}">
 
                 <label for="recentSurgeries">Recent Surgeries:</label>
-                <input type="text" id="recentSurgeries" th:field="*{recentSurgeries}">
+                <input type="text" id="recentSurgeries" name="recentSurgeries" th:value="${petRecord.recentSurgeries}">
 
                 <label for="dietaryRecommendations">Dietary Recommendations:</label>
-                <input type="text" id="dietaryRecommendations" th:field="*{dietaryRecommendations}">
+                <input type="text" id="dietaryRecommendations" name="dietaryRecommendations" th:value="${petRecord.dietaryRecommendations}">
 
                 <label for="notes">Notes:</label>
-                <textarea id="notes" th:field="*{notes}"></textarea>
+                <textarea id="notes" name="notes" th:text="${petRecord.notes}"></textarea>
 
                 <button type="submit" class="btn-primary">Update Record</button>
             </form>
