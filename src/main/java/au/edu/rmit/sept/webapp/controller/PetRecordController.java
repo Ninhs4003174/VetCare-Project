@@ -1,19 +1,15 @@
 package au.edu.rmit.sept.webapp.controller;
 
+import au.edu.rmit.sept.webapp.model.PetRecord;
+import au.edu.rmit.sept.webapp.service.PetRecordService;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import au.edu.rmit.sept.webapp.service.PetRecordService;
-import au.edu.rmit.sept.webapp.service.VetService;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import au.edu.rmit.sept.webapp.model.PetRecord;
-import au.edu.rmit.sept.webapp.model.Vet;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
+@RequestMapping("/records")
 public class PetRecordController {
 
     @Autowired
@@ -26,7 +22,7 @@ public class PetRecordController {
     @GetMapping("/records")
     public String getAllRecords(Model model) {
         model.addAttribute("records", petRecordService.getAllPetRecords());
-        return "vet-dashboard/records";
+        return "records"; // This corresponds to records.html
     }
 
     // Show form to create a new pet record
@@ -34,8 +30,7 @@ public class PetRecordController {
     public String showNewRecordForm(Model model) {
         PetRecord petRecord = new PetRecord();
         model.addAttribute("petRecord", petRecord);
-        model.addAttribute("vets", vetService.getAllVets()); // Add list of vets for selection
-        return "vet-dashboard/new_record";
+        return "new_record"; // This corresponds to new_record.html
     }
 
     // Save a new pet record
@@ -47,7 +42,7 @@ public class PetRecordController {
             petRecord.setVet(vet);
         }
         petRecordService.save(petRecord);
-        return "redirect:/vet/records";
+        return "redirect:/records"; // Redirect to records list after saving
     }
 
     // Show form to edit an existing pet record
@@ -55,8 +50,7 @@ public class PetRecordController {
     public String showEditRecordForm(@PathVariable Long id, Model model) {
         PetRecord petRecord = petRecordService.getPetRecordById(id);
         model.addAttribute("petRecord", petRecord);
-        model.addAttribute("vets", vetService.getAllVets()); // Add list of vets for selection
-        return "vet-dashboard/edit_record";
+        return "edit_record"; // This corresponds to edit_record.html
     }
 
     // Update an existing pet record
@@ -64,7 +58,9 @@ public class PetRecordController {
     public String updateRecord(@PathVariable Long id, @ModelAttribute PetRecord petRecord,
             @RequestParam("vetId") Long vetId) {
         PetRecord existingRecord = petRecordService.getPetRecordById(id);
+
         if (existingRecord != null) {
+            // Update the fields of the existing record with the form data
             existingRecord.setName(petRecord.getName());
             existingRecord.setBreed(petRecord.getBreed());
             existingRecord.setDateOfBirth(petRecord.getDateOfBirth());
@@ -78,15 +74,10 @@ public class PetRecordController {
             existingRecord.setDietaryRecommendations(petRecord.getDietaryRecommendations());
             existingRecord.setNotes(petRecord.getNotes());
 
-            // Update Vet association
-            Vet vet = vetService.getVetById(vetId);
-            if (vet != null) {
-                existingRecord.setVet(vet);
-            }
-
-            petRecordService.update(existingRecord);
+            petRecordService.update(existingRecord); // Call service to update the record
         }
-        return "redirect:/vet/records";
+
+        return "redirect:/records"; // Redirect to records page after update
     }
 
     // View a specific pet record

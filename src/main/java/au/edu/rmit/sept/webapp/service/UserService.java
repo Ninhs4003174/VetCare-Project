@@ -11,6 +11,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 
 import au.edu.rmit.sept.webapp.repository.PetRepository;
 import au.edu.rmit.sept.webapp.repository.UserRepository;
@@ -55,7 +57,7 @@ public class UserService implements UserDetailsService {
         return null;
     }
 
-    public void registerUser(String username, String email, String password, UserRole role) {
+    public void registerUser(String username, String email, String password, UserRole role, Long clinicId) {
         User user = new User();
         user.setUsername(username);
         user.setEmail(email);
@@ -103,7 +105,9 @@ public class UserService implements UserDetailsService {
         return userRepository.findById(userId).orElse(null);
     }
 
+    @Transactional
     public void updateUser(User user) {
+        System.out.println("Updating user: " + user.getUsername());
         userRepository.save(user);
     }
 
