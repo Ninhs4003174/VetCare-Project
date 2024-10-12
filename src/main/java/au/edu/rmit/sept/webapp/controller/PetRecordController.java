@@ -23,14 +23,14 @@ public class PetRecordController {
     private VetService vetService; // Service to fetch Vet details
 
     // Display all pet records
-    @GetMapping("/vet/records")
+    @GetMapping("/records")
     public String getAllRecords(Model model) {
         model.addAttribute("records", petRecordService.getAllPetRecords());
         return "vet-dashboard/records";
     }
 
     // Show form to create a new pet record
-    @GetMapping("/vet/records/new")
+    @GetMapping("/records/new")
     public String showNewRecordForm(Model model) {
         PetRecord petRecord = new PetRecord();
         model.addAttribute("petRecord", petRecord);
@@ -39,7 +39,7 @@ public class PetRecordController {
     }
 
     // Save a new pet record
-    @PostMapping("/vet/records/save")
+    @PostMapping("/records/save")
     public String saveRecord(@ModelAttribute PetRecord petRecord, @RequestParam("vetId") Long vetId) {
         // Set the associated Vet entity
         Vet vet = vetService.getVetById(vetId);
@@ -51,7 +51,7 @@ public class PetRecordController {
     }
 
     // Show form to edit an existing pet record
-    @GetMapping("/vet/records/edit/{id}")
+    @GetMapping("/records/edit/{id}")
     public String showEditRecordForm(@PathVariable Long id, Model model) {
         PetRecord petRecord = petRecordService.getPetRecordById(id);
         model.addAttribute("petRecord", petRecord);
@@ -60,7 +60,7 @@ public class PetRecordController {
     }
 
     // Update an existing pet record
-    @PostMapping("/vet/records/update/{id}")
+    @PostMapping("/records/update/{id}")
     public String updateRecord(@PathVariable Long id, @ModelAttribute PetRecord petRecord,
             @RequestParam("vetId") Long vetId) {
         PetRecord existingRecord = petRecordService.getPetRecordById(id);
@@ -90,7 +90,7 @@ public class PetRecordController {
     }
 
     // View a specific pet record
-    @GetMapping("/vet/records/view/{id}")
+    @GetMapping("/records/view/{id}")
     public String viewPetRecord(@PathVariable Long id, Model model) {
         PetRecord petRecord = petRecordService.getPetRecordById(id);
         model.addAttribute("petRecord", petRecord);
