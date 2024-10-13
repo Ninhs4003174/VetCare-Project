@@ -1,5 +1,6 @@
 package au.edu.rmit.sept.webapp.controller;
 
+
 import java.util.Collection; // Correct import for java.util.Collection
 import au.edu.rmit.sept.webapp.model.enums.UserRole;
 import au.edu.rmit.sept.webapp.model.User;
@@ -62,8 +63,14 @@ public class LoginController {
 
     @GetMapping("/userhome")
     public ModelAndView userHome() {
-
+        
         return new ModelAndView("userhome");
+    }
+
+   
+    @GetMapping("/receptionisthome")
+    public ModelAndView receptionistHome() {
+        return new ModelAndView("receptionisthome");
     }
 
 }
