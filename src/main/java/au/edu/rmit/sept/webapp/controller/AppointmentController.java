@@ -18,12 +18,15 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.validation.BindingResult;
 
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.StreamSupport;
 
 @Controller
 @RequestMapping("/appointments")
@@ -294,5 +297,28 @@ public class AppointmentController {
             return "403"; // Unauthorized access
         }
     }
+    @GetMapping("/clinicVets")
+public String showClinicAndVets(Model model) {
+    // Get all clinics (users with the role RECEPTIONIST)
+    List<User> clinics = StreamSupport.stream(userService.getUsersByRole(UserRole.RECEPTIONIST).spliterator(), false)
+            .collect(Collectors.toList());
+
+    if (clinics.isEmpty()) {
+        model.addAttribute("errorMessage", "No clinics found.");
+        return "error";  // Ensure 'error.html' exists
+    }
+
+    // Create a map to hold clinic name and associated vets
+    Map<String, List<User>> clinicVetsMap = new HashMap<>();
+    for (User clinic : clinics) {
+        // Fetch vets for each clinic
+        List<User> vets = userService.getVetsByClinicId(clinic.getId());
+        clinicVetsMap.put(clinic.getUsername(), vets);  // Clinic name as key, vets as value
+    }
+
+    model.addAttribute("clinicVetsMap", clinicVetsMap);
+    return "vet-list";  // Ensure 'vet-list.html' exists in the templates folder
+}
+
 
 }

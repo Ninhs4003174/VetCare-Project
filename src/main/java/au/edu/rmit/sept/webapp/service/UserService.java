@@ -1,6 +1,7 @@
 package au.edu.rmit.sept.webapp.service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 import java.util.Collections;
 import au.edu.rmit.sept.webapp.model.enums.UserRole;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -136,5 +137,14 @@ public class UserService implements UserDetailsService {
     public void deleteUserById(Long id) {
         userRepository.deleteById(id);
     }
+    public List<User> findVetsByClinic(Long clinicId) {
+        return userRepository.findAll().stream()
+                .filter(user -> user.getRole().equals("VET") && user.getClinicId() != null && user.getClinicId().equals(clinicId))
+                .collect(Collectors.toList());
+    }
+    public List<User> getVetsByReceptionistId(Long receptionistId) {
+        return userRepository.findByClinicIdAndRole(receptionistId, UserRole.VET);
+    }
+    
 
 }
