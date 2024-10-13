@@ -68,4 +68,54 @@ class ResourceControllerIntegrationTest {
         result.andExpect(status().is3xxRedirection())
               .andExpect(redirectedUrl("/resources"));
     }
+
+    // New Tests
+
+    @Test
+    @WithMockUser(username = "adminuser", roles = {"ADMIN"})
+    void testViewResourceDetails() throws Exception {
+        Resource resource = new Resource();
+        resource.setTitle("Test Resource");
+        when(resourceService.getResourceById(1L)).thenReturn(resource);
+
+        ResultActions result = mockMvc.perform(get("/resources/1")
+                .with(user("adminuser").roles("ADMIN")));
+
+        result.andExpect(status().isOk())
+              .andExpect(view().name("resources/view"))
+              .andExpect(model().attributeExists("resource"));
+    }
+
+    @Test
+    @WithMockUser(username = "adminuser", roles = {"ADMIN"})
+    void testViewPendingResources() throws Exception {
+        when(resourceService.getPendingResources()).thenReturn(Collections.emptyList());
+
+        ResultActions result = mockMvc.perform(get("/resources/approvals")
+                .with(user("adminuser").roles("ADMIN")));
+
+        result.andExpect(status().isOk())
+              .andExpect(view().name("admin-dashboard/resource-approvals"))
+              .andExpect(model().attributeExists("pendingResources"));
+    }
+
+    @Test
+    @WithMockUser(username = "adminuser", roles = {"ADMIN"})
+    void testApproveResource() throws Exception {
+        ResultActions result = mockMvc.perform(post("/resources/approve/1")
+                .with(user("adminuser").roles("ADMIN")));
+
+        result.andExpect(status().is3xxRedirection())
+              .andExpect(redirectedUrl("/resources/approvals"));
+    }
+
+    @Test
+    @WithMockUser(username = "adminuser", roles = {"ADMIN"})
+    void testDenyResource() throws Exception {
+        ResultActions result = mockMvc.perform(post("/resources/deny/1")
+                .with(user("adminuser").roles("ADMIN")));
+
+        result.andExpect(status().is3xxRedirection())
+              .andExpect(redirectedUrl("/resources/approvals"));
+    }
 }
