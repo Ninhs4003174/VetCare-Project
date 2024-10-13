@@ -2,10 +2,14 @@ package au.edu.rmit.sept.webapp.controller;
 
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.List;
 import java.util.Set;
 
 import org.slf4j.Logger;
+import au.edu.rmit.sept.webapp.service.PetService;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -35,6 +39,8 @@ public class ClinicDashBoardController {
     private UserService userService;
     @Autowired
     private AppointmentService appointmentService;
+    @Autowired
+    private PetService petService;
 
     @GetMapping("/clinichome")
     public String clinicHome() {

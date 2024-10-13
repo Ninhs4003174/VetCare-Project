@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <title>Clinic Info</title>
+        <link rel="stylesheet" type="text/css" href="/css/styles.css"> <!-- Link to your CSS file -->
+    </head>
+    <script th:if="${#authorization.expression('!hasAuthority(''RECEPTIONIST'')')}">
+        location.href = '/403';
+    </script>
+<body>
+    <header>
+        <nav>
+            <ul class="navbar-menu">
+                <li><a href="clinichome"><img src="img/logo.png" alt="Logo" class="logo"></a></li>
+                <li><a href="appointmentlist">Appointments</a></li>
+                <li><a href="clinic-patients">Patients</a></li>
+                <li><a href="vets">Vets</a></li>
+                <li><a href="clinicinfo">Clinic Info</a></li>
+                <li><a href="/logout">Log Out</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <h1 th:text="${clinicName}"></h1>
+    <p><strong>Address:</strong> <span th:text="${clinicAddress}"></span></p>
+    <p><strong>Contact Number:</strong> <span th:text="${contactNumber}"></span></p>
+    <p><strong>Expertise:</strong> <span th:text="${expertise}"></span></p>
+    <p><strong>Specialty:</strong> <span th:text="${specialty}"></span></p>
+
+    <h2>Services Offered</h2>
+    <ul>
+        <li th:each="service : ${services}">
+            <strong th:text="${service.key}"></strong>: <span th:text="${service.value}"></span>
+        </li>
+    </ul>
+</body>
+</html>

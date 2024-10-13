@@ -2,24 +2,27 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>Patient List</title>
-    <link rel="stylesheet" type="text/css" href="/css/styles.css"> <!-- Link to your CSS file -->
+    <link rel="stylesheet" type="text/css" href="/css/styles.css">
 </head>
+<script th:if="${#authorization.expression('!hasAuthority(''RECEPTIONIST'')')}">
+    location.href = '/403';
+</script>
 <body>
     <header>
         <nav>
             <ul class="navbar-menu">
                 <li><a href="clinichome"><img src="img/logo.png" alt="Logo" class="logo"></a></li>
                 <li><a href="appointmentlist">Appointments</a></li>
-                <li><a href="patientlist">Patients</a></li>
+                <li><a href="clinic-patients">Patients</a></li>
                 <li><a href="vets">Vets</a></li>
                 <li><a href="clinicinfo">Clinic Info</a></li>
                 <li><a href="/logout">Log Out</a></li>
             </ul>
         </nav>
     </header>
+
     <h1>Patient List</h1>
-    
-    <!-- Display the no patients message if it exists -->
+
     <div th:if="${noPatientsMessage}">
         <p th:text="${noPatientsMessage}" style="color: red;"></p>
     </div>
