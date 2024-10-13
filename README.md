@@ -34,7 +34,7 @@ Before running the project, ensure that you have the following installed on your
 1. **Install PostgreSQL:** Download and install PostgreSQL from the official [website.](https://www.postgresql.org/download/)
 2. **Create Database:** Once PostgreSQL is installed, create a new database for the project:
 ```
-psql -U <your-username>
+psql -U <your-username> -d postgres  
 CREATE DATABASE milestone2;
 ```
 3. **Run Migrations:** The project uses Flyway for database migrations. When the application starts, Flyway will automatically run the migrations and set up the required tables.
