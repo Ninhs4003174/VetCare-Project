@@ -6,6 +6,9 @@
     <title>Send Prescription</title>
     <link rel="stylesheet" th:href="@{/css/styles.css}">
 </head>
+<script th:if="${#authorization.expression('!hasAuthority(''VET'')')}">
+    location.href = '/403';
+</script>
 <body>
     <header>
         <nav>

@@ -33,6 +33,11 @@ public class HomeController {
         return "about";
     }
 
+    @GetMapping("/403")
+    public String error403() {
+        return "403";
+    }
+
     @GetMapping("/userabout")
     public String showuserabout() {
         return "userabout";

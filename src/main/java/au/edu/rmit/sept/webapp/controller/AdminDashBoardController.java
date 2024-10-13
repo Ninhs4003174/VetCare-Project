@@ -1,6 +1,5 @@
 package au.edu.rmit.sept.webapp.controller;
 
-import au.edu.rmit.sept.webapp.SecurityUtil;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,19 +29,20 @@ public class AdminDashBoardController {
 
     @GetMapping("/adminlist")
     public String adminList(Model model) {
-        if (!SecurityUtil.hasRole("ADMIN")) {
-            return "403"; // Redirect to access denied page if not CLIENT
-        }
+
         List<User> admins = userService.getUsersByRole(UserRole.ADMIN);
         model.addAttribute("users", admins);
         return "admin-dashboard/adminlist";
     }
 
+    @GetMapping("/adminhome")
+    public String adminhome() {
+        return "admin-dashboard/adminhome";
+    }
+
     @GetMapping("/cliniclist")
     public String clinicList(Model model) {
-        if (!SecurityUtil.hasRole("ADMIN")) {
-            return "403"; // Redirect to access denied page if not CLIENT
-        }
+
         List<User> clinics = userService.getUsersByRole(UserRole.RECEPTIONIST);
         model.addAttribute("users", clinics);
         return "admin-dashboard/cliniclist";
@@ -50,9 +50,7 @@ public class AdminDashBoardController {
 
     @GetMapping("/userlist")
     public String userList(Model model) {
-        if (!SecurityUtil.hasRole("ADMIN")) {
-            return "403"; // Redirect to access denied page if not CLIENT
-        }
+
         List<User> users = userService.getUsersByRole(UserRole.CLIENT);
         model.addAttribute("users", users);
         return "admin-dashboard/userlist";
@@ -60,9 +58,7 @@ public class AdminDashBoardController {
 
     @GetMapping("/vetlist")
     public String vetList(Model model) {
-        if (!SecurityUtil.hasRole("ADMIN")) {
-            return "403"; // Redirect to access denied page if not CLIENT
-        }
+
         List<User> vets = userService.getUsersByRole(UserRole.VET);
         model.addAttribute("users", vets);
         return "admin-dashboard/vetlist";
@@ -71,9 +67,7 @@ public class AdminDashBoardController {
     // Add users, clinics, and vets
     @GetMapping("/add-vet")
     public String addVetForm(Model model) {
-        if (!SecurityUtil.hasRole("ADMIN")) {
-            return "403"; // Redirect to access denied page if not CLIENT
-        }
+
         List<User> clinics = userService.getUsersByRole(UserRole.RECEPTIONIST);
         if (clinics.isEmpty()) {
             model.addAttribute("error", "No clinics available. Please add a clinic first.");
@@ -86,9 +80,7 @@ public class AdminDashBoardController {
 
     @PostMapping("/add-vet")
     public String addVet(@ModelAttribute User user) {
-        if (!SecurityUtil.hasRole("ADMIN")) {
-            return "403";
-        }
+
         user.setRole(UserRole.VET);
         userService.saveUser(user);
         return "redirect:/vetlist";
@@ -96,56 +88,69 @@ public class AdminDashBoardController {
 
     @GetMapping("/add-user")
     public String addUserForm(Model model) {
-        if (!SecurityUtil.hasRole("ADMIN")) {
-            return "403";
-        }
+
         model.addAttribute("user", new User());
         return "admin-dashboard/add-user";
     }
 
     @PostMapping("/add-user")
-    public String addUser(@ModelAttribute User user) {
-        if (!SecurityUtil.hasRole("ADMIN")) {
-            return "403";
+    public String addUser(@ModelAttribute User user, RedirectAttributes redirectAttributes) {
+        // Check if username is taken
+        if (userService.isUsernameTaken(user.getUsername())) {
+            redirectAttributes.addFlashAttribute("error", "Username is already taken");
+            return "redirect:/userlist";
         }
+    
+        // Check if email is taken
+        if (userService.isEmailTaken(user.getEmail())) {
+            redirectAttributes.addFlashAttribute("error", "Email is already taken");
+            return "redirect:/userlist";
+        }
+    
         user.setRole(UserRole.CLIENT);
         userService.saveUser(user);
+        redirectAttributes.addFlashAttribute("message", "User added successfully");
         return "redirect:/userlist";
     }
-
+    
     @GetMapping("/add-clinic")
     public String addClinicForm(Model model) {
-        if (!SecurityUtil.hasRole("ADMIN")) {
-            return "403";
-        }
+
         model.addAttribute("user", new User());
         return "admin-dashboard/add-clinic";
     }
-
     @PostMapping("/add-clinic")
-    public String addClinic(@ModelAttribute User user) {
-        if (!SecurityUtil.hasRole("ADMIN")) {
-            return "403";
-        }
-        user.setRole(UserRole.RECEPTIONIST);
-        userService.saveUser(user);
+public String addClinic(@ModelAttribute User user, RedirectAttributes redirectAttributes) {
+    // Check if username is taken
+    if (userService.isUsernameTaken(user.getUsername())) {
+        redirectAttributes.addFlashAttribute("error", "Username is already taken");
         return "redirect:/cliniclist";
     }
 
+    // Check if email is taken 
+    if (userService.isEmailTaken(user.getEmail())) {
+        redirectAttributes.addFlashAttribute("error", "Email is already taken");
+        return "redirect:/cliniclist";
+    }
+
+    // No errors, add the clinic
+    user.setRole(UserRole.RECEPTIONIST);
+    userService.saveUser(user);
+    redirectAttributes.addFlashAttribute("message", "Clinic added successfully");
+    return "redirect:/cliniclist";
+}
+
+    
     @GetMapping("/add-admin")
     public String addAdminForm(Model model) {
-        if (!SecurityUtil.hasRole("ADMIN")) {
-            return "403";
-        }
+
         model.addAttribute("user", new User());
         return "admin-dashboard/add-admin";
     }
 
     @PostMapping("/add-admin")
     public String addAdmin(@ModelAttribute User user) {
-        if (!SecurityUtil.hasRole("ADMIN")) {
-            return "403";
-        }
+
         user.setRole(UserRole.ADMIN);
         userService.saveUser(user);
         return "redirect:/adminlist";
@@ -153,9 +158,7 @@ public class AdminDashBoardController {
 
     @GetMapping("/resource-approvals")
     public String viewPendingResources(Model model) {
-        if (!SecurityUtil.hasRole("ADMIN")) {
-            return "403";
-        }
+
         List<Resource> pendingResources = resourceService.getPendingResources();
         model.addAttribute("resources", pendingResources);
         return "admin-dashboard/resource-approvals";
@@ -163,9 +166,7 @@ public class AdminDashBoardController {
 
     @GetMapping("/resources/approve/{id}")
     public String approveResource(@PathVariable Long id, RedirectAttributes redirectAttributes) {
-        if (!SecurityUtil.hasRole("ADMIN")) {
-            return "403";
-        }
+
         resourceService.approveResource(id);
         redirectAttributes.addFlashAttribute("message", "Resource approved successfully.");
         return "redirect:/resource-approvals";
@@ -173,9 +174,7 @@ public class AdminDashBoardController {
 
     @GetMapping("/resources/reject/{id}")
     public String rejectResource(@PathVariable Long id, RedirectAttributes redirectAttributes) {
-        if (!SecurityUtil.hasRole("ADMIN")) {
-            return "403";
-        }
+
         resourceService.denyResource(id);
         redirectAttributes.addFlashAttribute("message", "Resource rejected.");
         return "redirect:/resource-approvals";
@@ -183,27 +182,21 @@ public class AdminDashBoardController {
 
     @GetMapping("/delete-clinic/{id}")
     public String deleteClinic(@PathVariable Long id) {
-        if (!SecurityUtil.hasRole("ADMIN")) {
-            return "403";
-        }
+
         userService.deleteUserById(id);
         return "redirect:/cliniclist";
     }
 
     @GetMapping("/delete-user/{id}")
     public String deleteUser(@PathVariable Long id) {
-        if (!SecurityUtil.hasRole("ADMIN")) {
-            return "403";
-        }
+
         userService.deleteUserById(id);
         return "redirect:/userlist";
     }
 
     @GetMapping("/delete-vet/{id}")
     public String deleteVet(@PathVariable Long id) {
-        if (!SecurityUtil.hasRole("ADMIN")) {
-            return "403";
-        }
+
         userService.deleteUserById(id);
         return "redirect:/vetlist";
     }

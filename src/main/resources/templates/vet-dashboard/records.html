@@ -71,9 +71,6 @@
                         <td th:text="${record.lastVisit}"></td>
                         <td>
                             <a th:href="@{/records/view/{id}(id=${record.id})}" class="btn-secondary">View</a>
-                            <a th:href="@{/records/edit/{id}(id=${record.id})}" class="btn-secondary">Edit</a>
-                            <a th:href="@{/records/delete/{id}(id=${record.id})}" class="btn-secondary" 
-                               onclick="return confirm('Are you sure you want to delete this record?')">Delete</a>
                             <a th:href="@{/records/download-pdf/{id}(id=${record.id})}" class="btn-secondary">Download PDF</a>
                         </td>                        
                     </tr>

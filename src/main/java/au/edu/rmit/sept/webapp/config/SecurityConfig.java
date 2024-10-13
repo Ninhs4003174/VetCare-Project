@@ -75,28 +75,29 @@ public class SecurityConfig {
         return httpSecurity.build(); // Finalize the SecurityFilterChain
     }
 
- // Custom authentication success handler
- @Bean
- public AuthenticationSuccessHandler customSuccessHandler() {
-     return (request, response, authentication) -> {
-         // Get the user's roles
-         Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
-         System.out.println("Granted Authorities: " + authorities);
-         
-         // Determine the redirect URL based on roles
-         String redirectUrl = "/vetcaresystemhome"; // Default if no role matched
-         for (GrantedAuthority authority : authorities) {
-             if (authority.getAuthority().equals("CLIENT")) {
-                 redirectUrl = "/userhome"; // Redirect to user home for CLIENT role
-                 break;
-             } else if (authority.getAuthority().equals("RECEPTIONIST")) {
-                 redirectUrl = "/receptionisthome"; // Redirect to receptionist home for RECEPTIONIST role
-                 break;
-             } else if (authority.getAuthority().equals("VET")) {
-                 redirectUrl = "/vethome"; // Redirect to vet home for VET role
-                 break;
-             }
-         }
+    // Custom authentication success handler
+    @Bean
+    public AuthenticationSuccessHandler customSuccessHandler() {
+        return (request, response, authentication) -> {
+            Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
+
+            String redirectUrl = "/403"; // Default if no role matched
+            for (GrantedAuthority authority : authorities) {
+                switch (authority.getAuthority()) {
+                    case "CLIENT":
+                        redirectUrl = "/userhome";
+                        break;
+                    case "RECEPTIONIST":
+                        redirectUrl = "/clinichome";
+                        break;
+                    case "VET":
+                        redirectUrl = "/vethome";
+                        break;
+                    case "ADMIN":
+                        redirectUrl = "/adminhome";
+                        break;
+                }
+            }
 
          // Redirect to the determined URL
          response.sendRedirect(redirectUrl);

@@ -51,11 +51,10 @@
         
         <div class="button-container">
             <a href="/reviews/create" class="btn-secondary">Create Review</a>
-            <a href="/reviews" class="btn-secondary">Find Reviews</a>
         </div>
         
         <div class="reviews-list">
-            <h2>Your Submitted Reviews</h2>
+            <h2>Your Submitted Reviews </h2>
             <ul>
                 <li th:each="review : ${userReviews}" class="review-item">
                     <p>Clinic Name: <span th:text="${review.clinicName}"></span></p>
@@ -66,7 +65,7 @@
             </ul>
         
             <!-- Show a message if there are no reviews -->
-            <p th:if="${#lists.isEmpty(userReviews)}">You haven't submitted any reviews yet.</p>
+            <p th:if="${#lists.isEmpty(userReviews)}">You haven't submitted any reviews or they have been rejected by admin.</p>
         </div>
     </div>
 

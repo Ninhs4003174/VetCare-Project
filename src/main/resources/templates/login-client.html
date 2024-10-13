@@ -7,6 +7,9 @@
     <link rel="stylesheet" href="/css/styles.css" />
     <link rel="stylesheet" href="/css/loginstyles.css">
 </head>
+<script th:if="${#authorization.expression('hasAnyAuthority(''ADMIN'', ''RECEPTIONIST'', ''CLIENT'', ''VET'')')}">
+    location.href = '/403';
+</script>
 <body>
     <header>
         <nav>
@@ -24,8 +27,8 @@
             <h2>Login</h2>
             
             <!-- Display error message -->
-            <div th:if="${error}" class="error-message">
-                <p th:text="${error}"></p>
+            <div th:if="${param.error}" class="error-message">
+                <p th:text="${param.error}"></p>
             </div>
 
             <form action="/login-client" method="post">

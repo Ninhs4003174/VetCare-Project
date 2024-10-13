@@ -1,14 +1,12 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>View Prescription Requests</title>
-    <link rel="stylesheet" th:href="@{/css/styles.css}">
+    <title>Clinic Vets</title>
+    <!-- Link to the CSS file -->
+    <link rel="stylesheet" href="/css/styles.css">  <!-- Link to your CSS file for consistent styling -->
 </head>
-<script th:if="${#authorization.expression('!hasAuthority(''VET'')')}">
-    location.href = '/403';
-</script>
 <body>
     <header>
         <nav>
@@ -26,60 +24,53 @@
                 </li>
     
                 <!-- Vet-specific navigation -->
-                <li th:if="${#authorization.expression('hasAuthority(''VET'')')}">
-                    <a th:href="@{/appointments}">Appointments</a>
-                </li>
+                <li th:if="${#authorization.expression('hasAuthority(''VET'')')}"><a th:href="@{/appointments}">Appointments</a></li>
                 <li th:if="${#authorization.expression('hasAuthority(''VET'')')}"><a th:href="@{/patients}">Patients</a></li>
                 <li th:if="${#authorization.expression('hasAuthority(''VET'')')}"><a th:href="@{/prescriptions}">Prescriptions</a></li>
-                <li th:if="${#authorization.expression('hasAuthority(''VET'')')}"><a th:href="@{/view-prescription-requests}">Prescription Requests</a></li>
                 <li th:if="${#authorization.expression('hasAuthority(''VET'')')}"><a th:href="@{/records}">Records</a></li>
     
                 <!-- User-specific navigation -->
-                <li th:if="${#authorization.expression('hasAuthority(''CLIENT'')')}"><a th:href="@{/userabout}">About</a></li>
+                <li th:if="${#authorization.expression('hasAuthority(''CLIENT'')')}"><a th:href="@{/resources}">About</a></li>
                 <li th:if="${#authorization.expression('hasAuthority(''CLIENT'')')}"><a th:href="@{/contact}">Contact</a></li>
                 <li th:if="${#authorization.expression('hasAuthority(''CLIENT'')')}"><a th:href="@{/resources}">Resources</a></li>
                 <li th:if="${#authorization.expression('hasAuthority(''CLIENT'')')}"><a th:href="@{/appointments}">Appointments</a></li>
                 <li th:if="${#authorization.expression('hasAuthority(''CLIENT'')')}"><a th:href="@{/user-prescriptions}">Prescriptions</a></li>
                 <li th:if="${#authorization.expression('hasAuthority(''CLIENT'')')}"><a th:href="@{/records}">Records</a></li>
-                <li th:if="${#authorization.expression('hasAuthority(''CLIENT'')')}"><a th:href="@{/reviews}">Reviews</a></li>
                 <!-- Common pages -->
                 <li><a th:href="@{/profile}">Profile</a></li>
                 <li><a th:href="@{/logout}">Log Out</a></li>
             </ul>
         </nav>
     </header>
-    <main class="container">
-        <h1>Prescription Requests</h1>
+
+    <main>
+        <div th:if="${errorMessage}" class="alert-danger">
+            <p th:text="${errorMessage}"></p>
+        </div>
+
         <table>
             <thead>
                 <tr>
-                    <th>Prescription ID</th>
-                    <th>Pet Name</th>
-                    <th>Medication</th>
-                    <th>Status</th>
-                    <th>Requested At</th>
-                    <th>Actions</th>
+                    <th>Clinic Name</th>
+                    <th>Vet Name</th>
+                    <th>Action</th>
                 </tr>
             </thead>
             <tbody>
-                <tr th:each="request : ${prescriptionRequests}">
-                    <td th:text="${request.prescription.id}"></td>
-                    <td th:text="${request.petName}"></td>
-                    <td th:text="${request.prescription.medicationName}"></td>
-                    <td th:text="${request.status}"></td>
-                    <td th:text="${#temporals.format(request.requestedAt, 'yyyy-MM-dd HH:mm')}"></td>
-                    <td>
-                        <form th:action="@{/approve-prescription-request/{id}(id=${request.id})}" method="post">
-                            <button type="submit" class="btn btn-success">Approve</button>
-                        </form>
+                <tr th:each="entry : ${clinicVetsMap}">
+                    <td rowspan="${#lists.size(entry.value)}" th:text="${entry.key}">Clinic Name</td> <!-- Clinic name -->
+                    <td th:each="vet, iterStat : ${entry.value}" th:text="${vet.username}">Vet Name</td> <!-- Vet name -->
+                    <td th:each="vet, iterStat : ${entry.value}">
+                        <a th:href="@{/appointments/book(vetName=${vet.username})}" class="btn-primary">Book Appointment</a>
                     </td>
                 </tr>
             </tbody>
         </table>
     </main>
-    
+
     <footer>
         <p>© 2024 VetCare</p>
     </footer>
+
 </body>
 </html>

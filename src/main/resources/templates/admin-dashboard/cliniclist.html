@@ -16,6 +16,9 @@
         }
     </script>
 </head>
+<script th:if="${#authorization.expression('!hasAuthority(''ADMIN'')')}">
+    location.href = '/403';
+</script>
 <body>
     <header>
         <nav>
@@ -58,7 +61,16 @@
             </table>
             <button onclick="toggleForm('add-clinic-form')">Add New Clinic</button>
         </section>
-        
+        <!-- Error Message Display -->
+<div th:if="${error}" class="error-message" style="color: red;">
+    <p th:text="${error}"></p>
+</div>
+
+<!-- Success Message Display -->
+<div th:if="${message}" class="success-message" style="color: green;">
+    <p th:text="${message}"></p>
+</div>
+
         <section id="add-clinic-form" style="display:none;">
             <h2>Add New Clinic</h2>
             <form action="/add-clinic" method="post">
