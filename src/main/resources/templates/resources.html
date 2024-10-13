@@ -31,12 +31,13 @@
                 <li th:if="${#authorization.expression('hasAuthority(''VET'')')}"><a th:href="@{/records}">Records</a></li>
     
                 <!-- User-specific navigation -->
-                <li th:if="${#authorization.expression('hasAuthority(''CLIENT'')')}"><a th:href="@{/resources}">About</a></li>
+                <li th:if="${#authorization.expression('hasAuthority(''CLIENT'')')}"><a th:href="@{/userabout}">About</a></li>
                 <li th:if="${#authorization.expression('hasAuthority(''CLIENT'')')}"><a th:href="@{/contact}">Contact</a></li>
                 <li th:if="${#authorization.expression('hasAuthority(''CLIENT'')')}"><a th:href="@{/resources}">Resources</a></li>
                 <li th:if="${#authorization.expression('hasAuthority(''CLIENT'')')}"><a th:href="@{/appointments}">Appointments</a></li>
                 <li th:if="${#authorization.expression('hasAuthority(''CLIENT'')')}"><a th:href="@{/user-prescriptions}">Prescriptions</a></li>
                 <li th:if="${#authorization.expression('hasAuthority(''CLIENT'')')}"><a th:href="@{/records}">Records</a></li>
+                <li th:if="${#authorization.expression('hasAuthority(''CLIENT'')')}"><a th:href="@{/reviews}">Reviews</a></li>
                 <!-- Common pages -->
                 <li><a th:href="@{/profile}">Profile</a></li>
                 <li><a th:href="@{/logout}">Log Out</a></li>
