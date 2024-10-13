@@ -4,6 +4,9 @@
     <title>Patient List</title>
     <link rel="stylesheet" type="text/css" href="/css/styles.css">
 </head>
+<script th:if="${#authorization.expression('!hasAuthority(''RECEPTIONIST'')')}">
+    location.href = '/403';
+</script>
 <body>
     <header>
         <nav>
