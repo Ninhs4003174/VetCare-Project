@@ -34,7 +34,7 @@ Before running the project, ensure that you have the following installed on your
 1. **Install PostgreSQL:** Download and install PostgreSQL from the official [website.](https://www.postgresql.org/download/)
 2. **Create Database:** Once PostgreSQL is installed, create a new database for the project:
 ```
-psql -U <your-username> -d postgres  
+psql -U <your-username>
 CREATE DATABASE milestone2;
 ```
 3. **Run Migrations:** The project uses Flyway for database migrations. When the application starts, Flyway will automatically run the migrations and set up the required tables.
@@ -67,12 +67,63 @@ Build the project using Maven by running the following command:
 
 ```
 3. **Access the Application:**
-Open your browser and navigate to:
+Open your browser and navigate to:]
 ```
 http://localhost:8080
 
 ```
 
+# Exploring the Website
+
+### Client Dashboard
+Once signed up as a client, log in with your newly created credentials.
+As a client, you can:
+- Schedule and manage appointments.
+- View and access medical records for your pets.
+- Browse through educational resources and tips. (Note: Resources will first be empty until admin approves them)
+- Can view profile, edit profile and add/edit pets. 
+- User can view prescriptions and then request prescriptions.(prescriptions must first be approved by the vet you have booked an appointment with.)
+
+
+
+## Logging in as a Predifined User.
+To explore different roles and dashboards, you can use the following predefined accounts, created during the project initialization:
+
+#### Client Dashboard:
+- Username: user
+
+- Email: user@example.com
+
+- Password: user123
+
+After logging in, you will have access to the client dashboard, where you can manage appointments and view resources.
+
+
+#### Receptionist (Clinic) Dashboard:
+- Username: clinic
+- Email: clinic@example.com
+- Password: clinic123
+After logging in, you will access the clinic dashboard, where you can manage appointments and view clinic-related information.
+
+#### Vet Dashboard:
+- Username: vetuser
+- Email: vet@example.com
+- Password: vet123
+After logging in as a vet, you can:
+Manage your schedule and view upcoming appointments.
+Access medical records for pets under your care.
+
+#### Admin Dashboard:
+- Username: admin
+- Email: admin@example.com
+- Password: admin123
+After logging in as an admin, you can:
+Manage users (add or delete users).
+Review and approve or deny educational resources.
+Manage clinics and vet information.
+
+
+**Note:** only when admin approves resources, only then will it show up on client dashbaord.
 
 ## Docker Setup
 If you want to run the project using Docker:
@@ -123,14 +174,3 @@ Visit the following URL in your browser:
 http://localhost:8080
 
 ```
-
-6. Access the AdminUserIntializer.java file under java\au\edu\rmit\sept\webapp. It contains
-already-instantiated admin, user, vet and clinic/receptionist of a clinic users, along with their login credentials.
-
-Use these login credentials to access each of the following dashboards: admin, user, vet and clinic respectively, and test out their corresponding functionalities.
-
-The entrance to our VetCare system is http://localhost:8080/login-client.
-
-
-
-
