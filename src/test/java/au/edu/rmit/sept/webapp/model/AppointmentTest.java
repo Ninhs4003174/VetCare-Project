@@ -1,33 +1,67 @@
-// package au.edu.rmit.sept.webapp.model;
+package au.edu.rmit.sept.webapp.model;
 
-// import static org.junit.jupiter.api.Assertions.assertEquals;
-// import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-// import au.edu.rmit.sept.webapp.model.Appointment;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
-// public class AppointmentTest {
+class AppointmentTest {
 
-//     @Test
-//     void should_formatDetails_when_PetNameAndVetNameAreAvailable() {
-//         Appointment appointment = new Appointment(1L, "Bella", "Dr. Smith", "2024-09-15", "10:00 AM", "Scheduled");
-//         assertEquals("Bella with Dr. Smith on 2024-09-15 at 10:00 AM", appointment.formattedDetails());
-//     }
+    private Appointment appointment;
 
-//     @Test
-//     void should_formatDetails_when_PetNameIsNull() {
-//         Appointment appointment = new Appointment(1L, null, "Dr. Smith", "2024-09-15", "10:00 AM", "Scheduled");
-//         assertEquals("Unknown Pet with Dr. Smith on 2024-09-15 at 10:00 AM", appointment.formattedDetails());
-//     }
+    @BeforeEach
+    void setUp() {
+        // Initialize the appointment object
+        appointment = new Appointment();
+        appointment.setPetName("Max");
+        appointment.setDate("2024-10-13");
+        appointment.setTime("10:00 AM");
+        appointment.setStatus("Confirmed");
+    }
 
-//     @Test
-//     void should_formatDetails_when_VetNameIsNull() {
-//         Appointment appointment = new Appointment(1L, "Bella", null, "2024-09-15", "10:00 AM", "Scheduled");
-//         assertEquals("Bella with Unknown Vet on 2024-09-15 at 10:00 AM", appointment.formattedDetails());
-//     }
+    @Test
+    void testFormattedDetailsAllFieldsSet() {
+        String expectedDetails = "Max on 2024-10-13 at 10:00 AM. Status: Confirmed";
+        assertEquals(expectedDetails, appointment.formattedDetails(), "Formatted details should match the expected output when all fields are set");
+    }
 
-//     @Test
-//     void should_formatDetails_when_BothPetNameAndVetNameAreNull() {
-//         Appointment appointment = new Appointment(1L, null, null, "2024-09-15", "10:00 AM", "Scheduled");
-//         assertEquals("Unknown Pet with Unknown Vet on 2024-09-15 at 10:00 AM", appointment.formattedDetails());
-//     }
-// }
+    @Test
+    void testFormattedDetailsWithNullPetName() {
+        appointment.setPetName(null);
+        String expectedDetails = "Unknown Pet on 2024-10-13 at 10:00 AM. Status: Confirmed";
+        assertEquals(expectedDetails, appointment.formattedDetails(), "Formatted details should handle null pet name correctly");
+    }
+
+    @Test
+    void testFormattedDetailsWithNullDate() {
+        appointment.setDate(null);
+        String expectedDetails = "Max on Unknown Date at 10:00 AM. Status: Confirmed";
+        assertEquals(expectedDetails, appointment.formattedDetails(), "Formatted details should handle null date correctly");
+    }
+
+    @Test
+    void testFormattedDetailsWithNullTime() {
+        appointment.setTime(null);
+        String expectedDetails = "Max on 2024-10-13 at Unknown Time. Status: Confirmed";
+        assertEquals(expectedDetails, appointment.formattedDetails(), "Formatted details should handle null time correctly");
+    }
+
+    @Test
+    void testFormattedDetailsWithNullStatus() {
+        appointment.setStatus(null);
+        String expectedDetails = "Max on 2024-10-13 at 10:00 AM. Status: Unknown Status";
+        assertEquals(expectedDetails, appointment.formattedDetails(), "Formatted details should handle null status correctly");
+    }
+
+    @Test
+    void testFormattedDetailsWithAllNullFields() {
+        // Setting all fields to null
+        appointment.setPetName(null);
+        appointment.setDate(null);
+        appointment.setTime(null);
+        appointment.setStatus(null);
+
+        String expectedDetails = "Unknown Pet on Unknown Date at Unknown Time. Status: Unknown Status";
+        assertEquals(expectedDetails, appointment.formattedDetails(), "Formatted details should handle all null fields correctly");
+    }
+}
