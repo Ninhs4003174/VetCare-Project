@@ -1,4 +1,5 @@
 package au.edu.rmit.sept.webapp.controller;
+import au.edu.rmit.sept.webapp.SecurityUtil;
 
 import au.edu.rmit.sept.webapp.model.Appointment;
 import au.edu.rmit.sept.webapp.model.Pet;
@@ -49,6 +50,9 @@ public class AppointmentController {
 
     @GetMapping
     public String all(Model model) {
+        if (!SecurityUtil.hasRole("CLIENT")) {
+            return "403";  // Redirect to access denied page if not CLIENT
+        }
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String username = auth.getName();
         User user = userService.findByUsername(username);
@@ -82,6 +86,9 @@ public class AppointmentController {
 
     @GetMapping("/book")
     public String showBookingForm(Model model) {
+        if (!SecurityUtil.hasRole("CLIENT")) {
+            return "403";  // Redirect to access denied page if not CLIENT
+        }
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String username = auth.getName();
         User user = userService.findByUsername(username);
@@ -104,6 +111,9 @@ public class AppointmentController {
    
     @PostMapping("/book")
     public String bookAppointment(@ModelAttribute Appointment appointment, BindingResult result, Model model) {
+        if (!SecurityUtil.hasRole("CLIENT")) {
+            return "403";  // Redirect to access denied page if not CLIENT
+        }
         User user = null;
     
         try {
@@ -192,12 +202,18 @@ public class AppointmentController {
 
     @PostMapping("/cancel")
     public String cancelAppointment(@ModelAttribute("id") Long id) {
+        if (!SecurityUtil.hasRole("CLIENT")) {
+            return "403";  // Redirect to access denied page if not CLIENT
+        }
         appointmentService.cancelAppointment(id);
         return "redirect:/appointments";
     }
 
     @GetMapping("/edit/{id}")
     public String showEditForm(@PathVariable("id") Long id, Model model) {
+        if (!SecurityUtil.hasRole("CLIENT")) {
+            return "403";  // Redirect to access denied page if not CLIENT
+        }
         Appointment appointment = appointmentService.findAppointmentById(id);
         model.addAttribute("appointment", appointment);
         model.addAttribute("vets", vetService.getAllVets());
@@ -210,6 +226,9 @@ public class AppointmentController {
 
     @PostMapping("/edit")
     public String editAppointment(@ModelAttribute Appointment appointment, BindingResult result, Model model) {
+        if (!SecurityUtil.hasRole("CLIENT")) {
+            return "403";  // Redirect to access denied page if not CLIENT
+        }
         if (result.hasErrors()) {
             model.addAttribute("vets", vetService.getAllVets());
             model.addAttribute("timeSlots", getTimeSlots());
@@ -256,6 +275,9 @@ public class AppointmentController {
             @RequestParam(value = "serviceType", required = false) String serviceType,
             @RequestParam(value = "location", required = false) String location,
             Model model) {
+                if (!SecurityUtil.hasRole("CLIENT")) {
+                    return "403";  // Redirect to access denied page if not CLIENT
+                }
         try {
             List<VetBooking> filteredVets = vetService.getFilteredVets(serviceType, location);
             model.addAttribute("filteredVets", filteredVets);
@@ -273,6 +295,9 @@ public class AppointmentController {
         @RequestParam Long appointmentId, 
         @RequestParam String status, 
         Model model) {
+            if (!SecurityUtil.hasRole("CLIENT")) {
+                return "403";  // Redirect to access denied page if not CLIENT
+            }
         
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String username = auth.getName();
