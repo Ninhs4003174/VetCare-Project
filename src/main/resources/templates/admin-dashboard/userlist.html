@@ -61,7 +61,15 @@
             </table>
             <button onclick="toggleForm('add-user-form')">Add New User</button>
         </section>
-        
+          <!-- Error Message Display -->
+          <div th:if="${error}" class="error-message" style="color: red;">
+            <p th:text="${error}"></p>
+        </div>
+
+        <!-- Success Message Display -->
+        <div th:if="${message}" class="success-message" style="color: green;">
+            <p th:text="${message}"></p>
+        </div>
         <section id="add-user-form" style="display:none;">
             <h2>Add New User</h2>
             <form action="/add-user" method="post">
@@ -75,10 +83,10 @@
                 <input type="password" id="user-password" name="password" required>
                 
                 <label for="user-address">Address:</label>
-                <input type="text" id="user-address" name="address">
+                <input type="text" id="user-address" name="address" required>
                 
                 <label for="user-phone">Phone Number:</label>
-                <input type="text" id="user-phone" name="phoneNumber">
+                <input type="text" id="user-phone" name="phoneNumber" required>
                 
                 <button type="submit">Add User</button>
             </form>
