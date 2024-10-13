@@ -141,25 +141,25 @@ class PrescriptionControllerTest {
         // Assert
         assertEquals("403", result);
     }
-
-    // @Test
-    // void testSubmitPrescription_WithValidData() {
-    //     // Arrange
-    //     Prescription prescription = new Prescription();
-    //     User vetUser = new User();
-    //     vetUser.setId(1L);
-
-    //     when(bindingResult.hasErrors()).thenReturn(false);
-    //     when(prescriptionService.savePrescription(any(Prescription.class))).thenReturn(prescription);
-
-    //     // Act
-    //     String result = prescriptionController.submitPrescription(prescription, bindingResult, model, 1L, 1L, "petName");
-
-    //     // Assert
-    //     assertEquals("redirect:/patients", result);
-    //     verify(prescriptionService).savePrescription(any(Prescription.class));
-    // }
-
+    @Test
+    void testSubmitPrescription_WithValidData() {
+        // Arrange
+        Prescription prescription = new Prescription();
+        User vetUser = new User();
+        vetUser.setId(1L);
+    
+        when(bindingResult.hasErrors()).thenReturn(false);
+        doNothing().when(prescriptionService).savePrescription(any(Prescription.class));
+    
+        // Act
+        String result = prescriptionController.submitPrescription(prescription, bindingResult, model, 1L, 1L, "petName");
+    
+        // Assert
+        assertEquals("redirect:/patients", result);
+        verify(prescriptionService).savePrescription(any(Prescription.class));
+    }
+    
+    
     @Test
     void testSubmitPrescription_WithBindingErrors() {
         // Arrange
