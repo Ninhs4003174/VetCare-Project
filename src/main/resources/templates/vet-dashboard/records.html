@@ -71,6 +71,7 @@
                         <td th:text="${record.lastVisit}"></td>
                         <td>
                             <a th:href="@{/records/view/{id}(id=${record.id})}" class="btn-secondary">View</a>
+                            <a th:href="@{/records/delete/{id}(id=${petRecord.id})}" class="btn btn-danger">Delete</a>
                             <a th:href="@{/records/download-pdf/{id}(id=${record.id})}" class="btn-secondary">Download PDF</a>
                         </td>                        
                     </tr>

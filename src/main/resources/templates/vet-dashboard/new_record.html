@@ -8,7 +8,6 @@
             const name = document.forms["petRecordForm"]["name"].value;
             const breed = document.forms["petRecordForm"]["breed"].value;
             const dateOfBirth = document.forms["petRecordForm"]["dateOfBirth"].value;
-            const veterinarian = document.forms["petRecordForm"]["veterinarian"].value;
             const vetId = document.forms["petRecordForm"]["vetId"].value;
             const userId = document.forms["petRecordForm"]["userId"].value;
 
@@ -29,11 +28,6 @@
                 isValid = false;
             }
 
-            if (veterinarian === "" || veterinarian.length < 3 || veterinarian.length > 100) {
-                alert("Veterinarian name must be between 3 and 100 characters.");
-                isValid = false;
-            }
-
             if (vetId === "" || isNaN(vetId)) {
                 alert("Please select a valid Vet.");
                 isValid = false;
@@ -49,124 +43,108 @@
     </script>
 </head>
 <body>
-    <header>
-        <nav>
-            <ul class="navbar-menu">
-                <!-- Logo for vet or user based on role -->
-                <li>
-                    <a th:href="@{/vethome}" th:if="${#authorization.expression('hasAuthority(''VET'')')}">
-                        <img th:src="@{/img/logo.png}" alt="Vet Logo" class="logo">
-                    </a>
-                </li>
-                <li>
-                    <a th:href="@{/userhome}" th:if="${#authorization.expression('hasAuthority(''CLIENT'')')}">
-                        <img th:src="@{/img/logo.png}" alt="User Logo" class="logo">
-                    </a>
-                </li>
-    
-                <!-- Vet-specific navigation -->
-                <li th:if="${#authorization.expression('hasAuthority(''VET'')')}">
-                    <a th:href="@{/appointments}">Appointments</a>
-                </li>
-                <li th:if="${#authorization.expression('hasAuthority(''VET'')')}"><a th:href="@{/patients}">Patients</a></li>
-                <li th:if="${#authorization.expression('hasAuthority(''VET'')')}"><a th:href="@{/prescriptions}">Prescriptions</a></li>
-                <li th:if="${#authorization.expression('hasAuthority(''VET'')')}"><a th:href="@{/view-prescription-requests}">Prescription Requests</a></li>
-                <li th:if="${#authorization.expression('hasAuthority(''VET'')')}"><a th:href="@{/records}">Records</a></li>
-    
-                <!-- User-specific navigation -->
-                <li th:if="${#authorization.expression('hasAuthority(''CLIENT'')')}"><a th:href="@{/userabout}">About</a></li>
-                <li th:if="${#authorization.expression('hasAuthority(''CLIENT'')')}"><a th:href="@{/contact}">Contact</a></li>
-                <li th:if="${#authorization.expression('hasAuthority(''CLIENT'')')}"><a th:href="@{/resources}">Resources</a></li>
-                <li th:if="${#authorization.expression('hasAuthority(''CLIENT'')')}"><a th:href="@{/appointments}">Appointments</a></li>
-                <li th:if="${#authorization.expression('hasAuthority(''CLIENT'')')}"><a th:href="@{/user-prescriptions}">Prescriptions</a></li>
-                <li th:if="${#authorization.expression('hasAuthority(''CLIENT'')')}"><a th:href="@{/records}">Records</a></li>
-                <li th:if="${#authorization.expression('hasAuthority(''CLIENT'')')}"><a th:href="@{/reviews}">Reviews</a></li>
-                <!-- Common pages -->
-                <li><a th:href="@{/profile}">Profile</a></li>
-                <li><a th:href="@{/logout}">Log Out</a></li>
-            </ul>
-        </nav>
-    </header>
-
     <main>
+        <header>
+            <nav>
+                <ul class="navbar-menu">
+                    <!-- Logo for vet or user based on role -->
+                    <li>
+                        <a th:href="@{/vethome}" th:if="${#authorization.expression('hasAuthority(''VET'')')}">
+                            <img th:src="@{/img/logo.png}" alt="Vet Logo" class="logo">
+                        </a>
+                    </li>
+                    <li>
+                        <a th:href="@{/userhome}" th:if="${#authorization.expression('hasAuthority(''CLIENT'')')}">
+                            <img th:src="@{/img/logo.png}" alt="User Logo" class="logo">
+                        </a>
+                    </li>
+                    <!-- Vet-specific navigation -->
+                    <li th:if="${#authorization.expression('hasAuthority(''VET'')')}"><a th:href="@{/appointments}">Appointments</a></li>
+                    <li th:if="${#authorization.expression('hasAuthority(''VET'')')}"><a th:href="@{/patients}">Patients</a></li>
+                    <li th:if="${#authorization.expression('hasAuthority(''VET'')')}"><a th:href="@{/prescriptions}">Prescriptions</a></li>
+                    <li th:if="${#authorization.expression('hasAuthority(''VET'')')}"><a th:href="@{/view-prescription-requests}">Prescription Requests</a></li>
+                    <li th:if="${#authorization.expression('hasAuthority(''VET'')')}"><a th:href="@{/records}">Records</a></li>
+                    <!-- User-specific navigation -->
+                    <li th:if="${#authorization.expression('hasAuthority(''CLIENT'')')}"><a th:href="@{/userabout}">About</a></li>
+                    <li th:if="${#authorization.expression('hasAuthority(''CLIENT'')')}"><a th:href="@{/contact}">Contact</a></li>
+                    <li th:if="${#authorization.expression('hasAuthority(''CLIENT'')')}"><a th:href="@{/resources}">Resources</a></li>
+                    <li th:if="${#authorization.expression('hasAuthority(''CLIENT'')')}"><a th:href="@{/appointments}">Appointments</a></li>
+                    <li th:if="${#authorization.expression('hasAuthority(''CLIENT'')')}"><a th:href="@{/user-prescriptions}">Prescriptions</a></li>
+                    <li th:if="${#authorization.expression('hasAuthority(''CLIENT'')')}"><a th:href="@{/records}">Records</a></li>
+                    <li th:if="${#authorization.expression('hasAuthority(''CLIENT'')')}"><a th:href="@{/reviews}">Reviews</a></li>
+                    <!-- Common pages -->
+                    <li><a th:href="@{/profile}">Profile</a></li>
+                </ul>
+            </nav>
+        </header>
+
         <section class="pet-record-form">
             <h1>Create New Pet Record</h1>
-            
-            <!-- Form bound to the petRecord object -->
-            <form th:action="@{/vet/records/save}" th:object="${petRecord}" method="post" onsubmit="return validateForm()" class="form-container">
-                
-                <!-- CSRF Token for security -->
-                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
-    
+            <form th:action="@{/records/save}" th:object="${petRecord}" method="post" onsubmit="return validateForm()" class="form-container">
+
                 <!-- Pet Name -->
                 <label for="name">Pet Name:</label>
                 <input type="text" id="name" th:field="*{name}" required>
-    
+            
                 <!-- Breed -->
                 <label for="breed">Breed:</label>
                 <input type="text" id="breed" th:field="*{breed}" required>
-    
+            
                 <!-- Date of Birth -->
                 <label for="dateOfBirth">Date of Birth:</label>
                 <input type="date" id="dateOfBirth" th:field="*{dateOfBirth}" required>
-    
-                <!-- Veterinarian -->
-                <label for="veterinarian">Veterinarian:</label>
-                <input type="text" id="veterinarian" th:field="*{veterinarian}" required>
-    
-                <!-- Vet Dropdown -->
+            
+                <!-- Vet Dropdown (Selecting Vet by ID) -->
                 <label for="vetId">Vet:</label>
-                <select id="vetId" th:field="*{vet.id}" required>
+                <select id="vetId" th:field="*{vet.vetId}" required>
                     <option value="" disabled selected>Select a Vet</option>
-                    <option th:each="vet : ${vets}" th:value="${vet.id}" th:text="${vet.clinicName}"></option>
+                    <option th:each="vet : ${vets}" th:value="${vet.vetId}" th:text="${vet.clinicName}"></option>
                 </select>
-    
-                <!-- User Dropdown -->
+
+                <!-- User Dropdown (Selecting User by ID) -->
                 <label for="userId">User:</label>
                 <select id="userId" th:field="*{user.id}" required>
                     <option value="" disabled selected>Select a User</option>
                     <option th:each="user : ${users}" th:value="${user.id}" th:text="${user.username}"></option>
                 </select>
-    
+            
                 <!-- Last Visit -->
                 <label for="lastVisit">Last Visit:</label>
                 <input type="date" id="lastVisit" th:field="*{lastVisit}">
-    
+            
                 <!-- Allergies -->
                 <label for="allergies">Allergies:</label>
                 <input type="text" id="allergies" th:field="*{allergies}">
-    
+            
                 <!-- Prescriptions -->
                 <label for="prescriptions">Prescriptions:</label>
                 <input type="text" id="prescriptions" th:field="*{prescriptions}">
-    
+            
                 <!-- Vaccination History -->
                 <label for="vaccinationHistory">Vaccination History:</label>
                 <textarea id="vaccinationHistory" th:field="*{vaccinationHistory}"></textarea>
-    
+            
                 <!-- Recent Tests -->
                 <label for="recentTests">Recent Tests:</label>
                 <input type="text" id="recentTests" th:field="*{recentTests}">
-    
+            
                 <!-- Recent Surgeries -->
                 <label for="recentSurgeries">Recent Surgeries:</label>
                 <input type="text" id="recentSurgeries" th:field="*{recentSurgeries}">
-    
+            
                 <!-- Dietary Recommendations -->
                 <label for="dietaryRecommendations">Dietary Recommendations:</label>
                 <input type="text" id="dietaryRecommendations" th:field="*{dietaryRecommendations}">
-    
+            
                 <!-- Notes -->
                 <label for="notes">Notes:</label>
                 <textarea id="notes" th:field="*{notes}"></textarea>
-    
+            
                 <!-- Submit Button -->
                 <button type="submit" class="btn-primary">Save Record</button>
             </form>
         </section>
-    </main>    
-    <footer>
-        <p>© 2024 VetCare</p>
-    </footer>
+    </main>
 </body>
 </html>
+

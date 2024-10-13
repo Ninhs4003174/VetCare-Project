@@ -1,12 +1,11 @@
 package au.edu.rmit.sept.webapp.controller;
 
 import au.edu.rmit.sept.webapp.model.PetRecord;
-import au.edu.rmit.sept.webapp.model.User;
 import au.edu.rmit.sept.webapp.model.Vet;
-import au.edu.rmit.sept.webapp.model.enums.UserRole;
 import au.edu.rmit.sept.webapp.service.PetRecordService;
 import au.edu.rmit.sept.webapp.service.UserService;
 import au.edu.rmit.sept.webapp.service.VetService;
+import au.edu.rmit.sept.webapp.model.User;
 
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
@@ -20,7 +19,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -49,31 +47,29 @@ public class PetRecordController {
 
     // Show form to create a new pet record
     @GetMapping("/new")
-    public String showNewRecordForm(Model model) {
-        // Create a new empty PetRecord object to bind the form fields
-        PetRecord petRecord = new PetRecord();
-        model.addAttribute("petRecord", petRecord);
+    public String showNewPetRecordForm(Model model) {
+        model.addAttribute("petRecord", new PetRecord());
 
-        // Add necessary data like users and vets for dropdowns
-        List<User> vets = userService.getUsersByRole(UserRole.VET); // Fetch vets from UserService
-        List<User> users = userService.getUsersByRole(UserRole.CLIENT); // Assuming clients are the pet owners
+        // Fetching all users and vets from the database
+        Iterable<User> users = userService.getAllUsers();
+        List<Vet> vets = vetService.getAllVets();
 
-        model.addAttribute("vets", vets); // List of vets for dropdown
-        model.addAttribute("users", users); // List of pet owners for dropdown
+        model.addAttribute("users", users);
+        model.addAttribute("vets", vets);
 
-        // Return the view for the form
-        return "vet-dashboard/new_record";
+        return "vet-dashboard/new_record"; // Thymeleaf template name
     }
 
-    // Save a new pet record
-    @PostMapping("/records/save")
-    public String saveNewPetRecord(PetRecord petRecord, @RequestParam("vetId") Long vetId,
-            RedirectAttributes redirectAttributes) {
-        Vet vet = vetService.getVetById(vetId);
-        petRecord.setVet(vet); // Assign vet to petRecord
-        petRecordService.save(petRecord); // Save petRecord
+    // Method to handle form submission
+    @PostMapping("/save")
+    public String saveNewPetRecord(@ModelAttribute PetRecord petRecord) {
+        Vet selectedVet = petRecord.getVet();
+        if (selectedVet != null) {
+            Vet fetchedVet = vetService.getVetById(selectedVet.getVetId());
+            petRecord.setVet(fetchedVet);
+        }
 
-        redirectAttributes.addFlashAttribute("message", "Pet record saved successfully");
+        petRecordService.save(petRecord);
         return "redirect:/records";
     }
 
@@ -81,8 +77,17 @@ public class PetRecordController {
     @GetMapping("/edit/{id}")
     public String showEditRecordForm(@PathVariable Long id, Model model) {
         PetRecord petRecord = petRecordService.getPetRecordById(id);
+        List<Vet> vets = vetService.getAllVets(); // Fetch all vets for the dropdown
         model.addAttribute("petRecord", petRecord);
+        model.addAttribute("vets", vets); // Add the list of vets to the model
         return "vet-dashboard/edit_record"; // This corresponds to edit_record.html
+    }
+
+    // Method to handle deleting a pet record by ID
+    @PostMapping("/delete/{id}")
+    public String deletePetRecord(@PathVariable("id") Long id) {
+        petRecordService.delete(id); // Call the service to delete the record
+        return "redirect:/records"; // Redirect to the records list after deleting
     }
 
     // Update an existing pet record
@@ -95,7 +100,6 @@ public class PetRecordController {
             existingRecord.setName(petRecord.getName());
             existingRecord.setBreed(petRecord.getBreed());
             existingRecord.setDateOfBirth(petRecord.getDateOfBirth());
-            existingRecord.setVeterinarian(petRecord.getVeterinarian());
             existingRecord.setLastVisit(petRecord.getLastVisit());
             existingRecord.setAllergies(petRecord.getAllergies());
             existingRecord.setPrescriptions(petRecord.getPrescriptions());
@@ -104,6 +108,12 @@ public class PetRecordController {
             existingRecord.setRecentSurgeries(petRecord.getRecentSurgeries());
             existingRecord.setDietaryRecommendations(petRecord.getDietaryRecommendations());
             existingRecord.setNotes(petRecord.getNotes());
+
+            // Fetch and assign the selected vet during update
+            Vet selectedVet = vetService.getVetById(vetId);
+            if (selectedVet != null) {
+                existingRecord.setVet(selectedVet);
+            }
 
             petRecordService.update(existingRecord);
         }
@@ -167,7 +177,7 @@ public class PetRecordController {
                 contentStream.showText("Date of Birth: " + record.getDateOfBirth());
                 contentStream.newLineAtOffset(0, -15);
                 contentStream.showText("Veterinarian: "
-                        + (record.getVeterinarian() != null ? record.getVeterinarian() : "No Vet Assigned"));
+                        + (record.getVet() != null ? record.getVet().getClinicName() : "No Vet Assigned"));
                 contentStream.newLineAtOffset(0, -15);
                 contentStream.showText("Last Visit: "
                         + (record.getLastVisit() != null ? record.getLastVisit().toString() : "No Visit Data"));
