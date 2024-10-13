@@ -25,34 +25,22 @@
     </div>
 
     <!-- Display the patients only if they exist -->
-    <div th:if="${patients != null && !#lists.isEmpty(patients)}">
+    <div th:if="${pets != null && !#lists.isEmpty(pets)}">
         <h2>Patients</h2>
         <table>
             <thead>
                 <tr>
-                    <th>Patient ID</th>
                     <th>Patient Name</th>
-                    <th>Phone Number</th>
-                    <th>Email</th>
-                    <th>Address</th>
-                    <th>Pet Name</th>
+                    <th>Owner Name</th>
                 </tr>
             </thead>
             <tbody>
-                <tr th:each="patient : ${patients}">
-                    <td th:text="${patient.id}"></td>
-                    <td th:text="${patient.name}"></td>
-                    <td th:text="${patient.phoneNumber}"></td>
-                    <td th:text="${patient.email}"></td>
-                    <td th:text="${patient.address}"></td>
-                    <td th:text="${patient.petName}"></td>
+                <tr th:each="pet : ${pets}">
+                    <td th:text="${pet.name}"></td>
+                    <td th:text="${pet.owner.username}"></td>
                 </tr>
             </tbody>
         </table>
     </div>
-
-    <!-- Optionally, link to other pages like clinic home or vets list -->
-    <a href="/clinichome">Back to Clinic Home</a>
-    <a href="/vets">View Vets</a>
 </body>
 </html>

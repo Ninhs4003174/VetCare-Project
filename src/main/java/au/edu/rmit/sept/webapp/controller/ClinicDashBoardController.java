@@ -19,9 +19,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import au.edu.rmit.sept.webapp.model.Appointment;
+import au.edu.rmit.sept.webapp.model.Pet;
 import au.edu.rmit.sept.webapp.model.User;
 import au.edu.rmit.sept.webapp.model.enums.UserRole;
 import au.edu.rmit.sept.webapp.service.AppointmentService;
+import au.edu.rmit.sept.webapp.service.PetService;
 import au.edu.rmit.sept.webapp.service.UserService;
 
 @Controller
@@ -164,52 +166,53 @@ public class ClinicDashBoardController {
         return "clinic-dashboard/appointment-list"; // Ensure this matches your template path
     }
 
-   @GetMapping("/clinic-patients")
-public String listPetNames(Model model, Authentication authentication) {
+    // Inject necessary services
 
-    // Retrieve the logged-in clinic user
-    User clinic = userService.findByUsername(authentication.getName());
-    
-    // Check if the user is a valid clinic
-    if (clinic == null || clinic.getRole() != UserRole.RECEPTIONIST) {
-        logger.warn("Clinic user not found or user is not a clinic");
-        return "403";  // Access denied page
-    }
+    @GetMapping("/clinic-patients")
+    public String listPetNames(Model model, Authentication authentication) {
 
-    // Retrieve vets associated with the clinic
-    List<User> vets = userService.getVetsByClinicId(clinic.getId());
-    
-    // Create a set to avoid duplicate pet names
-    Set<String> petNames = new HashSet<>();
-    List<Appointment> allAppointments = new ArrayList<>();
+        // Retrieve the logged-in clinic user
+        User clinic = userService.findByUsername(authentication.getName());
 
-    for (User vet : vets) {
-        // Retrieve appointments for each vet
-        List<Appointment> appointments = appointmentService.getAppointmentsByVet(vet.getId());
-        allAppointments.addAll(appointments);
-        
-        // Collect pet names from the appointments
-        for (Appointment appointment : appointments) {
-            petNames.add(appointment.getPetName());
+        // Check if the user is a valid clinic
+        if (clinic == null || clinic.getRole() != UserRole.RECEPTIONIST) {
+            logger.warn("Clinic user not found or user is not a clinic");
+            return "403"; // Access denied page
         }
+
+        // Retrieve vets associated with the clinic
+        List<User> vets = userService.getVetsByClinicId(clinic.getId());
+
+        // Create a list to store pet details
+        List<Pet> pets = new ArrayList<>();
+
+        for (User vet : vets) {
+            // Retrieve appointments for each vet
+            List<Appointment> appointments = appointmentService.getAppointmentsByVet(vet.getId());
+
+            // Collect pet details from the appointments
+            for (Appointment appointment : appointments) {
+                Pet pet = new Pet();
+                pet.setName(appointment.getPetName());
+                pet.setOwner(userService.findById(appointment.getUserId())); // Assuming Pet has an owner field of type
+                                                                             // User
+                pets.add(pet);
+            }
+        }
+
+        // Check if any pets were found
+        if (pets.isEmpty()) {
+            model.addAttribute("noPatientsMessage", "No pets have booked appointments with any vets.");
+        } else {
+            // Log pet details for debugging
+            pets.forEach(pet -> logger.info("Pet: {}", pet));
+
+            // Add data to the model
+            model.addAttribute("pets", pets);
+            model.addAttribute("username", clinic.getUsername()); // Correctly add the username from the clinic user
+        }
+
+        // Return the patient list view
+        return "clinic-dashboard/patients"; // Ensure this matches your template path
     }
-
-    // Check if any pet names were found
-    if (petNames.isEmpty()) {
-        model.addAttribute("noPetsMessage", "No pets have booked appointments with any vets.");
-    } else {
-        // Log pet names for debugging
-        petNames.forEach(petName -> logger.info("Pet Name: {}", petName));
-
-        // Add data to the model
-        model.addAttribute("petNames", petNames);
-        model.addAttribute("username", clinic.getUsername()); // Correctly add the username from the clinic user
-    }
-
-    // Return the pet names view
-    return "clinic-dashboard/patients";  // Ensure this matches your template path
-}
-
-
-
 }
