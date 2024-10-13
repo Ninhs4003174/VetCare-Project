@@ -78,7 +78,7 @@ public class SecurityConfig {
         return (request, response, authentication) -> {
             Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
 
-            String redirectUrl = "/vetcaresystemhome"; // Default if no role matched
+            String redirectUrl = "/403"; // Default if no role matched
             for (GrantedAuthority authority : authorities) {
                 switch (authority.getAuthority()) {
                     case "CLIENT":
