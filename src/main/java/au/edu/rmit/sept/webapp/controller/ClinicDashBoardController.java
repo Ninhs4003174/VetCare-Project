@@ -33,6 +33,7 @@ public class ClinicDashBoardController {
 
     @Autowired
     private UserService userService;
+    @Autowired
     private AppointmentService appointmentService;
 
     @GetMapping("/clinichome")
