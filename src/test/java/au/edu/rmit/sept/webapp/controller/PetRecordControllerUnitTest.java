@@ -1,90 +1,122 @@
-// package au.edu.rmit.sept.webapp.controller;
+package au.edu.rmit.sept.webapp.controller;
 
-// import au.edu.rmit.sept.webapp.model.PetRecord;
-// import au.edu.rmit.sept.webapp.model.Vet;
-// import au.edu.rmit.sept.webapp.service.PetRecordService;
-// import au.edu.rmit.sept.webapp.service.VetService;
-// import org.junit.jupiter.api.BeforeEach;
-// import org.junit.jupiter.api.Test;
-// import org.junit.jupiter.api.extension.ExtendWith;
-// import org.mockito.InjectMocks;
-// import org.mockito.Mock;
-// import org.mockito.junit.jupiter.MockitoExtension;
-// import org.springframework.ui.Model;
-// import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import au.edu.rmit.sept.webapp.model.PetRecord;
+import au.edu.rmit.sept.webapp.model.Vet;
+import au.edu.rmit.sept.webapp.service.PetRecordService;
+import au.edu.rmit.sept.webapp.service.VetService;
+import au.edu.rmit.sept.webapp.service.UserService;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseEntity;
+import org.springframework.ui.Model;
 
-// import static org.mockito.ArgumentMatchers.any;
-// import static org.mockito.ArgumentMatchers.eq;
-// import static org.mockito.Mockito.*;
-// import static org.junit.jupiter.api.Assertions.*;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.util.List;
 
-// @ExtendWith(MockitoExtension.class)
-// class PetRecordControllerUnitTest {
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.*;
 
-// @Mock
-// private PetRecordService petRecordService;
+@ExtendWith(MockitoExtension.class)
+class PetRecordControllerUnitTest {
 
-// @Mock
-// private VetService vetService;
+    @Mock
+    private PetRecordService petRecordService;
 
-// @Mock
-// private Model model;
+    @Mock
+    private VetService vetService;
 
-// @Mock
-// private RedirectAttributes redirectAttributes;
+    @Mock
+    private UserService userService;
 
-// @InjectMocks
-// private PetRecordController petRecordController;
+    @Mock
+    private Model model;
 
-// private PetRecord petRecord;
-// private Vet vet;
+    @InjectMocks
+    private PetRecordController petRecordController;
 
-// @BeforeEach
-// void setUp() {
-// petRecord = new PetRecord();
-// petRecord.setId(1L);
-// petRecord.setName("Buddy");
+    private PetRecord petRecord;
+    private Vet vet;
 
-// vet = new Vet();
-// vet.setVetId(1L);
-// vet.setClinicName("Vet Clinic");
-// }
+    @BeforeEach
+    void setUp() {
+        petRecord = new PetRecord();
+        petRecord.setId(1L);
+        petRecord.setName("Buddy");
 
-// @Test
-// void testGetAllRecords() {
-// String view = petRecordController.getAllRecords(model);
-// assertEquals("vet-dashboard/records", view);
-// verify(petRecordService, times(1)).getAllPetRecords();
-// }
+        vet = new Vet();
+        vet.setVetId(1L);
+        vet.setClinicName("Vet Clinic");
+    }
 
-// @Test
-// void testsaveNewPetRecord() {
-// // Mock the behavior of vetService
-// when(vetService.getVetById(1L)).thenReturn(vet);
+    @Test
+    void testShowRecords() {
+        List<PetRecord> petRecords = List.of(petRecord);
+        when(petRecordService.getAllPetRecords()).thenReturn(petRecords);
 
-// // Call the saveNewPetRecord method with RedirectAttributes
-// String view = petRecordController.saveNewPetRecord(petRecord, 1L,
-// redirectAttributes);
+        String view = petRecordController.showRecords(model);
+        assertEquals("vet-dashboard/records", view);
+        verify(model, times(1)).addAttribute("records", petRecords);
+        verify(petRecordService, times(1)).getAllPetRecords();
+    }
 
-// // Assert the view name after redirect
-// assertEquals("redirect:/records", view);
+    @Test
+    void testSaveNewPetRecord() {
+        // Call the method under test
+        String view = petRecordController.saveNewPetRecord(petRecord);
 
-// // Verify that petRecordService.save() was called exactly once
-// verify(petRecordService, times(1)).save(any(PetRecord.class));
-// }
+        // Assert the redirection
+        assertEquals("redirect:/records", view);
 
-// @Test
-// void testShowNewRecordForm() {
-// String view = petRecordController.showNewRecordForm(model);
-// assertEquals("vet-dashboard/new_record", view);
-// verify(model, times(1)).addAttribute(eq("petRecord"), any(PetRecord.class));
-// }
+        // Verify that petRecordService.save() was called exactly once
+        verify(petRecordService, times(1)).save(any(PetRecord.class));
+    }
 
-// @Test
-// void testUpdateRecord() {
-// when(petRecordService.getPetRecordById(1L)).thenReturn(petRecord);
-// String view = petRecordController.updateRecord(1L, petRecord, 1L);
-// assertEquals("redirect:/records", view);
-// verify(petRecordService, times(1)).update(petRecord);
-// }
-// }
+    @Test
+    void testShowNewPetRecordForm() {
+        String view = petRecordController.showNewPetRecordForm(model);
+        assertEquals("vet-dashboard/new_record", view);
+        verify(model, times(1)).addAttribute(eq("petRecord"), any(PetRecord.class));
+        verify(userService, times(1)).getAllUsers();
+        verify(vetService, times(1)).getAllVets();
+    }
+
+    @Test
+    void testUpdateRecord() {
+        when(petRecordService.getPetRecordById(1L)).thenReturn(petRecord);
+        when(vetService.getVetById(1L)).thenReturn(vet);
+
+        String view = petRecordController.updateRecord(1L, petRecord, 1L);
+        assertEquals("redirect:/records", view);
+        verify(petRecordService, times(1)).update(any(PetRecord.class));
+    }
+
+    @Test
+    void testDeleteRecord() {
+        String view = petRecordController.deleteRecord(1L);
+        assertEquals("redirect:/records", view);
+        verify(petRecordService, times(1)).delete(1L);
+    }
+
+    @Test
+    void testDownloadPdf() throws IOException {
+        when(petRecordService.getPetRecordById(1L)).thenReturn(petRecord);
+
+        ResponseEntity<InputStreamResource> response = petRecordController.downloadPdf(1L);
+
+        assertEquals("attachment; filename=record_" + petRecord.getId() + ".pdf",
+                response.getHeaders().getFirst(HttpHeaders.CONTENT_DISPOSITION));
+        assertEquals(200, response.getStatusCodeValue());
+        assertEquals("application/pdf", response.getHeaders().getFirst(HttpHeaders.CONTENT_TYPE));
+
+        verify(petRecordService, times(1)).getPetRecordById(1L);
+    }
+}
