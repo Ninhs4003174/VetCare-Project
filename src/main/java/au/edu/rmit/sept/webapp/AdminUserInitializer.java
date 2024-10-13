@@ -16,9 +16,14 @@ public class AdminUserInitializer implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
         // Admin user details
-        String adminUsername = "admin3";
+        String adminUsername = "admin";
         String adminEmail = "admin@example.com";
         String adminEncodedPassword = "admin123";
+
+        // User details
+        String Username = "user";
+        String Email = "user@example.com";
+        String Password = "user123";
 
         // Receptionist user details
         String receptionistUsername = "clinic";
@@ -49,14 +54,28 @@ public class AdminUserInitializer implements CommandLineRunner {
         } else {
             System.out.println("Receptionist user already exists.");
         }
+        if (!userService.isUsernameTaken(Username)) {
+            UserRole clientRole = UserRole.CLIENT;
+            userService.registerUser(Username, Email, Password,
+                    clientRole, null);
+            System.out.println("Receptionist user inserted successfully!");
+        } else {
+            System.out.println("Receptionist user already exists.");
+        }
 
         // Check if vet user already exists
         if (!userService.isUsernameTaken(vetUsername)) {
-            UserRole vetRole = UserRole.VET;
-            userService.registerUser(vetUsername, vetEmail, vetEncodedPassword, vetRole, clinicId);
+            User vetUser = new User();
+            vetUser.setUsername(vetUsername);
+            vetUser.setEmail(vetEmail);
+            vetUser.setPassword(vetEncodedPassword);
+            vetUser.setRole(UserRole.VET);
+            vetUser.setClinicId(clinicId);
+            userService.saveUser(vetUser);
             System.out.println("Vet user inserted successfully!");
         } else {
             System.out.println("Vet user already exists.");
         }
+
     }
 }
