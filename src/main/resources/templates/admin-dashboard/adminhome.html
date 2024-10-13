@@ -6,6 +6,9 @@
     <title>Admin Dashboard</title>
     <link rel="stylesheet" href="/css/styles.css">
 </head>
+<script th:if="${#authorization.expression('!hasAuthority(''ADMIN'')')}">
+    location.href = '/403';
+</script>
 <body>
     <header>
         <nav>
