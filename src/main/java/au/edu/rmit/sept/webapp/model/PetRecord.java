@@ -20,7 +20,6 @@ public class PetRecord {
     private String recentSurgeries;
     private String dietaryRecommendations;
     private String notes;
-    private String veterinarian;
 
     @ManyToOne
     @JoinColumn(name = "vet_id")
@@ -28,7 +27,7 @@ public class PetRecord {
 
     @ManyToOne
     @JoinColumn(name = "user_id")
-    private User user; // User entity as a foreign key
+    private User user; // Reference to User entity
 
     // Constructors, getters, and setters
 
@@ -37,7 +36,7 @@ public class PetRecord {
 
     public PetRecord(String name, String breed, String dateOfBirth, String lastVisit, String allergies,
             String prescriptions, String vaccinationHistory, String recentTests, String recentSurgeries,
-            String dietaryRecommendations, String notes, String veterinarian, Vet vet, User user) {
+            String dietaryRecommendations, String notes, Vet vet, User user) {
         this.name = name;
         this.breed = breed;
         this.dateOfBirth = dateOfBirth;
@@ -49,7 +48,6 @@ public class PetRecord {
         this.recentSurgeries = recentSurgeries;
         this.dietaryRecommendations = dietaryRecommendations;
         this.notes = notes;
-        this.veterinarian = veterinarian;
         this.vet = vet;
         this.user = user;
     }
@@ -148,14 +146,6 @@ public class PetRecord {
 
     public void setNotes(String notes) {
         this.notes = notes;
-    }
-
-    public String getVeterinarian() {
-        return veterinarian;
-    }
-
-    public void setVeterinarian(String veterinarian) {
-        this.veterinarian = veterinarian;
     }
 
     public Vet getVet() {

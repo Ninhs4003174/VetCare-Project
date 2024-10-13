@@ -6,3 +6,6 @@ WHERE name = 'Buddy';
 UPDATE pet_record
 SET owner = 'Emily Green'
 WHERE name = 'Luna';
+
+ALTER TABLE pet_record
+DROP COLUMN owner;

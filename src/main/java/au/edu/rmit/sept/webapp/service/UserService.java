@@ -14,7 +14,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-
 import au.edu.rmit.sept.webapp.repository.PetRepository;
 import au.edu.rmit.sept.webapp.repository.UserRepository;
 import au.edu.rmit.sept.webapp.repository.PrescriptionRequestRepository;
@@ -137,14 +136,16 @@ public class UserService implements UserDetailsService {
     public void deleteUserById(Long id) {
         userRepository.deleteById(id);
     }
+
     public List<User> findVetsByClinic(Long clinicId) {
         return userRepository.findAll().stream()
-                .filter(user -> user.getRole().equals("VET") && user.getClinicId() != null && user.getClinicId().equals(clinicId))
+                .filter(user -> user.getRole().equals("VET") && user.getClinicId() != null
+                        && user.getClinicId().equals(clinicId))
                 .collect(Collectors.toList());
     }
+
     public List<User> getVetsByReceptionistId(Long receptionistId) {
         return userRepository.findByClinicIdAndRole(receptionistId, UserRole.VET);
     }
-    
 
 }
