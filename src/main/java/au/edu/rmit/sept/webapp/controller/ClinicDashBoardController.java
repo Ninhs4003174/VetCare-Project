@@ -1,34 +1,28 @@
 package au.edu.rmit.sept.webapp.controller;
 
-import java.util.regex.Pattern;
-import java.util.stream.Collectors;
-import java.util.Set;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
-import au.edu.rmit.sept.webapp.model.Appointment;
-import au.edu.rmit.sept.webapp.model.User;
-import au.edu.rmit.sept.webapp.model.enums.UserRole;
-import au.edu.rmit.sept.webapp.service.UserService;
-import au.edu.rmit.sept.webapp.service.AppointmentService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import org.apache.catalina.security.SecurityUtil;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
+import au.edu.rmit.sept.webapp.model.Appointment;
+import au.edu.rmit.sept.webapp.model.User;
+import au.edu.rmit.sept.webapp.model.enums.UserRole;
+import au.edu.rmit.sept.webapp.service.AppointmentService;
+import au.edu.rmit.sept.webapp.service.UserService;
 
 @Controller
 public class ClinicDashBoardController {
@@ -170,7 +164,7 @@ public class ClinicDashBoardController {
         return "clinic-dashboard/appointment-list"; // Ensure this matches your template path
     }
 
-   @GetMapping("/patients")
+   @GetMapping("/clinic-patients")
 public String listPetNames(Model model, Authentication authentication) {
 
     // Retrieve the logged-in clinic user
