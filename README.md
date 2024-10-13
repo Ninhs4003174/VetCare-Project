@@ -123,3 +123,9 @@ Visit the following URL in your browser:
 http://localhost:8080
 
 ```
+
+6. Access the AdminUserIntializer.java file under java\au\edu\rmit\sept\webapp. It contains
+already-instantiated admin, user, vet and clinic/receptionist of the clinic login credentials.
+
+Use these login credentials to access each of the following dashboards: admin, user, vet and clinic respectively. 
+
