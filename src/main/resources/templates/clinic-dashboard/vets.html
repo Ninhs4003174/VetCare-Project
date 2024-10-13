@@ -24,6 +24,9 @@
         }
     </script>
 </head>
+<script th:if="${#authorization.expression('!hasAuthority(''RECEPTIONIST'')')}">
+    location.href = '/403';
+</script>
 <body>
     <header>
         <nav>

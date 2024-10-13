@@ -1,6 +1,5 @@
 package au.edu.rmit.sept.webapp.controller;
 
-
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
@@ -39,11 +38,13 @@ public class ClinicDashBoardController {
 
     @GetMapping("/clinichome")
     public String clinicHome() {
+
         return "clinic-dashboard/clinichome";
     }
 
     @GetMapping("/vets")
     public String vetList(Model model, Authentication authentication) {
+
         User clinic = userService.findByUsername(authentication.getName());
         List<User> vets = userService.getVetsByClinicId(clinic.getId());
         model.addAttribute("users", vets);
@@ -52,12 +53,14 @@ public class ClinicDashBoardController {
 
     @GetMapping("/clinic-add-vet")
     public String addVetForm(Model model) {
+
         model.addAttribute("user", new User());
         return "clinic-dashboard/add-vet";
     }
 
     @PostMapping("/clinic-add-vet")
     public String addVet(@ModelAttribute User user, Authentication authentication) {
+
         User clinic = userService.findByUsername(authentication.getName());
         user.setRole(UserRole.VET);
         user.setClinicId(clinic.getId());
@@ -67,6 +70,7 @@ public class ClinicDashBoardController {
 
     @GetMapping("/edit-vet/{id}")
     public String showEditForm(@PathVariable("id") Long id, Model model) {
+
         // Find veterinarian by ID
         User veterinarian = userService.findById(id);
 
@@ -89,6 +93,7 @@ public class ClinicDashBoardController {
             RedirectAttributes redirectAttributes) {
 
         try {
+
             // Find the veterinarian by ID
             User veterinarian = userService.findById(id);
             if (veterinarian == null || veterinarian.getRole() != UserRole.VET) {
@@ -122,44 +127,91 @@ public class ClinicDashBoardController {
     }
 
     @GetMapping("/appointmentlist")
-public String appointmentList(Model model, Authentication authentication) {
-    // Retrieve the logged-in clinic user
-    User clinic = userService.findByUsername(authentication.getName());
-    
-    // Check if the user is a valid clinic
-    if (clinic == null || clinic.getRole() != UserRole.RECEPTIONIST) {
-        logger.warn("Clinic user not found or user is not a clinic");
-        return "403";  // Access denied page
+    public String appointmentList(Model model, Authentication authentication) {
+
+        // Retrieve the logged-in clinic user
+        User clinic = userService.findByUsername(authentication.getName());
+
+        // Check if the user is a valid clinic
+        if (clinic == null || clinic.getRole() != UserRole.RECEPTIONIST) {
+            logger.warn("Clinic user not found or user is not a clinic");
+            return "403"; // Access denied page
+        }
+
+        // Retrieve vets associated with the clinic
+        List<User> vets = userService.getVetsByClinicId(clinic.getId());
+
+        List<Appointment> allAppointments = new ArrayList<>();
+        for (User vet : vets) {
+            // Retrieve appointments for each vet and add them to the list
+            allAppointments.addAll(appointmentService.getAppointmentsByVet(vet.getId()));
+        }
+
+        // Check if any appointments were found
+        if (allAppointments.isEmpty()) {
+            model.addAttribute("noAppointmentsMessage", "No appointments with any vets.");
+        } else {
+            // Log appointment details
+            allAppointments.forEach(appointment -> logger.info(
+                    "Appointment details: ID={}, Pet Name={}, Vet ID={}, User ID={}",
+                    appointment.getId(), appointment.getPetName(), appointment.getVetId(), appointment.getUserId()));
+
+            // Add data to the model
+            model.addAttribute("vets", vets);
+            model.addAttribute("appointments", allAppointments);
+            model.addAttribute("username", clinic.getUsername()); // Correctly add the username from the clinic user
+        }
+
+        // Return the appointment list view
+        return "clinic-dashboard/appointment-list"; // Ensure this matches your template path
     }
 
-    // Retrieve vets associated with the clinic
-    List<User> vets = userService.getVetsByClinicId(clinic.getId());
-    
-    List<Appointment> allAppointments = new ArrayList<>();
-    for (User vet : vets) {
-        // Retrieve appointments for each vet and add them to the list
-        allAppointments.addAll(appointmentService.getAppointmentsByVet(vet.getId()));
-    }
+    // delete by id, cuz id's are unique make sure you're on the right table(s),
 
-    // Check if any appointments were found
-    if (allAppointments.isEmpty()) {
-        model.addAttribute("noAppointmentsMessage", "No appointments with any vets.");
-    } else {
-        // Log appointment details
-        allAppointments.forEach(appointment -> logger.info(
-                "Appointment details: ID={}, Pet Name={}, Vet ID={}, User ID={}", 
-                appointment.getId(), appointment.getPetName(), appointment.getVetId(), appointment.getUserId()));
+    // @PostMapping("/edit-vet")
+    // public String editVeterinarian(
+    // @RequestParam Long id, // Receive ID from the form
+    // @RequestParam String email,
+    // @RequestParam String address,
+    // @RequestParam String phoneNumber,
+    // RedirectAttributes redirectAttributes) {
 
-        // Add data to the model
-        model.addAttribute("vets", vets);
-        model.addAttribute("appointments", allAppointments);
-        model.addAttribute("username", clinic.getUsername()); // Correctly add the username from the clinic user
-    }
+    // try {
+    // // Find the veterinarian by ID
+    // User veterinarian = userService.findById(id);
+    // if (veterinarian == null || veterinarian.getRole() != UserRole.VET) {
+    // throw new IllegalArgumentException("Only veterinarians can be updated through
+    // this form.");
+    // }
 
-    // Return the appointment list view
-    return "clinic-dashboard/appointment-list";  // Ensure this matches your template path
-}
+    // // Update veterinarian's details
+    // veterinarian.setEmail(email);
+    // veterinarian.setAddress(address);
+    // veterinarian.setPhoneNumber(phoneNumber);
 
+    // // Save the updated user
+    // userService.updateUser(veterinarian);
 
+    // // Add success message
+    // redirectAttributes.addFlashAttribute("message", "Veterinarian details updated
+    // successfully!");
+    // redirectAttributes.addFlashAttribute("success", true);
+    // } catch (IllegalArgumentException e) {
+    // // Handle invalid data or roles
+    // redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
+    // redirectAttributes.addFlashAttribute("success", false);
+    // return "redirect:/vets"; // Redirect to vets list or an error page
+    // } catch (Exception e) {
+    // // Handle other errors
+    // redirectAttributes.addFlashAttribute("errorMessage", "Failed to edit
+    // veterinarian: " + e.getMessage());
+    // redirectAttributes.addFlashAttribute("success", false);
+    // }
+
+    // // Redirect to the veterinarians list after a successful update
+    // return "redirect:/vets";
+    // }
+
+    // delete by id, cuz id's are unique make sure you're on the right table(s),
 
 }

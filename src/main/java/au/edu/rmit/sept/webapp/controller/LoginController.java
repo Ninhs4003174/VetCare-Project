@@ -1,5 +1,5 @@
 package au.edu.rmit.sept.webapp.controller;
-
+import au.edu.rmit.sept.webapp.SecurityUtil;
 
 import java.util.Collection; // Correct import for java.util.Collection
 import au.edu.rmit.sept.webapp.model.enums.UserRole;
@@ -19,7 +19,6 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
-
 
 @Controller
 public class LoginController {
@@ -62,15 +61,20 @@ public class LoginController {
         }
     }
 
-    
     @GetMapping("/userhome")
     public ModelAndView userHome() {
+        if (!SecurityUtil.hasRole("CLIENT")) {
+            return new ModelAndView("403");  // Redirect to access denied page if not CLIENT
+        }
         return new ModelAndView("userhome");
     }
 
    
     @GetMapping("/receptionisthome")
     public ModelAndView receptionistHome() {
+        if (!SecurityUtil.hasRole("RECEPTIONIST")) {
+            return new ModelAndView("403");  // Redirect to access denied page if not RECEPTIONIST
+        }
         return new ModelAndView("receptionisthome");
     }
 
