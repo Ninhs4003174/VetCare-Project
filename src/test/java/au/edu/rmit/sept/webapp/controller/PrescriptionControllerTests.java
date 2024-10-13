@@ -1,211 +1,154 @@
 package au.edu.rmit.sept.webapp.controller;
 
-import au.edu.rmit.sept.webapp.model.Appointment;
+import static org.mockito.ArgumentMatchers.anyList;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.Mockito.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import au.edu.rmit.sept.webapp.model.Prescription;
+import au.edu.rmit.sept.webapp.model.PrescriptionRequest;
 import au.edu.rmit.sept.webapp.model.User;
 import au.edu.rmit.sept.webapp.model.enums.UserRole;
 import au.edu.rmit.sept.webapp.service.AppointmentService;
 import au.edu.rmit.sept.webapp.service.PetService;
+import au.edu.rmit.sept.webapp.service.PrescriptionRequestService;
 import au.edu.rmit.sept.webapp.service.PrescriptionService;
 import au.edu.rmit.sept.webapp.service.UserService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContext;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.Collections;
-import java.util.List;
+import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.Mockito.*;
+@WebMvcTest(PrescriptionController.class)
+public class PrescriptionControllerTests {
 
-class PrescriptionControllerTest {
+    @Autowired
+    private MockMvc mockMvc;
 
-    @Mock
+    @MockBean
     private AppointmentService appointmentService;
 
-    @Mock
+    @MockBean
     private UserService userService;
 
-    @Mock
+    @MockBean
     private PetService petService;
 
-    @Mock
+    @MockBean
     private PrescriptionService prescriptionService;
 
-    @Mock
-    private Authentication authentication;
+    @MockBean
+    private PrescriptionRequestService prescriptionRequestService;
 
-    @Mock
-    private SecurityContext securityContext;
-
-    @Mock
-    private Model model;
-
-    @Mock
-    private BindingResult bindingResult;
-
-    @Mock
-    private RedirectAttributes redirectAttributes;
-
-    @InjectMocks
-    private PrescriptionController prescriptionController;
+    private User vetUser;
 
     @BeforeEach
-    void setUp() {
-        MockitoAnnotations.openMocks(this);
-        SecurityContextHolder.setContext(securityContext);
-        when(securityContext.getAuthentication()).thenReturn(authentication);
+    public void setUp() {
+        vetUser = new User();
+        vetUser.setId(1L);
+        vetUser.setUsername("vet1");
+        vetUser.setRole(UserRole.VET);
     }
 
     @Test
-    void testVetHome_WithValidVet() {
-        // Arrange
-        User vetUser = new User();
-        vetUser.setUsername("vet1");
-        vetUser.setRole(UserRole.VET);
-
-        when(authentication.getName()).thenReturn("vet1");
+    @WithMockUser(username = "vet1", roles = { "VET" })
+    public void testVetHome_WithValidVet() throws Exception {
         when(userService.findByUsername("vet1")).thenReturn(vetUser);
         when(appointmentService.getAppointmentsByVet(anyLong())).thenReturn(Collections.emptyList());
 
-        // Act
-        String result = prescriptionController.vetHome(model);
+        mockMvc.perform(get("/vethome"))
+                .andExpect(status().isOk())
+                .andExpect(view().name("vet-dashboard/vethome"))
+                .andExpect(model().attributeExists("appointments"))
+                .andExpect(model().attributeExists("username"))
+                .andExpect(model().attributeExists("userRole"));
 
-        // Assert
-        assertEquals("vet-dashboard/vethome", result);
-        verify(model).addAttribute("appointments", Collections.emptyList());
-        verify(model).addAttribute("username", "vet1");
-        verify(model).addAttribute("userRole", UserRole.VET);
+        verify(userService, times(1)).findByUsername("vet1");
+        verify(appointmentService, times(1)).getAppointmentsByVet(anyLong());
     }
 
     @Test
-    void testVetHome_WithNonVetUser_ShouldReturn403() {
-        // Arrange
-        User nonVetUser = new User();
-        nonVetUser.setUsername("user1");
-        nonVetUser.setRole(UserRole.CLIENT);
-
-        when(authentication.getName()).thenReturn("user1");
-        when(userService.findByUsername("user1")).thenReturn(nonVetUser);
-
-        // Act
-        String result = prescriptionController.vetHome(model);
-
-        // Assert
-        assertEquals("403", result);
-    }
-
-    @Test
-    void testShowPatientsDashboard_WithValidVet() {
-        // Arrange
-        User vetUser = new User();
-        vetUser.setUsername("vet1");
-        vetUser.setRole(UserRole.VET);
-        vetUser.setId(1L);
-
-        when(authentication.getName()).thenReturn("vet1");
+    @WithMockUser(username = "vet1", roles = { "VET" })
+    public void testShowPatientsDashboard_WithValidVet() throws Exception {
         when(userService.findByUsername("vet1")).thenReturn(vetUser);
         when(appointmentService.getAppointmentsByVet(anyLong())).thenReturn(Collections.emptyList());
         when(userService.findAllById(anyList())).thenReturn(Collections.emptyList());
 
-        // Act
-        String result = prescriptionController.showPatientsDashboard(model);
+        mockMvc.perform(get("/patients"))
+                .andExpect(status().isOk())
+                .andExpect(view().name("vet-dashboard/patients"))
+                .andExpect(model().attributeExists("clients"))
+                .andExpect(model().attributeExists("username"));
 
-        // Assert
-        assertEquals("vet-dashboard/patients", result);
-        verify(model).addAttribute("clients", Collections.emptyList());
+        verify(userService, times(1)).findByUsername("vet1");
+        verify(appointmentService, times(1)).getAppointmentsByVet(anyLong());
+        verify(userService, times(1)).findAllById(anyList());
     }
 
     @Test
-    void testShowPatientsDashboard_WithNonVetUser_ShouldReturn403() {
-        // Arrange
-        User nonVetUser = new User();
-        nonVetUser.setUsername("user1");
-        nonVetUser.setRole(UserRole.CLIENT);
+    @WithMockUser(username = "vet1", roles = { "VET" })
+    public void testSendPrescription_WithValidVetAndClient() throws Exception {
+        User client = new User();
+        client.setId(1L);
 
-        when(authentication.getName()).thenReturn("user1");
-        when(userService.findByUsername("user1")).thenReturn(nonVetUser);
+        when(userService.findByUsername("vet1")).thenReturn(vetUser);
+        when(userService.findById(1L)).thenReturn(client);
+        when(petService.findPetsByUser(client)).thenReturn(Collections.emptyList());
 
-        // Act
-        String result = prescriptionController.showPatientsDashboard(model);
+        mockMvc.perform(get("/send-prescription").param("clientId", "1"))
+                .andExpect(status().isOk())
+                .andExpect(view().name("vet-dashboard/send-prescription"))
+                .andExpect(model().attributeExists("client"))
+                .andExpect(model().attributeExists("vetUser"))
+                .andExpect(model().attributeExists("pets"));
 
-        // Assert
-        assertEquals("403", result);
-    }
-    @Test
-    void testSubmitPrescription_WithValidData() {
-        // Arrange
-        Prescription prescription = new Prescription();
-        User vetUser = new User();
-        vetUser.setId(1L);
-    
-        when(bindingResult.hasErrors()).thenReturn(false);
-        doNothing().when(prescriptionService).savePrescription(any(Prescription.class));
-    
-        // Act
-        String result = prescriptionController.submitPrescription(prescription, bindingResult, model, 1L, 1L, "petName");
-    
-        // Assert
-        assertEquals("redirect:/patients", result);
-        verify(prescriptionService).savePrescription(any(Prescription.class));
-    }
-    
-    
-    @Test
-    void testSubmitPrescription_WithBindingErrors() {
-        // Arrange
-        when(bindingResult.hasErrors()).thenReturn(true);
-
-        // Act
-        String result = prescriptionController.submitPrescription(new Prescription(), bindingResult, model, 1L, 1L, "petName");
-
-        // Assert
-        assertEquals("vet-dashboard/send-prescription", result);
-        verify(model).addAttribute("errorMessage", "Please correct the errors in the form.");
+        verify(userService, times(1)).findByUsername("vet1");
+        verify(userService, times(1)).findById(1L);
+        verify(petService, times(1)).findPetsByUser(client);
     }
 
     @Test
-    void testViewPrescriptions_WithValidVet() {
-        // Arrange
-        User vetUser = new User();
-        vetUser.setId(1L);
-        vetUser.setRole(UserRole.VET);
-
-        when(authentication.getName()).thenReturn("vet1");
+    @WithMockUser(username = "vet1", roles = { "VET" })
+    public void testViewPrescriptions_WithValidVet() throws Exception {
         when(userService.findByUsername("vet1")).thenReturn(vetUser);
         when(prescriptionService.findPrescriptionsByVetId(anyLong())).thenReturn(Collections.emptyList());
 
-        // Act
-        String result = prescriptionController.viewPrescriptions(model);
+        mockMvc.perform(get("/prescriptions"))
+                .andExpect(status().isOk())
+                .andExpect(view().name("vet-dashboard/view-prescriptions"))
+                .andExpect(model().attributeExists("prescriptions"));
 
-        // Assert
-        assertEquals("vet-dashboard/view-prescriptions", result);
-        verify(model).addAttribute("prescriptions", Collections.emptyList());
+        verify(userService, times(1)).findByUsername("vet1");
+        verify(prescriptionService, times(1)).findPrescriptionsByVetId(anyLong());
     }
 
     @Test
-    void testViewPrescriptions_WithNonVetUser_ShouldReturn403() {
-        // Arrange
-        User nonVetUser = new User();
-        nonVetUser.setUsername("user1");
-        nonVetUser.setRole(UserRole.CLIENT);
+    @WithMockUser(username = "vet1", roles = { "VET" })
+    public void testViewPrescriptionRequests_WithValidVet() throws Exception {
+        PrescriptionRequest request = new PrescriptionRequest();
+        request.setPrescriptionId(1L);
 
-        when(authentication.getName()).thenReturn("user1");
-        when(userService.findByUsername("user1")).thenReturn(nonVetUser);
+        Prescription prescription = new Prescription();
+        prescription.setId(1L);
+        prescription.setVetId(1L);
 
-        // Act
-        String result = prescriptionController.viewPrescriptions(model);
+        when(userService.findByUsername("vet1")).thenReturn(vetUser);
+        when(prescriptionRequestService.findAll()).thenReturn(Collections.singletonList(request));
+        when(prescriptionService.findById(1L)).thenReturn(Optional.of(prescription));
 
-        // Assert
-        assertEquals("403", result);
+        mockMvc.perform(get("/view-prescription-requests"))
+                .andExpect(status().isOk())
+                .andExpect(view().name("vet-dashboard/view-prescription-requests"))
+                .andExpect(model().attributeExists("prescriptionRequests"));
+
+        verify(userService, times(1)).findByUsername("vet1");
+        verify(prescriptionRequestService, times(1)).findAll();
+        verify(prescriptionService, times(1)).findById(1L);
     }
 }
