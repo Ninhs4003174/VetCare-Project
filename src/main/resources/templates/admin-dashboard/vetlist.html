@@ -5,6 +5,44 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Vet List</title>
     <link rel="stylesheet" href="/css/styles.css">
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            font-size: 1em;
+        }
+
+        table th, table td {
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+        }
+
+        table th {
+            background-color: #4bc970;
+            color: white;
+            text-align: center;
+        }
+
+        table td {
+            background-color: #f9f9f9;
+            text-align: center;
+        }
+
+        /* Red Delete Button Styling */
+        .btn-delete {
+            background-color: #f44336;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 4px;
+            text-decoration: none;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn-delete:hover {
+            background-color: #e53935;
+        }
+    </style>
     <script>
         function toggleForm(formId) {
             var form = document.getElementById(formId);
@@ -54,13 +92,12 @@
                         <td th:text="${user.username}"></td>
                         <td th:text="${user.email}"></td>
                         <td>
-                            <a th:href="@{/delete-vet/{id}(id=${user.id})}">Delete</a>
+                            <a th:href="@{/delete-vet/{id}(id=${user.id})}" class="btn-delete">Delete</a>
                         </td>
                     </tr>
                 </tbody>
             </table>
         </section>
-
     </main>
     
     <footer>

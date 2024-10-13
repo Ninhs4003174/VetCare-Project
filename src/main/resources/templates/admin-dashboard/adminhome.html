@@ -5,6 +5,80 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Dashboard</title>
     <link rel="stylesheet" href="/css/styles.css">
+    <style>
+        /* Center the Admin Dashboard title and make it large and green */
+        h1 {
+            font-size: 3em;
+            color: #4bc970;
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Style sections for better spacing and presentation */
+        section {
+            margin-bottom: 40px;
+            padding: 20px;
+            background-color: #f9f9f9;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        section h3 {
+            color: #4bc970;
+            font-size: 1.8em;
+            margin-bottom: 15px;
+        }
+
+        section ul {
+            list-style-type: disc;
+            padding-left: 20px;
+        }
+
+        section ul li {
+            margin-bottom: 10px;
+        }
+
+        /* Style for anchor links */
+        a {
+            color: #4bc970;
+            text-decoration: none;
+        }
+
+        a:hover {
+            color: #2e8b57;
+            text-decoration: underline;
+        }
+
+        /* Footer styling */
+        footer {
+            text-align: center;
+            background-color: #384047;
+            color: white;
+            padding: 20px;
+            margin-top: 40px;
+        }
+
+        footer p {
+            margin: 0;
+        }
+
+        /* Responsive design improvements */
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2.5em;
+            }
+
+            section {
+                padding: 15px;
+            }
+        }
+    </style>
 </head>
 <script th:if="${#authorization.expression('!hasAuthority(''ADMIN'')')}">
     location.href = '/403';
@@ -22,20 +96,47 @@
                 <li th:if="${#authorization.expression('hasAuthority(''ADMIN'')')}"><a th:href="@{/adminlist}">Admins</a></li>
                 <li th:if="${#authorization.expression('hasAuthority(''ADMIN'')')}"><a th:href="@{/resources/approvals}">Resource Approvals</a></li>
                 <li th:if="${#authorization.expression('hasAuthority(''ADMIN'')')}"><a th:href="@{/logout}">Log Out</a></li>
-                
             </ul>
         </nav>
     </header>
     
     <main class="container">
+        <h1>Admin Dashboard</h1>
+
         <section id="overview">
-            <h2>Admin Dashboard</h2>
-            <p>Welcome to the admin dashboard. Here you can manage users, clinics, vets, and admins. Use the navigation links above to view and manage different types of users.</p>
+            <h3>Welcome to Your Admin Dashboard</h3>
+            <p>As an administrator, you have the ability to manage users, clinics, vets, and various other resources within the system. Use the navigation above to access different sections of the platform.</p>
+            <p>Your oversight is critical in ensuring the smooth operation of services. Whether you're adding new clinics, approving resources, or managing user accounts, your attention helps keep everything running seamlessly.</p>
+        </section>
+
+        <section id="admin-tips">
+            <h3>Admin Tips</h3>
+            <ul>
+                <li><strong>User Management:</strong> Regularly review user activity to ensure only verified users are active on the system.</li>
+                <li><strong>Clinic Management:</strong> Keep clinic information accurate and up-to-date so users can easily find the services they need.</li>
+                <li><strong>Vet Approvals:</strong> Periodically check vet credentials to maintain trust and credibility within the platform.</li>
+                <li><strong>Resource Approvals:</strong> Quickly approve or deny resource submissions to keep the content relevant.</li>
+            </ul>
+        </section>
+
+        <section id="admin-updates">
+            <h3>Latest Updates</h3>
+            <p>We are always working to improve the platform. Here are some recent changes:</p>
+            <ul>
+                <li><strong>User Interface:</strong> We’ve updated the layout for better navigation and an improved user experience.</li>
+                <li><strong>Security Enhancements:</strong> New security features have been added to protect user data more effectively.</li>
+                <li><strong>Performance Optimizations:</strong> The platform now loads faster and operates more smoothly across all devices.</li>
+            </ul>
+        </section>
+
+        <section id="help">
+            <h3>Need Help?</h3>
+            <p>If you have any questions or need assistance, please contact us at <a href="mailto:support@vetcare.com">support@vetcare.com</a>.</p>
         </section>
     </main>
     
     <footer>
-        <p>© 2024 VetCare</p>
+        <p>© 2024 VetCare | Admin Dashboard</p>
     </footer>
 </body>
 </html>
