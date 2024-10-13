@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Appointment List</title>
+    <link rel="stylesheet" type="text/css" href="/css/styles.css"> <!-- Link to your CSS file -->
+</head>
+<body>
+    <h1>Appointment List</h1>
+    
+    <!-- Display the no appointments message if it exists -->
+    <div th:if="${noAppointmentsMessage}">
+        <p th:text="${noAppointmentsMessage}" style="color: red;"></p>
+    </div>
+
+    <!-- Display the appointments only if they exist -->
+    <div th:if="${appointments != null && !#lists.isEmpty(appointments)}">
+        <h2>Appointments</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Appointment ID</th>
+                    <th>Pet Name</th>
+                    <th>Vet ID</th>
+                    <th>User ID</th>
+                    <th>Date</th>
+                    <th>Time</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="appointment : ${appointments}">
+                    <td th:text="${appointment.id}"></td>
+                    <td th:text="${appointment.petName}"></td>
+                    <td th:text="${appointment.vetId}"></td>
+                    <td th:text="${appointment.userId}"></td>
+                    <td th:text="${appointment.date}"></td>
+                    <td th:text="${appointment.time}"></td>
+                    <td th:text="${appointment.status}"></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Optionally, link to other pages like clinic home or vets list -->
+    <a href="/clinichome">Back to Clinic Home</a>
+    <a href="/vets">View Vets</a>
+</body>
+</html>

@@ -1,11 +1,16 @@
 package au.edu.rmit.sept.webapp.controller;
 
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
+
+import au.edu.rmit.sept.webapp.model.Appointment;
 import au.edu.rmit.sept.webapp.model.User;
 import au.edu.rmit.sept.webapp.model.enums.UserRole;
 import au.edu.rmit.sept.webapp.service.UserService;
+import au.edu.rmit.sept.webapp.service.AppointmentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -15,14 +20,20 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
 public class ClinicDashBoardController {
 
+    private static final Logger logger = LoggerFactory.getLogger(ClinicDashBoardController.class);
+
     @Autowired
     private UserService userService;
+    private AppointmentService appointmentService;
 
     @GetMapping("/clinichome")
     public String clinicHome() {
@@ -116,6 +127,46 @@ public class ClinicDashBoardController {
         // Redirect to the veterinarians list after a successful update
         return "redirect:/vets";
     }
+
+    @GetMapping("/appointmentlist")
+public String appointmentList(Model model, Authentication authentication) {
+    // Retrieve the logged-in clinic user
+    User clinic = userService.findByUsername(authentication.getName());
+    
+    // Check if the user is a valid clinic
+    if (clinic == null || clinic.getRole() != UserRole.RECEPTIONIST) {
+        logger.warn("Clinic user not found or user is not a clinic");
+        return "403";  // Access denied page
+    }
+
+    // Retrieve vets associated with the clinic
+    List<User> vets = userService.getVetsByClinicId(clinic.getId());
+    
+    List<Appointment> allAppointments = new ArrayList<>();
+    for (User vet : vets) {
+        // Retrieve appointments for each vet and add them to the list
+        allAppointments.addAll(appointmentService.getAppointmentsByVet(vet.getId()));
+    }
+
+    // Check if any appointments were found
+    if (allAppointments.isEmpty()) {
+        model.addAttribute("noAppointmentsMessage", "No appointments with any vets.");
+    } else {
+        // Log appointment details
+        allAppointments.forEach(appointment -> logger.info(
+                "Appointment details: ID={}, Pet Name={}, Vet ID={}, User ID={}", 
+                appointment.getId(), appointment.getPetName(), appointment.getVetId(), appointment.getUserId()));
+
+        // Add data to the model
+        model.addAttribute("vets", vets);
+        model.addAttribute("appointments", allAppointments);
+        model.addAttribute("username", clinic.getUsername()); // Correctly add the username from the clinic user
+    }
+
+    // Return the appointment list view
+    return "clinic-dashboard/appointment-list";  // Ensure this matches your template path
+}
+
 
     // delete by id, cuz id's are unique make sure you're on the right table(s),
     

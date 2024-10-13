@@ -81,6 +81,10 @@ public class UserService implements UserDetailsService {
         }
     }
 
+    public List<User> findVetsByClinicId(Long clinicId) {
+        return userRepository.findByClinicIdAndRole(clinicId, UserRole.VET);
+    }
+
     public List<Pet> findPetsByUser(User user) {
         return petRepository.findByOwner(user);
     }
