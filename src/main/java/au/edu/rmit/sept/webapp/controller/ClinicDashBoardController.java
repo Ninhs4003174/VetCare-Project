@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import au.edu.rmit.sept.webapp.service.PetService;
@@ -134,25 +135,24 @@ public class ClinicDashBoardController {
 
     @GetMapping("/appointmentlist")
     public String appointmentList(Model model, Authentication authentication) {
-
         // Retrieve the logged-in clinic user
         User clinic = userService.findByUsername(authentication.getName());
-
+    
         // Check if the user is a valid clinic
         if (clinic == null || clinic.getRole() != UserRole.RECEPTIONIST) {
             logger.warn("Clinic user not found or user is not a clinic");
             return "403"; // Access denied page
         }
-
+    
         // Retrieve vets associated with the clinic
         List<User> vets = userService.getVetsByClinicId(clinic.getId());
-
+    
         List<Appointment> allAppointments = new ArrayList<>();
         for (User vet : vets) {
             // Retrieve appointments for each vet and add them to the list
             allAppointments.addAll(appointmentService.getAppointmentsByVet(vet.getId()));
         }
-
+    
         // Check if any appointments were found
         if (allAppointments.isEmpty()) {
             model.addAttribute("noAppointmentsMessage", "No appointments with any vets.");
@@ -161,16 +161,17 @@ public class ClinicDashBoardController {
             allAppointments.forEach(appointment -> logger.info(
                     "Appointment details: ID={}, Pet Name={}, Vet ID={}, User ID={}",
                     appointment.getId(), appointment.getPetName(), appointment.getVetId(), appointment.getUserId()));
-
+    
             // Add data to the model
             model.addAttribute("vets", vets);
-            model.addAttribute("appointments", allAppointments);
+            model.addAttribute("appointments", allAppointments); // This line should execute when appointments are available
             model.addAttribute("username", clinic.getUsername()); // Correctly add the username from the clinic user
         }
-
+    
         // Return the appointment list view
         return "clinic-dashboard/appointment-list"; // Ensure this matches your template path
     }
+    
 
     // Inject necessary services
 
@@ -214,7 +215,8 @@ public class ClinicDashBoardController {
             pets.forEach(pet -> logger.info("Pet: {}", pet));
 
             // Add data to the model
-            model.addAttribute("pets", pets);
+            // model.addAttribute("pets", pets);
+            model.addAttribute("petNames", pets.stream().map(Pet::getName).collect(Collectors.toList()));
             model.addAttribute("username", clinic.getUsername()); // Correctly add the username from the clinic user
         }
 

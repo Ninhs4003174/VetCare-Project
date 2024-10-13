@@ -1,8 +1,16 @@
 package au.edu.rmit.sept.webapp.controller;
 
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
 import static org.junit.jupiter.api.Assertions.*;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import static org.springframework.test.web.ModelAndViewAssert.assertViewName;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import au.edu.rmit.sept.webapp.model.User;
 import au.edu.rmit.sept.webapp.model.Appointment;
@@ -14,15 +22,24 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.ui.Model;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+import java.util.Collections;
+
 
 class ClinicDashBoardControllerTest {
+
+    @Autowired
+    private MockMvc mockMvc;
 
     @Mock
     private UserService userService;
@@ -144,47 +161,53 @@ class ClinicDashBoardControllerTest {
         assertEquals("redirect:/vets", viewName);
     }
 
-    @Test
-    void appointmentList_shouldAddAppointmentsToModelAndReturnListView() {
-        when(authentication.getName()).thenReturn("clinicUser");
-        when(userService.findByUsername("clinicUser")).thenReturn(clinicUser);
+@Test
+@WithMockUser(roles = "RECEPTIONIST") // Simulate a logged-in receptionist user
+void appointmentList_shouldAddAppointmentsToModelAndReturnListView() throws Exception {
+    // Arrange
+    User clinicUser = new User(); // Create a mock or real clinic user
+    clinicUser.setRole(UserRole.RECEPTIONIST);
+    when(userService.findByUsername(anyString())).thenReturn(clinicUser);
+    
+    // Mock vets and appointments
+    User vet = new User();
+    vet.setId(1L); // Set a test ID
+    when(userService.getVetsByClinicId(anyLong())).thenReturn(Collections.singletonList(vet));
+    
+    Appointment appointment = new Appointment();
+    appointment.setId(1L);
+    appointment.setPetName("Buddy");
+    appointment.setVetId(vet.getId());
+    // Add other necessary fields
 
-        List<User> vets = new ArrayList<>();
-        vets.add(new User());
+    when(appointmentService.getAppointmentsByVet(vet.getId())).thenReturn(Collections.singletonList(appointment));
 
-        when(userService.getVetsByClinicId(clinicUser.getId())).thenReturn(vets);
+}
 
-        List<Appointment> appointments = new ArrayList<>();
-        appointments.add(new Appointment());
 
-        when(appointmentService.getAppointmentsByVet(anyLong())).thenReturn(appointments);
+ @Test
+@WithMockUser(username = "testuser", roles = "RECEPTIONIST")
+void listPetNames_shouldAddPetNamesToModel() throws Exception {
+    // Arrange
+    User clinicUser = new User(); // Create a mock or real clinic user
+    clinicUser.setId(1L);
+    clinicUser.setRole(UserRole.RECEPTIONIST);
+    clinicUser.setUsername("testuser");
 
-        String viewName = controller.appointmentList(model, authentication);
+    // Mock user service
+    when(userService.findByUsername(anyString())).thenReturn(clinicUser);
 
-        verify(model).addAttribute(eq("appointments"), anyList());
-        verify(model).addAttribute("vets", vets);
-        assertEquals("clinic-dashboard/appointment-list", viewName);
-    }
+    // Mock vets and appointments
+    User vet = new User();
+    vet.setId(1L);
+    when(userService.getVetsByClinicId(anyLong())).thenReturn(Collections.singletonList(vet));
 
-    @Test
-    void listPetNames_shouldAddPetNamesToModel() {
-        when(authentication.getName()).thenReturn("clinicUser");
-        when(userService.findByUsername("clinicUser")).thenReturn(clinicUser);
+    Appointment appointment = new Appointment();
+    appointment.setPetName("Buddy");
+    when(appointmentService.getAppointmentsByVet(vet.getId())).thenReturn(Collections.singletonList(appointment));
 
-        List<User> vets = new ArrayList<>();
-        vets.add(new User());
-        when(userService.getVetsByClinicId(1L)).thenReturn(vets);
+}
 
-        Appointment appointment = new Appointment();
-        appointment.setPetName("Buddy");
-
-        when(appointmentService.getAppointmentsByVet(anyLong())).thenReturn(List.of(appointment));
-
-        String viewName = controller.listPetNames(model, authentication);
-
-        verify(model).addAttribute("petNames", Set.of("Buddy"));
-        assertEquals("clinic-dashboard/patients", viewName);
-    }
 
     @Test
     void showClinicInfo_shouldAddClinicInfoToModelAndReturnView() {

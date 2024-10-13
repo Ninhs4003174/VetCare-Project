@@ -4,13 +4,7 @@
     <title>Appointment List</title>
     <link rel="stylesheet" type="text/css" href="/css/styles.css"> <!-- Link to your CSS file -->
 </head>
-<script th:if="${#authorization.expression('!hasAuthority(''RECEPTIONIST'')')}">
-    location.href = '/403';
-</script>
 <body>
-    <script th:if="${#authorization.expression('!hasAuthority(''RECEPTIONIST'')')}">
-        location.href = '/403';
-    </script>
     <header>
         <nav>
             <ul class="navbar-menu">
@@ -58,7 +52,5 @@
             </tbody>
         </table>
     </div>
-
-   
 </body>
 </html>

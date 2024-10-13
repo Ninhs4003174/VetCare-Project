@@ -3,6 +3,7 @@ package au.edu.rmit.sept.webapp.controller;
 import au.edu.rmit.sept.webapp.model.PetRecord;
 import au.edu.rmit.sept.webapp.model.Vet;
 import au.edu.rmit.sept.webapp.service.PetRecordService;
+import au.edu.rmit.sept.webapp.service.UserService; // Import UserService
 import au.edu.rmit.sept.webapp.service.VetService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -26,6 +27,9 @@ class PetRecordControllerUnitTest {
 
     @Mock
     private VetService vetService;
+
+    @Mock
+    private UserService userService; // Add this line to mock UserService
 
     @Mock
     private Model model;
