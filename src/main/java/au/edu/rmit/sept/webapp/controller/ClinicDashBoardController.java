@@ -221,4 +221,28 @@ public class ClinicDashBoardController {
         // Return the patient list view
         return "clinic-dashboard/patients"; // Ensure this matches your template path
     }
+
+    @GetMapping("/clinicinfo")
+    public String showClinicInfo(Model model) {
+        // Adding basic clinic information
+        model.addAttribute("clinicName", "Happy Tails Veterinary Clinic");
+        model.addAttribute("clinicAddress", "1234 Bark Street, Pawsville, 56789");
+        model.addAttribute("contactNumber", "+61 123 456 789");
+        model.addAttribute("expertise", "Specializes in small animals: Dogs, Cats, and Rabbits.");
+        model.addAttribute("specialty", "Pioneers in laser surgery and advanced dental care.");
+
+        // Services offered by the clinic with their prices
+        Map<String, String> services = new HashMap<>();
+        services.put("General Check-up", "$50");
+        services.put("Vaccinations", "$80");
+        services.put("Dental Cleaning", "$120");
+        services.put("Emergency Care", "Starting from $150");
+        services.put("Surgery", "Consultation Required");
+
+        model.addAttribute("services", services);
+
+        // Return the clinic info view
+        return "clinic-dashboard/clinic-info";
+    }
+
 }
