@@ -2,6 +2,8 @@ package au.edu.rmit.sept.webapp.controller;
 
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
+import java.util.Set;
+import java.util.HashSet;
 
 import au.edu.rmit.sept.webapp.model.Appointment;
 import au.edu.rmit.sept.webapp.model.User;
@@ -20,10 +22,12 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.apache.catalina.security.SecurityUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 @Controller
@@ -166,52 +170,51 @@ public class ClinicDashBoardController {
         return "clinic-dashboard/appointment-list"; // Ensure this matches your template path
     }
 
-    // delete by id, cuz id's are unique make sure you're on the right table(s),
+   @GetMapping("/patients")
+public String listPetNames(Model model, Authentication authentication) {
 
-    // @PostMapping("/edit-vet")
-    // public String editVeterinarian(
-    // @RequestParam Long id, // Receive ID from the form
-    // @RequestParam String email,
-    // @RequestParam String address,
-    // @RequestParam String phoneNumber,
-    // RedirectAttributes redirectAttributes) {
+    // Retrieve the logged-in clinic user
+    User clinic = userService.findByUsername(authentication.getName());
+    
+    // Check if the user is a valid clinic
+    if (clinic == null || clinic.getRole() != UserRole.RECEPTIONIST) {
+        logger.warn("Clinic user not found or user is not a clinic");
+        return "403";  // Access denied page
+    }
 
-    // try {
-    // // Find the veterinarian by ID
-    // User veterinarian = userService.findById(id);
-    // if (veterinarian == null || veterinarian.getRole() != UserRole.VET) {
-    // throw new IllegalArgumentException("Only veterinarians can be updated through
-    // this form.");
-    // }
+    // Retrieve vets associated with the clinic
+    List<User> vets = userService.getVetsByClinicId(clinic.getId());
+    
+    // Create a set to avoid duplicate pet names
+    Set<String> petNames = new HashSet<>();
+    List<Appointment> allAppointments = new ArrayList<>();
 
-    // // Update veterinarian's details
-    // veterinarian.setEmail(email);
-    // veterinarian.setAddress(address);
-    // veterinarian.setPhoneNumber(phoneNumber);
+    for (User vet : vets) {
+        // Retrieve appointments for each vet
+        List<Appointment> appointments = appointmentService.getAppointmentsByVet(vet.getId());
+        allAppointments.addAll(appointments);
+        
+        // Collect pet names from the appointments
+        for (Appointment appointment : appointments) {
+            petNames.add(appointment.getPetName());
+        }
+    }
 
-    // // Save the updated user
-    // userService.updateUser(veterinarian);
+    // Check if any pet names were found
+    if (petNames.isEmpty()) {
+        model.addAttribute("noPetsMessage", "No pets have booked appointments with any vets.");
+    } else {
+        // Log pet names for debugging
+        petNames.forEach(petName -> logger.info("Pet Name: {}", petName));
 
-    // // Add success message
-    // redirectAttributes.addFlashAttribute("message", "Veterinarian details updated
-    // successfully!");
-    // redirectAttributes.addFlashAttribute("success", true);
-    // } catch (IllegalArgumentException e) {
-    // // Handle invalid data or roles
-    // redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
-    // redirectAttributes.addFlashAttribute("success", false);
-    // return "redirect:/vets"; // Redirect to vets list or an error page
-    // } catch (Exception e) {
-    // // Handle other errors
-    // redirectAttributes.addFlashAttribute("errorMessage", "Failed to edit
-    // veterinarian: " + e.getMessage());
-    // redirectAttributes.addFlashAttribute("success", false);
-    // }
+        // Add data to the model
+        model.addAttribute("petNames", petNames);
+        model.addAttribute("username", clinic.getUsername()); // Correctly add the username from the clinic user
+    }
 
-    // // Redirect to the veterinarians list after a successful update
-    // return "redirect:/vets";
-    // }
+    // Return the pet names view
+    return "clinic-dashboard/patients";  // Ensure this matches your template path
+}
 
-    // delete by id, cuz id's are unique make sure you're on the right table(s),
 
 }
