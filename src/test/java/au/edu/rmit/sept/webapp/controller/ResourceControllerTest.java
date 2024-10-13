@@ -78,4 +78,47 @@ class ResourceControllerTest {
         assertEquals("redirect:/resources", viewName);
         verify(resourceService).deleteResourceById(resourceId);
     }
+
+    // New Tests
+
+    @Test
+    void testViewResourceDetails() {
+        Long resourceId = 1L;
+        Resource resource = new Resource();
+        when(resourceService.getResourceById(resourceId)).thenReturn(resource);
+
+        String viewName = resourceController.viewResource(resourceId, model);
+        assertEquals("resources/view", viewName);
+        verify(model).addAttribute("resource", resource);
+    }
+
+    @Test
+    void testViewPendingResources() {
+        List<Resource> pendingResources = Collections.emptyList();
+        when(resourceService.getPendingResources()).thenReturn(pendingResources);
+
+        String viewName = resourceController.viewPendingResources(model);
+        assertEquals("admin-dashboard/resource-approvals", viewName);
+        verify(model).addAttribute("pendingResources", pendingResources);
+    }
+
+    @Test
+    void testApproveResource() {
+        Long resourceId = 1L;
+
+        String viewName = resourceController.approveResource(resourceId, redirectAttributes);
+        assertEquals("redirect:/resources/approvals", viewName);
+        verify(resourceService).approveResource(resourceId);
+        verify(redirectAttributes).addFlashAttribute("message", "Resource approved successfully.");
+    }
+
+    @Test
+    void testDenyResource() {
+        Long resourceId = 1L;
+
+        String viewName = resourceController.denyResource(resourceId, redirectAttributes);
+        assertEquals("redirect:/resources/approvals", viewName);
+        verify(resourceService).denyResource(resourceId);
+        verify(redirectAttributes).addFlashAttribute("message", "Resource denied successfully.");
+    }
 }
