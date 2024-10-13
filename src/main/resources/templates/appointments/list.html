@@ -43,7 +43,6 @@
                 <li th:if="${#authorization.expression('hasAuthority(''CLIENT'')')}"><a th:href="@{/user-prescriptions}">Prescriptions</a></li>
                 <li th:if="${#authorization.expression('hasAuthority(''CLIENT'')')}"><a th:href="@{/records}">Records</a></li>
                 <li th:if="${#authorization.expression('hasAuthority(''CLIENT'')')}"><a th:href="@{/reviews}">Reviews</a></li>
-                <li th:if="${#authorization.expression('hasAuthority(''CLIENT'')')}"><a th:href="@{/appointments/clinicVets}">List of Vets</a></li>
                 <!-- Common pages -->
                 <li><a th:href="@{/profile}">Profile</a></li>
                 <li><a th:href="@{/logout}">Log Out</a></li>
@@ -83,6 +82,12 @@
                         <a class="edit-link" th:href="@{/appointments/edit/{id}(id=${appointmentDetails.get('appointment').id})}">Edit</a>
                     </span>
                 </li>
+
+                <li>
+                    <button type="button" th:onclick="|window.location.href='@{/appointments/clinicVets}'|">List of Vets</button>
+                </li>
+                
+
             </ul>
         </div>
     </main>

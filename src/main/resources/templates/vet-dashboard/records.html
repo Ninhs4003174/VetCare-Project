@@ -70,7 +70,6 @@
                         <td th:text="${record.vet != null ? record.vet.clinicName : 'No Vet Assigned'}"></td>
                         <td th:text="${record.lastVisit != null ? record.lastVisit : 'No visit yet'}"></td>
                         <td>
-                            <a th:href="@{/records/view/{id}(id=${record.id})}" class="btn-secondary">View</a>
                             <a th:href="@{/records/delete/{id}(id=${record.id})}" class="btn-secondary">Delete</a>
                             <a th:href="@{/records/download-pdf/{id}(id=${record.id})}" class="btn-secondary">Download PDF</a>
                         </td>                        

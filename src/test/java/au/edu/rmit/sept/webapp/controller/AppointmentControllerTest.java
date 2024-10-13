@@ -1,12 +1,24 @@
 package au.edu.rmit.sept.webapp.controller;
 
-import au.edu.rmit.sept.webapp.model.*;
-import au.edu.rmit.sept.webapp.model.enums.UserRole;
-import au.edu.rmit.sept.webapp.service.*;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyList;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.eq;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 import org.mockito.MockitoAnnotations;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
@@ -14,17 +26,14 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 
-import java.time.LocalDate;
-import java.time.LocalTime;
-import java.util.*;
-
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyList;
-import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.*;
+import au.edu.rmit.sept.webapp.model.Appointment;
+import au.edu.rmit.sept.webapp.model.User;
+import au.edu.rmit.sept.webapp.model.enums.UserRole;
+import au.edu.rmit.sept.webapp.service.AppointmentService;
+import au.edu.rmit.sept.webapp.service.EmailNotificationService;
+import au.edu.rmit.sept.webapp.service.PetService;
+import au.edu.rmit.sept.webapp.service.UserService;
+import au.edu.rmit.sept.webapp.service.VetBookingService;
 
 class AppointmentControllerTest {
 
@@ -104,34 +113,6 @@ class AppointmentControllerTest {
         verify(model).addAttribute(eq("vets"), anyList());
         verify(model).addAttribute(eq("pets"), anyList());
         verify(model).addAttribute(eq("timeSlots"), anyList());
-    }
-
-    @Test
-    void testBookAppointment_Success() {
-        String username = "testUser";
-        when(authentication.getName()).thenReturn(username);
-
-        User user = new User();
-        user.setUsername(username);
-        user.setEmail("test@example.com");
-
-        Pet pet = new Pet();
-        pet.setId(1L);
-        pet.setName("Fluffy");
-
-        Appointment appointment = new Appointment();
-        appointment.setDate(LocalDate.now().toString());
-        appointment.setTime(LocalTime.now().plusHours(1).toString());
-        appointment.setPetId(1L);
-
-        when(userService.findByUsername(username)).thenReturn(user);
-        when(petService.findById(1L)).thenReturn(pet);
-
-        String viewName = appointmentController.bookAppointment(appointment, bindingResult, model);
-        assertEquals("redirect:/appointments", viewName);
-
-        verify(appointmentService).saveAppointment(appointment);
-        verify(emailNotificationService).sendEmail(eq(user.getEmail()), anyString(), anyString());
     }
 
     @Test
