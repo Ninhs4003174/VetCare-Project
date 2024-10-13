@@ -1,5 +1,4 @@
 package au.edu.rmit.sept.webapp.controller;
-import au.edu.rmit.sept.webapp.SecurityUtil;
 
 import au.edu.rmit.sept.webapp.model.Appointment;
 import au.edu.rmit.sept.webapp.model.Pet;
@@ -18,7 +17,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.validation.BindingResult;
-
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -39,20 +37,17 @@ public class AppointmentController {
 
     @Autowired
     public AppointmentController(AppointmentService appointmentService, VetBookingService vetService,
-            UserService userService, PetService petService,EmailNotificationService emailNotificationService) {
+            UserService userService, PetService petService, EmailNotificationService emailNotificationService) {
         this.appointmentService = appointmentService;
         this.vetService = vetService;
         this.userService = userService;
         this.petService = petService;
         this.emailNotificationService = emailNotificationService;
     }
-   
 
     @GetMapping
     public String all(Model model) {
-        if (!SecurityUtil.hasRole("CLIENT")) {
-            return "403";  // Redirect to access denied page if not CLIENT
-        }
+
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String username = auth.getName();
         User user = userService.findByUsername(username);
@@ -86,67 +81,62 @@ public class AppointmentController {
 
     @GetMapping("/book")
     public String showBookingForm(Model model) {
-        if (!SecurityUtil.hasRole("CLIENT")) {
-            return "403";  // Redirect to access denied page if not CLIENT
-        }
+
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String username = auth.getName();
         User user = userService.findByUsername(username);
-    
+
         model.addAttribute("appointment", new Appointment());
         model.addAttribute("vets", vetService.getAllVets());
         model.addAttribute("pets", petService.findPetsByUser(user)); // Fetch pets from PetService
-    
+
         List<String> timeSlots = getTimeSlots();
         model.addAttribute("timeSlots", timeSlots);
-    
+
         LocalDate today = LocalDate.now();
         LocalDate fiveDaysLater = today.plusDays(5);
         model.addAttribute("today", today);
         model.addAttribute("fiveDaysLater", fiveDaysLater);
-    
+
         return "appointments/book";
     }
-    
-   
+
     @PostMapping("/book")
     public String bookAppointment(@ModelAttribute Appointment appointment, BindingResult result, Model model) {
-        if (!SecurityUtil.hasRole("CLIENT")) {
-            return "403";  // Redirect to access denied page if not CLIENT
-        }
+
         User user = null;
-    
+
         try {
             // Get the authenticated user's username
             Authentication auth = SecurityContextHolder.getContext().getAuthentication();
             String username = auth.getName();
-            
+
             // Find the user by username
             user = userService.findByUsername(username);
-            
+
             // Ensure user is not null
             if (user == null) {
                 throw new IllegalArgumentException("User not found.");
             }
-    
+
             // Check for validation errors
             if (result.hasErrors()) {
                 model.addAttribute("vets", vetService.getAllVets());
-                model.addAttribute("pets", petService.findPetsByUser(user)); 
+                model.addAttribute("pets", petService.findPetsByUser(user));
                 model.addAttribute("timeSlots", getTimeSlots());
                 return "appointments/book";
             }
-    
+
             // Validate that a pet is selected
             if (appointment.getPetId() == null) {
                 throw new IllegalArgumentException("Please select a pet.");
             }
-    
+
             // Validate time
             if (appointment.getTime() == null || appointment.getTime().isEmpty()) {
                 throw new IllegalArgumentException("Please select a valid time.");
             }
-    
+
             // Fetch the pet and set the pet name in the appointment
             Pet pet = petService.findById(appointment.getPetId());
             if (pet != null) {
@@ -154,7 +144,7 @@ public class AppointmentController {
             } else {
                 throw new IllegalArgumentException("Pet not found.");
             }
-    
+
             // Validate appointment date and time
             LocalDate today = LocalDate.now();
             LocalDate appointmentDate = LocalDate.parse(appointment.getDate());
@@ -164,18 +154,19 @@ public class AppointmentController {
             if (appointmentDate.equals(today) && LocalTime.parse(appointment.getTime()).isBefore(LocalTime.now())) {
                 throw new IllegalArgumentException("Cannot book an appointment for a past time today.");
             }
-    
+
             // Set user and status, then save the appointment
             appointment.setUser(user);
             appointment.setStatus("Scheduled");
             appointmentService.saveAppointment(appointment);
-    
+
             // Send email notification after successfully booking the appointment
-            String emailBody = String.format("Dear %s,\n\nYour appointment for your pet %s has been successfully booked for %s at %s.",
+            String emailBody = String.format(
+                    "Dear %s,\n\nYour appointment for your pet %s has been successfully booked for %s at %s.",
                     user.getUsername(), pet.getName(), appointment.getDate(), appointment.getTime());
-            
+
             emailNotificationService.sendEmail(user.getEmail(), "Appointment Confirmation", emailBody);
-    
+
         } catch (IllegalArgumentException e) {
             // Handle errors and re-populate the form fields
             model.addAttribute("errorMessage", e.getMessage());
@@ -184,10 +175,10 @@ public class AppointmentController {
             model.addAttribute("timeSlots", getTimeSlots());
             return "appointments/book";
         }
-    
+
         return "redirect:/appointments";
     }
-    
+
     private List<String> getTimeSlots() {
         List<String> timeSlots = new ArrayList<>();
         LocalTime startTime = LocalTime.of(9, 0);
@@ -202,18 +193,14 @@ public class AppointmentController {
 
     @PostMapping("/cancel")
     public String cancelAppointment(@ModelAttribute("id") Long id) {
-        if (!SecurityUtil.hasRole("CLIENT")) {
-            return "403";  // Redirect to access denied page if not CLIENT
-        }
+
         appointmentService.cancelAppointment(id);
         return "redirect:/appointments";
     }
 
     @GetMapping("/edit/{id}")
     public String showEditForm(@PathVariable("id") Long id, Model model) {
-        if (!SecurityUtil.hasRole("CLIENT")) {
-            return "403";  // Redirect to access denied page if not CLIENT
-        }
+
         Appointment appointment = appointmentService.findAppointmentById(id);
         model.addAttribute("appointment", appointment);
         model.addAttribute("vets", vetService.getAllVets());
@@ -226,9 +213,7 @@ public class AppointmentController {
 
     @PostMapping("/edit")
     public String editAppointment(@ModelAttribute Appointment appointment, BindingResult result, Model model) {
-        if (!SecurityUtil.hasRole("CLIENT")) {
-            return "403";  // Redirect to access denied page if not CLIENT
-        }
+
         if (result.hasErrors()) {
             model.addAttribute("vets", vetService.getAllVets());
             model.addAttribute("timeSlots", getTimeSlots());
@@ -270,14 +255,13 @@ public class AppointmentController {
 
         return "redirect:/appointments";
     }
+
     @GetMapping("/compare-providers")
     public String compareProviders(
             @RequestParam(value = "serviceType", required = false) String serviceType,
             @RequestParam(value = "location", required = false) String location,
             Model model) {
-                if (!SecurityUtil.hasRole("CLIENT")) {
-                    return "403";  // Redirect to access denied page if not CLIENT
-                }
+
         try {
             List<VetBooking> filteredVets = vetService.getFilteredVets(serviceType, location);
             model.addAttribute("filteredVets", filteredVets);
@@ -290,28 +274,25 @@ public class AppointmentController {
 
         return "appointments/compare-providers";
     }
+
     @PostMapping("/updateStatus")
     public String updateAppointmentStatus(
-        @RequestParam Long appointmentId, 
-        @RequestParam String status, 
-        Model model) {
-            if (!SecurityUtil.hasRole("CLIENT")) {
-                return "403";  // Redirect to access denied page if not CLIENT
-            }
-        
+            @RequestParam Long appointmentId,
+            @RequestParam String status,
+            Model model) {
+
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String username = auth.getName();
         User vetUser = userService.findByUsername(username);
-    
+
         if (vetUser != null && vetUser.getRole() == UserRole.VET) {
             // Use the new service method to update the status
             appointmentService.updateAppointmentStatus(appointmentId, status);
-    
+
             return "redirect:/vethome"; // Redirect back to vet's dashboard after update
         } else {
             return "403"; // Unauthorized access
         }
     }
-    
-} 
 
+}

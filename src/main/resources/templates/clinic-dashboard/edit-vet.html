@@ -6,6 +6,9 @@
     <title>Edit Vet</title>
     <link rel="stylesheet" href="/css/styles.css">
 </head>
+<script th:if="${#authorization.expression('!hasAuthority(''RECEPTIONIST'')')}">
+    location.href = '/403';
+</script>
 <body>
     <h2>Edit Veterinarian</h2>
     <form th:action="@{/edit-vet}" th:object="${user}" method="post">
