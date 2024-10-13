@@ -1,5 +1,6 @@
 package au.edu.rmit.sept.webapp.controller;
 
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -155,4 +156,46 @@ public class AdminDashBoardControllerTest {
             .andExpect(view().name("admin-dashboard/resource-approvals"))
             .andExpect(model().attributeExists("resources"));
     }
+    @Test
+@WithMockUser(username = "admin", roles = {"ADMIN"})
+public void testAddVetForm_NoClinicsAvailable() throws Exception {
+    when(userService.getUsersByRole(UserRole.RECEPTIONIST)).thenReturn(new ArrayList<>());
+
+    mockMvc.perform(get("/add-vet"))
+        .andExpect(status().isOk())
+        .andExpect(view().name("admin-dashboard/vetlist"))
+        .andExpect(model().attributeExists("error"))
+        .andExpect(model().attribute("error", "No clinics available. Please add a clinic first."));
+    
+    verify(userService, times(1)).getUsersByRole(UserRole.RECEPTIONIST);
+}
+
+
+
+
+
+@Test
+@WithMockUser(username = "admin", roles = {"ADMIN"})
+public void testApproveResource() throws Exception {
+    mockMvc.perform(get("/resources/approve/1"))
+        .andExpect(status().is3xxRedirection())
+        .andExpect(redirectedUrl("/resource-approvals"))
+        .andExpect(flash().attributeExists("message"))
+        .andExpect(flash().attribute("message", "Resource approved successfully."));
+
+    verify(resourceService, times(1)).approveResource(1L);
+}
+
+@Test
+@WithMockUser(username = "admin", roles = {"ADMIN"})
+public void testRejectResource() throws Exception {
+    mockMvc.perform(get("/resources/reject/1"))
+        .andExpect(status().is3xxRedirection())
+        .andExpect(redirectedUrl("/resource-approvals"))
+        .andExpect(flash().attributeExists("message"))
+        .andExpect(flash().attribute("message", "Resource rejected."));
+
+    verify(resourceService, times(1)).denyResource(1L);
+}
+
 }
