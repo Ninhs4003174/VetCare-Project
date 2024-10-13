@@ -40,9 +40,10 @@ public class PetRecordController {
 
     // Display all pet records
     @GetMapping
-    public String getAllRecords(Model model) {
-        model.addAttribute("records", petRecordService.getAllPetRecords());
-        return "vet-dashboard/records"; // This corresponds to records.html
+    public String showRecords(Model model) {
+        List<PetRecord> records = petRecordService.getAllPetRecords(); // Fetch the records
+        model.addAttribute("records", records); // Add to the model
+        return "vet-dashboard/records"; // Return the view name, which corresponds to records.html
     }
 
     // Show form to create a new pet record
