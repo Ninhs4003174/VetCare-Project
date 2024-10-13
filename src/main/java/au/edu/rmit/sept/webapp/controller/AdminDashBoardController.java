@@ -35,6 +35,11 @@ public class AdminDashBoardController {
         return "admin-dashboard/adminlist";
     }
 
+    @GetMapping("/adminhome")
+    public String adminhome() {
+        return "admin-dashboard/adminhome";
+    }
+
     @GetMapping("/cliniclist")
     public String clinicList(Model model) {
 
