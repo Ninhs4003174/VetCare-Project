@@ -1,5 +1,5 @@
 package au.edu.rmit.sept.webapp.controller;
-import au.edu.rmit.sept.webapp.SecurityUtil;
+
 
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -39,17 +39,11 @@ public class ClinicDashBoardController {
 
     @GetMapping("/clinichome")
     public String clinicHome() {
-        if (!SecurityUtil.hasRole("RECEPTIONIST")) {
-            return "403";  // Redirect to access denied page if not CLIENT
-        }
         return "clinic-dashboard/clinichome";
     }
 
     @GetMapping("/vets")
     public String vetList(Model model, Authentication authentication) {
-        if (!SecurityUtil.hasRole("RECEPTIONIST")) {
-            return "403";  // Redirect to access denied page if not CLIENT
-        }
         User clinic = userService.findByUsername(authentication.getName());
         List<User> vets = userService.getVetsByClinicId(clinic.getId());
         model.addAttribute("users", vets);
@@ -58,18 +52,12 @@ public class ClinicDashBoardController {
 
     @GetMapping("/clinic-add-vet")
     public String addVetForm(Model model) {
-        if (!SecurityUtil.hasRole("RECEPTIONIST")) {
-            return "403";  // Redirect to access denied page if not CLIENT
-        }
         model.addAttribute("user", new User());
         return "clinic-dashboard/add-vet";
     }
 
     @PostMapping("/clinic-add-vet")
     public String addVet(@ModelAttribute User user, Authentication authentication) {
-        if (!SecurityUtil.hasRole("RECEPTIONIST")) {
-            return "403";  // Redirect to access denied page if not CLIENT
-        }
         User clinic = userService.findByUsername(authentication.getName());
         user.setRole(UserRole.VET);
         user.setClinicId(clinic.getId());
@@ -79,9 +67,6 @@ public class ClinicDashBoardController {
 
     @GetMapping("/edit-vet/{id}")
     public String showEditForm(@PathVariable("id") Long id, Model model) {
-        if (!SecurityUtil.hasRole("RECEPTIONIST")) {
-            return "403";  // Redirect to access denied page if not CLIENT
-        }
         // Find veterinarian by ID
         User veterinarian = userService.findById(id);
 
@@ -104,9 +89,6 @@ public class ClinicDashBoardController {
             RedirectAttributes redirectAttributes) {
 
         try {
-            if (!SecurityUtil.hasRole("RECEPTIONIST")) {
-                return "403";  // Redirect to access denied page if not CLIENT
-            }
             // Find the veterinarian by ID
             User veterinarian = userService.findById(id);
             if (veterinarian == null || veterinarian.getRole() != UserRole.VET) {
@@ -141,9 +123,6 @@ public class ClinicDashBoardController {
 
     @GetMapping("/appointmentlist")
 public String appointmentList(Model model, Authentication authentication) {
-    if (!SecurityUtil.hasRole("RECEPTIONIST")) {
-        return "403";  // Redirect to access denied page if not CLIENT
-    }
     // Retrieve the logged-in clinic user
     User clinic = userService.findByUsername(authentication.getName());
     
@@ -182,52 +161,5 @@ public String appointmentList(Model model, Authentication authentication) {
 }
 
 
-    // delete by id, cuz id's are unique make sure you're on the right table(s),
-
-    // @PostMapping("/edit-vet")
-    // public String editVeterinarian(
-    // @RequestParam Long id, // Receive ID from the form
-    // @RequestParam String email,
-    // @RequestParam String address,
-    // @RequestParam String phoneNumber,
-    // RedirectAttributes redirectAttributes) {
-
-    // try {
-    // // Find the veterinarian by ID
-    // User veterinarian = userService.findById(id);
-    // if (veterinarian == null || veterinarian.getRole() != UserRole.VET) {
-    // throw new IllegalArgumentException("Only veterinarians can be updated through
-    // this form.");
-    // }
-
-    // // Update veterinarian's details
-    // veterinarian.setEmail(email);
-    // veterinarian.setAddress(address);
-    // veterinarian.setPhoneNumber(phoneNumber);
-
-    // // Save the updated user
-    // userService.updateUser(veterinarian);
-
-    // // Add success message
-    // redirectAttributes.addFlashAttribute("message", "Veterinarian details updated
-    // successfully!");
-    // redirectAttributes.addFlashAttribute("success", true);
-    // } catch (IllegalArgumentException e) {
-    // // Handle invalid data or roles
-    // redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
-    // redirectAttributes.addFlashAttribute("success", false);
-    // return "redirect:/vets"; // Redirect to vets list or an error page
-    // } catch (Exception e) {
-    // // Handle other errors
-    // redirectAttributes.addFlashAttribute("errorMessage", "Failed to edit
-    // veterinarian: " + e.getMessage());
-    // redirectAttributes.addFlashAttribute("success", false);
-    // }
-
-    // // Redirect to the veterinarians list after a successful update
-    // return "redirect:/vets";
-    // }
-
-    // delete by id, cuz id's are unique make sure you're on the right table(s),
 
 }
