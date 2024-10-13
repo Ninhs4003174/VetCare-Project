@@ -27,14 +27,23 @@
         <p th:text="${noPatientsMessage}" style="color: red;"></p>
     </div>
 
-    <div th:if="${patients != null && !#lists.isEmpty(patients)}">
+    <!-- Display the patients only if they exist -->
+    <div th:if="${pets != null && !#lists.isEmpty(pets)}">
         <h2>Patients</h2>
-        <h2>Pets with Appointments</h2>
-
-        <ul>
-            <li th:each="petName : ${petNames}" th:text="${petName}"></li>
-        </ul>
+        <table>
+            <thead>
+                <tr>
+                    <th>Patient Name</th>
+                    <th>Owner Name</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="pet : ${pets}">
+                    <td th:text="${pet.name}"></td>
+                    <td th:text="${pet.owner.username}"></td>
+                </tr>
+            </tbody>
+        </table>
     </div>
-
 </body>
 </html>

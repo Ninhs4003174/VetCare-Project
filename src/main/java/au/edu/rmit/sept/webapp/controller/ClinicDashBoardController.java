@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import au.edu.rmit.sept.webapp.service.PetService;
@@ -23,9 +24,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import au.edu.rmit.sept.webapp.model.Appointment;
+import au.edu.rmit.sept.webapp.model.Pet;
 import au.edu.rmit.sept.webapp.model.User;
 import au.edu.rmit.sept.webapp.model.enums.UserRole;
 import au.edu.rmit.sept.webapp.service.AppointmentService;
+import au.edu.rmit.sept.webapp.service.PetService;
 import au.edu.rmit.sept.webapp.service.UserService;
 
 @Controller
@@ -132,6 +135,48 @@ public class ClinicDashBoardController {
 
     @GetMapping("/appointmentlist")
     public String appointmentList(Model model, Authentication authentication) {
+        // Retrieve the logged-in clinic user
+        User clinic = userService.findByUsername(authentication.getName());
+    
+        // Check if the user is a valid clinic
+        if (clinic == null || clinic.getRole() != UserRole.RECEPTIONIST) {
+            logger.warn("Clinic user not found or user is not a clinic");
+            return "403"; // Access denied page
+        }
+    
+        // Retrieve vets associated with the clinic
+        List<User> vets = userService.getVetsByClinicId(clinic.getId());
+    
+        List<Appointment> allAppointments = new ArrayList<>();
+        for (User vet : vets) {
+            // Retrieve appointments for each vet and add them to the list
+            allAppointments.addAll(appointmentService.getAppointmentsByVet(vet.getId()));
+        }
+    
+        // Check if any appointments were found
+        if (allAppointments.isEmpty()) {
+            model.addAttribute("noAppointmentsMessage", "No appointments with any vets.");
+        } else {
+            // Log appointment details
+            allAppointments.forEach(appointment -> logger.info(
+                    "Appointment details: ID={}, Pet Name={}, Vet ID={}, User ID={}",
+                    appointment.getId(), appointment.getPetName(), appointment.getVetId(), appointment.getUserId()));
+    
+            // Add data to the model
+            model.addAttribute("vets", vets);
+            model.addAttribute("appointments", allAppointments); // This line should execute when appointments are available
+            model.addAttribute("username", clinic.getUsername()); // Correctly add the username from the clinic user
+        }
+    
+        // Return the appointment list view
+        return "clinic-dashboard/appointment-list"; // Ensure this matches your template path
+    }
+    
+
+    // Inject necessary services
+
+    @GetMapping("/clinic-patients")
+    public String listPetNames(Model model, Authentication authentication) {
 
         // Retrieve the logged-in clinic user
         User clinic = userService.findByUsername(authentication.getName());
@@ -145,107 +190,61 @@ public class ClinicDashBoardController {
         // Retrieve vets associated with the clinic
         List<User> vets = userService.getVetsByClinicId(clinic.getId());
 
-        List<Appointment> allAppointments = new ArrayList<>();
+        // Create a list to store pet details
+        List<Pet> pets = new ArrayList<>();
+
         for (User vet : vets) {
-            // Retrieve appointments for each vet and add them to the list
-            allAppointments.addAll(appointmentService.getAppointmentsByVet(vet.getId()));
+            // Retrieve appointments for each vet
+            List<Appointment> appointments = appointmentService.getAppointmentsByVet(vet.getId());
+
+            // Collect pet details from the appointments
+            for (Appointment appointment : appointments) {
+                Pet pet = new Pet();
+                pet.setName(appointment.getPetName());
+                pet.setOwner(userService.findById(appointment.getUserId())); // Assuming Pet has an owner field of type
+                                                                             // User
+                pets.add(pet);
+            }
         }
 
-        // Check if any appointments were found
-        if (allAppointments.isEmpty()) {
-            model.addAttribute("noAppointmentsMessage", "No appointments with any vets.");
+        // Check if any pets were found
+        if (pets.isEmpty()) {
+            model.addAttribute("noPatientsMessage", "No pets have booked appointments with any vets.");
         } else {
-            // Log appointment details
-            allAppointments.forEach(appointment -> logger.info(
-                    "Appointment details: ID={}, Pet Name={}, Vet ID={}, User ID={}",
-                    appointment.getId(), appointment.getPetName(), appointment.getVetId(), appointment.getUserId()));
+            // Log pet details for debugging
+            pets.forEach(pet -> logger.info("Pet: {}", pet));
 
             // Add data to the model
-            model.addAttribute("vets", vets);
-            model.addAttribute("appointments", allAppointments);
+            // model.addAttribute("pets", pets);
+            model.addAttribute("petNames", pets.stream().map(Pet::getName).collect(Collectors.toList()));
             model.addAttribute("username", clinic.getUsername()); // Correctly add the username from the clinic user
         }
 
-        // Return the appointment list view
-        return "clinic-dashboard/appointment-list"; // Ensure this matches your template path
+        // Return the patient list view
+        return "clinic-dashboard/patients"; // Ensure this matches your template path
     }
 
-   @GetMapping("/clinic-patients")
-public String listPetNames(Model model, Authentication authentication) {
+    @GetMapping("/clinicinfo")
+    public String showClinicInfo(Model model) {
+        // Adding basic clinic information
+        model.addAttribute("clinicName", "Happy Tails Veterinary Clinic");
+        model.addAttribute("clinicAddress", "1234 Bark Street, Pawsville, 56789");
+        model.addAttribute("contactNumber", "+61 123 456 789");
+        model.addAttribute("expertise", "Specializes in small animals: Dogs, Cats, and Rabbits.");
+        model.addAttribute("specialty", "Pioneers in laser surgery and advanced dental care.");
 
-    // Retrieve the logged-in clinic user
-    User clinic = userService.findByUsername(authentication.getName());
+        // Services offered by the clinic with their prices
+        Map<String, String> services = new HashMap<>();
+        services.put("General Check-up", "$50");
+        services.put("Vaccinations", "$80");
+        services.put("Dental Cleaning", "$120");
+        services.put("Emergency Care", "Starting from $150");
+        services.put("Surgery", "Consultation Required");
 
-    // Check if the user is a valid clinic (Receptionist)
-    if (clinic == null || clinic.getRole() != UserRole.RECEPTIONIST) {
-        logger.warn("Clinic user not found or user is not a clinic");
-        return "403";  // Access denied page
+        model.addAttribute("services", services);
+
+        // Return the clinic info view
+        return "clinic-dashboard/clinic-info";
     }
-
-    // Retrieve vets associated with the clinic
-    List<User> vets = userService.getVetsByClinicId(clinic.getId());
-
-    // Create a set to store unique pet names
-    Set<String> petNames = new HashSet<>();
-    List<Appointment> allAppointments = new ArrayList<>();
-
-    for (User vet : vets) {
-        // Retrieve appointments for each vet
-        List<Appointment> appointments = appointmentService.getAppointmentsByVet(vet.getId());
-        allAppointments.addAll(appointments);
-
-        // Collect pet names from the appointments
-        for (Appointment appointment : appointments) {
-            if (appointment.getPetName() != null) {
-                petNames.add(appointment.getPetName());
-            }
-        }
-    }
-
-    // Handle the case where no pets are found
-    if (petNames.isEmpty()) {
-        model.addAttribute("noPetsMessage", "No pets have booked appointments with any vets.");
-    } else {
-        // Log the collected pet names for debugging
-        petNames.forEach(petName -> logger.info("Pet Name: {}", petName));
-
-        // Add the unique pet names to the model
-        model.addAttribute("petNames", petNames);
-    }
-
-    // Add the username of the logged-in clinic user to the model
-    model.addAttribute("username", clinic.getUsername());
-
-    // Return the appropriate view for displaying patients
-    return "clinic-dashboard/patients";  // Ensure this matches your template path
-}
-
-
-@GetMapping("/clinicinfo")
-public String showClinicInfo(Model model) {
-    // Adding basic clinic information
-    model.addAttribute("clinicName", "Happy Tails Veterinary Clinic");
-    model.addAttribute("clinicAddress", "1234 Bark Street, Pawsville, 56789");
-    model.addAttribute("contactNumber", "+61 123 456 789");
-    model.addAttribute("expertise", "Specializes in small animals: Dogs, Cats, and Rabbits.");
-    model.addAttribute("specialty", "Pioneers in laser surgery and advanced dental care.");
-
-    // Services offered by the clinic with their prices
-    Map<String, String> services = new HashMap<>();
-    services.put("General Check-up", "$50");
-    services.put("Vaccinations", "$80");
-    services.put("Dental Cleaning", "$120");
-    services.put("Emergency Care", "Starting from $150");
-    services.put("Surgery", "Consultation Required");
-
-    model.addAttribute("services", services);
-
-    // Return the clinic info view
-    return "clinic-dashboard/clinic-info";
-}
-
-
-
-
 
 }
