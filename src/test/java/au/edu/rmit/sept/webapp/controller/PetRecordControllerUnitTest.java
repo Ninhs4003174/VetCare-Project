@@ -11,7 +11,10 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.ui.Model;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -26,6 +29,9 @@ class PetRecordControllerUnitTest {
 
     @Mock
     private Model model;
+
+    @Mock
+    private RedirectAttributes redirectAttributes;
 
     @InjectMocks
     private PetRecordController petRecordController;
@@ -52,10 +58,17 @@ class PetRecordControllerUnitTest {
     }
 
     @Test
-    void testSaveRecord() {
+    void testsaveNewPetRecord() {
+        // Mock the behavior of vetService
         when(vetService.getVetById(1L)).thenReturn(vet);
-        String view = petRecordController.saveRecord(petRecord, 1L);
+
+        // Call the saveNewPetRecord method with RedirectAttributes
+        String view = petRecordController.saveNewPetRecord(petRecord, 1L, redirectAttributes);
+
+        // Assert the view name after redirect
         assertEquals("redirect:/records", view);
+
+        // Verify that petRecordService.save() was called exactly once
         verify(petRecordService, times(1)).save(any(PetRecord.class));
     }
 

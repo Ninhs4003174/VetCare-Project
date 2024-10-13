@@ -1,8 +1,11 @@
 package au.edu.rmit.sept.webapp.controller;
 
 import au.edu.rmit.sept.webapp.model.PetRecord;
+import au.edu.rmit.sept.webapp.model.User;
 import au.edu.rmit.sept.webapp.model.Vet;
+import au.edu.rmit.sept.webapp.model.enums.UserRole;
 import au.edu.rmit.sept.webapp.service.PetRecordService;
+import au.edu.rmit.sept.webapp.service.UserService;
 import au.edu.rmit.sept.webapp.service.VetService;
 
 import org.apache.pdfbox.pdmodel.PDDocument;
@@ -17,10 +20,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.util.List;
 
 @Controller
 @RequestMapping("/records")
@@ -32,6 +37,9 @@ public class PetRecordController {
     @Autowired
     private VetService vetService;
 
+    @Autowired
+    private UserService userService;
+
     // Display all pet records
     @GetMapping
     public String getAllRecords(Model model) {
@@ -42,20 +50,31 @@ public class PetRecordController {
     // Show form to create a new pet record
     @GetMapping("/new")
     public String showNewRecordForm(Model model) {
+        // Create a new empty PetRecord object to bind the form fields
         PetRecord petRecord = new PetRecord();
         model.addAttribute("petRecord", petRecord);
-        return "vet-dashboard/new_record"; // This corresponds to new_record.html
+
+        // Add necessary data like users and vets for dropdowns
+        List<User> vets = userService.getUsersByRole(UserRole.VET); // Fetch vets from UserService
+        List<User> users = userService.getUsersByRole(UserRole.CLIENT); // Assuming clients are the pet owners
+
+        model.addAttribute("vets", vets); // List of vets for dropdown
+        model.addAttribute("users", users); // List of pet owners for dropdown
+
+        // Return the view for the form
+        return "vet-dashboard/new_record";
     }
 
     // Save a new pet record
-    @PostMapping("/save")
-    public String saveRecord(@ModelAttribute PetRecord petRecord, @RequestParam("vetId") Long vetId) {
+    @PostMapping("/records/save")
+    public String saveNewPetRecord(PetRecord petRecord, @RequestParam("vetId") Long vetId,
+            RedirectAttributes redirectAttributes) {
         Vet vet = vetService.getVetById(vetId);
-        if (vet != null) {
-            petRecord.setVet(vet);
-        }
-        petRecordService.save(petRecord);
-        return "redirect:/records"; // Redirect to records list after saving
+        petRecord.setVet(vet); // Assign vet to petRecord
+        petRecordService.save(petRecord); // Save petRecord
+
+        redirectAttributes.addFlashAttribute("message", "Pet record saved successfully");
+        return "redirect:/records";
     }
 
     // Show form to edit an existing pet record
@@ -98,6 +117,12 @@ public class PetRecordController {
         PetRecord petRecord = petRecordService.getPetRecordById(id);
         model.addAttribute("petRecord", petRecord);
         return "vet-dashboard/view_record";
+    }
+
+    @GetMapping("/delete/{id}")
+    public String deleteRecord(@PathVariable Long id) {
+        petRecordService.delete(id);
+        return "redirect:/records"; // Redirect to the records list after deletion
     }
 
     // Download PDF of a specific pet record
