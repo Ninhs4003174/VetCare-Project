@@ -5,12 +5,24 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Add New Resource</title>
     <link rel="stylesheet" href="/css/styles.css">
+    <script>
+        // Function to show the confirmation pop-up after form submission
+        function showConfirmation(event) {
+            event.preventDefault();  // Prevent the default form submission
+            const form = event.target;
+
+            // Display confirmation pop-up
+            if (confirm("Your submission was sent for review, an admin will approve or deny it shortly!")) {
+                // Submit the form if the user confirms
+                form.submit();
+            }
+        }
+    </script>
 </head>
 <body>
     <header>
         <nav>
             <ul class="navbar-menu">
-                <!-- Logo for vet or user based on role -->
                 <li>
                     <a th:href="@{/vethome}" th:if="${#authorization.expression('hasAuthority(''VET'')')}">
                         <img th:src="@{/img/logo.png}" alt="Vet Logo" class="logo">
@@ -21,8 +33,6 @@
                         <img th:src="@{/img/logo.png}" alt="User Logo" class="logo">
                     </a>
                 </li>
-
-                <!-- User-specific navigation -->
                 <li th:if="${#authorization.expression('hasAuthority(''CLIENT'')')}"><a th:href="@{/resources}">Resources</a></li>
             </ul>
         </nav>
@@ -31,12 +41,7 @@
     <main>
         <h1>Add New Educational Resource</h1>
 
-        <!-- Flash message display -->
-        <div th:if="${message}" class="alert">
-            <p th:text="${message}"></p>
-        </div>
-
-        <form action="/resources/save" method="post" class="form-container">
+        <form action="/resources/save" method="post" class="form-container" onsubmit="showConfirmation(event)">
             <label for="title">Title:</label>
             <input type="text" id="title" name="title" required>
 

@@ -38,7 +38,7 @@ public class ResourceController {
     // Save a new resource with 'PENDING' status
     @PostMapping("/resources/save")
     public String saveResource(@ModelAttribute("resource") Resource resource, RedirectAttributes redirectAttributes) {
-        resourceService.addResource(resource);
+        resourceService.addResource(resource);  // Save the resource with pending status
         redirectAttributes.addFlashAttribute("message", "Your article is submitted, an admin will approve or deny your post.");
         return "redirect:/resources";
     }
