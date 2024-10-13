@@ -94,28 +94,53 @@ public class AdminDashBoardController {
     }
 
     @PostMapping("/add-user")
-    public String addUser(@ModelAttribute User user) {
-
+    public String addUser(@ModelAttribute User user, RedirectAttributes redirectAttributes) {
+        // Check if username is taken
+        if (userService.isUsernameTaken(user.getUsername())) {
+            redirectAttributes.addFlashAttribute("error", "Username is already taken");
+            return "redirect:/userlist";
+        }
+    
+        // Check if email is taken
+        if (userService.isEmailTaken(user.getEmail())) {
+            redirectAttributes.addFlashAttribute("error", "Email is already taken");
+            return "redirect:/userlist";
+        }
+    
         user.setRole(UserRole.CLIENT);
         userService.saveUser(user);
+        redirectAttributes.addFlashAttribute("message", "User added successfully");
         return "redirect:/userlist";
     }
-
+    
     @GetMapping("/add-clinic")
     public String addClinicForm(Model model) {
 
         model.addAttribute("user", new User());
         return "admin-dashboard/add-clinic";
     }
-
     @PostMapping("/add-clinic")
-    public String addClinic(@ModelAttribute User user) {
-
-        user.setRole(UserRole.RECEPTIONIST);
-        userService.saveUser(user);
+public String addClinic(@ModelAttribute User user, RedirectAttributes redirectAttributes) {
+    // Check if username is taken
+    if (userService.isUsernameTaken(user.getUsername())) {
+        redirectAttributes.addFlashAttribute("error", "Username is already taken");
         return "redirect:/cliniclist";
     }
 
+    // Check if email is taken 
+    if (userService.isEmailTaken(user.getEmail())) {
+        redirectAttributes.addFlashAttribute("error", "Email is already taken");
+        return "redirect:/cliniclist";
+    }
+
+    // No errors, add the clinic
+    user.setRole(UserRole.RECEPTIONIST);
+    userService.saveUser(user);
+    redirectAttributes.addFlashAttribute("message", "Clinic added successfully");
+    return "redirect:/cliniclist";
+}
+
+    
     @GetMapping("/add-admin")
     public String addAdminForm(Model model) {
 
