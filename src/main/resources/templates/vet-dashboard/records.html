@@ -69,9 +69,7 @@
                             <a th:href="@{/records/edit/{id}(id=${record.id})}" class="btn-secondary">Edit</a>
                             <a th:href="@{/records/delete/{id}(id=${record.id})}" class="btn-secondary" 
                                onclick="return confirm('Are you sure you want to delete this record?')">Delete</a>
-                            <!-- Storing record ID in data attribute -->
-                            <a href="javascript:void(0)" class="btn-secondary" 
-                               data-record-id="[[${record.id}]]" onclick="downloadPdf(this)">Download PDF</a>
+                            <a th:href="@{/records/download-pdf/{id}(id=${record.id})}" class="btn-secondary">Download PDF</a>
                         </td>                        
                     </tr>
                 </tbody>
@@ -83,29 +81,5 @@
     <footer>
         <p>© 2024 VetCare</p>
     </footer>
-
-    <script>
-        // Script to handle PDF download
-        function downloadPdf(element) {
-            const recordId = element.getAttribute('data-record-id');
-            const url = `/records/download-pdf/${recordId}`;
-            fetch(url)
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Network response was not ok');
-                    }
-                    return response.blob();
-                })
-                .then(blob => {
-                    const link = document.createElement('a');
-                    link.href = window.URL.createObjectURL(blob);
-                    link.download = `record_${recordId}.pdf`;
-                    link.click();
-                })
-                .catch(error => {
-                    console.error('There was a problem with the fetch operation:', error);
-                });
-        }
-    </script>
 </body>
 </html>
