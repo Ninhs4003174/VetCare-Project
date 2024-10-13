@@ -67,11 +67,59 @@ Build the project using Maven by running the following command:
 
 ```
 3. **Access the Application:**
-Open your browser and navigate to:]
+Open your browser and navigate to:
 ```
 http://localhost:8080
 
 ```
 
 
-## Docker Setup (Optional)
+## Docker Setup
+If you want to run the project using Docker:
+
+1. **Install Docker:**
+Download and install Docker from the official  [website.](https://www.docker.com/get-started/)
+
+
+2. **Configure Docker Credentials:**  Open the docker-compose.yml file and update it with your postgreSQL details.
+```
+services:
+  db:
+    image: postgres:13
+    container_name: postgres
+    environment:
+      POSTGRES_DB: milestone2
+      POSTGRES_USER: <your-username>      # Replace with your PostgreSQL username
+      POSTGRES_PASSWORD: <your-password>  # Replace with your PostgreSQL password
+
+  webapp:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: springboot-app
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/milestone2
+      SPRING_DATASOURCE_USERNAME: <your-username>      # Replace with your PostgreSQL username
+      SPRING_DATASOURCE_PASSWORD: <your-password>      # Replace with your PostgreSQL password
+
+```
+
+3. **Build Docker Image:**
+Use Docker to build the image for the application:
+```
+docker build -t vetcare-app .
+
+```
+4. **Run Docker Container:**
+Start the Docker container:
+```
+docker-compose up --build
+
+```
+5. **Access the Application:**
+Visit the following URL in your browser:
+
+```
+http://localhost:8080
+
+```
