@@ -127,7 +127,9 @@ http://localhost:8080
 6. Access the AdminUserIntializer.java file under java\au\edu\rmit\sept\webapp. It contains
 already-instantiated admin, user, vet and clinic/receptionist of a clinic users, along with their login credentials.
 
-Use these login credentials to access each of the following dashboards: admin, user, vet and clinic respectively, and test out their corresponding functionalities
+Use these login credentials to access each of the following dashboards: admin, user, vet and clinic respectively, and test out their corresponding functionalities.
+
+The entrance to our VetCare system is http://localhost:8080/login-client.
 
 
 
