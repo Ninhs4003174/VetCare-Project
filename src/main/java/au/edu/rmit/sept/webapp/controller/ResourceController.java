@@ -39,7 +39,7 @@ public class ResourceController {
     @PostMapping("/resources/save")
     public String saveResource(@ModelAttribute("resource") Resource resource, RedirectAttributes redirectAttributes) {
         resourceService.addResource(resource);
-        redirectAttributes.addFlashAttribute("message", "Resource has been sent to admin for approval.");
+        redirectAttributes.addFlashAttribute("message", "Your article is submitted, an admin will approve or deny your post.");
         return "redirect:/resources";
     }
 

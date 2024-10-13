@@ -32,4 +32,9 @@ public class HomeController {
     public String about() {
         return "about";
     }
+
+    @GetMapping("/userabout")
+    public String showuserabout() {
+        return "userabout";
+    }
 }
